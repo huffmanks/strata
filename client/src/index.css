@@ -4,6 +4,24 @@
 
 @layer base {
     body {
+        background-color: #1e1e1e;
+        color: #fefefe;
         font-family: 'Lato', sans-serif;
+    }
+    table {
+        width: 100%;
+    }
+    table thead tr {
+        background-color: #252526;
+    }
+    table tbody tr:nth-of-type(even) {
+        background-color: #333;
+    }
+    table tr th,
+    table tr td {
+        padding: 10px;
+    }
+    textarea {
+        resize: none;
     }
 }

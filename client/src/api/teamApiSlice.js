@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const apiSlice = createApi({
+export const teamApiSlice = createApi({
     reducerPath: 'api',
 
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:1337/api' }),
@@ -40,4 +40,4 @@ export const apiSlice = createApi({
     }),
 })
 
-export const { useGetTeamsQuery, useGetTeamQuery, useCreateTeamMutation, useEditTeamMutation, useDeleteTeamMutation } = apiSlice
+export const { useGetTeamsQuery, useGetTeamQuery, useCreateTeamMutation, useEditTeamMutation, useDeleteTeamMutation } = teamApiSlice

@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import usersReducer from './data/usersSlice'
-import teamsReducer from './data/teamsSlice'
-import { apiSlice } from './api/apiSlice'
+import usersReducer from './reducers/usersSlice'
+import teamsReducer from './reducers/teamsSlice'
+import { teamApiSlice } from './api/teamApiSlice'
 
 const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : undefined
 
@@ -11,7 +11,7 @@ export default configureStore({
         users: usersReducer,
         teams: teamsReducer,
         persistedState,
-        [apiSlice.reducerPath]: apiSlice.reducer,
+        [teamApiSlice.reducerPath]: teamApiSlice.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(teamApiSlice.middleware),
 })

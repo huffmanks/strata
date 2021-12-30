@@ -1,4 +1,4 @@
-import { useDeleteTeamQuery } from '../../api/apiSlice'
+import { useDeleteTeamQuery } from '../../api/teamApiSlice'
 import { useParams } from 'react-router-dom'
 
 // import { Link } from 'react-router-dom'

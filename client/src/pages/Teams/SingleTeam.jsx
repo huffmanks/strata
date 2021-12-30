@@ -1,4 +1,4 @@
-import { useGetTeamQuery } from '../../api/apiSlice'
+import { useGetTeamQuery } from '../../api/teamApiSlice'
 import { useParams } from 'react-router-dom'
 
 // import { Link } from 'react-router-dom'

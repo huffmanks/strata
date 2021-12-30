@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import store from './store'
 
-import { fetchUsers } from './data/usersSlice'
-import { fetchTeams } from './data/teamsSlice'
+import { fetchUsers } from './reducers/usersSlice'
+import { fetchTeams } from './reducers/teamsSlice'
 
 import App from './App'
 import './index.css'
