@@ -10,7 +10,6 @@ const TeamsList = () => {
         return <div>Loading...</div>
     }
     if (error) {
-        deleteTeam()
         return <div>Oops, an error occured</div>
     }
 

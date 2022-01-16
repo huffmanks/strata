@@ -1,31 +1,23 @@
 {
-  "name": "server",
-  "private": true,
-  "version": "0.1.0",
-  "description": "A Strapi application",
-  "scripts": {
-    "develop": "strapi develop",
-    "start": "strapi start",
-    "build": "strapi build",
-    "strapi": "strapi"
-  },
-  "devDependencies": {},
-  "dependencies": {
-    "@strapi/plugin-documentation": "4.0.2",
-    "@strapi/plugin-i18n": "4.0.2",
-    "@strapi/plugin-users-permissions": "4.0.2",
-    "@strapi/strapi": "4.0.2",
-    "sqlite3": "5.0.2"
-  },
-  "author": {
-    "name": "A Strapi developer"
-  },
-  "strapi": {
-    "uuid": "afd98c1c-7492-4bd9-b0cf-17ce48423e06"
-  },
-  "engines": {
-    "node": ">=12.x.x <=16.x.x",
-    "npm": ">=6.0.0"
-  },
-  "license": "MIT"
+    "name": "api-boilerplate",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "servers.js",
+    "license": "MIT",
+    "scripts": {
+        "server": "nodemon server"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.2",
+        "formidable": "v3",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.1.4"
+    },
+    "devDependencies": {
+        "concurrently": "^6.5.1",
+        "nodemon": "^2.0.15"
+    }
 }

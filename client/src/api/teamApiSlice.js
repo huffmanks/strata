@@ -3,7 +3,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const teamApiSlice = createApi({
     reducerPath: 'api',
 
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:1337/api' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api/private' }),
+    // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:1337/api' }),
     tagTypes: ['Team'],
     endpoints: (builder) => ({
         getTeams: builder.query({
@@ -16,7 +17,8 @@ export const teamApiSlice = createApi({
         }),
         createTeam: builder.mutation({
             query: (initialTeam) => ({
-                url: '/teams?populate=*',
+                url: '/teams/create',
+                // url: '/teams?populate=*',
                 method: 'POST',
                 body: { data: initialTeam },
             }),
@@ -24,7 +26,8 @@ export const teamApiSlice = createApi({
         }),
         editTeam: builder.mutation({
             query: ({ teamId, ...data }) => ({
-                url: `/teams/${teamId}?populate=*`,
+                url: `/teams/edit/${teamId}`,
+                // url: `/teams/${teamId}?populate=*`,
                 method: 'PUT',
                 body: { data },
             }),
