@@ -128,7 +128,6 @@ export const updateUser = async (req, res, next) => {
         next(err)
     }
 }
-findByIdAndDele
 
 export const deleteUser = async (req, res, next) => {
     try {
