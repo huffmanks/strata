@@ -28,8 +28,8 @@ const Router = () => {
             children: [
                 { path: 'login', element: <Login /> },
                 { path: 'register', element: <Register /> },
-                { path: 'forgotpassword', element: <ForgotPassword /> },
-                { path: 'resetpassword/:resetToken', element: <ResetPassword /> },
+                { path: 'forgot-password', element: <ForgotPassword /> },
+                { path: 'reset-password/:resetToken', element: <ResetPassword /> },
                 { path: 'access-denied', element: <AccessDenied /> },
             ],
         },

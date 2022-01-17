@@ -1,15 +1,19 @@
 import { useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
-import '../../index.css'
+import { useNavigate } from 'react-router-dom'
+
+import Form from '../../components/Form'
+import FormHeader from '../../components/Form/FormHeader'
+import FormInput from '../../components/Form/FormInput'
+import FormFooter from '../../components/Form/FormFooter'
+
+import ErrorToast from '../../containers/messages/ErrorToast'
 
 const Register = () => {
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [confirmpassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [error, setError] = useState('Passwords do not match.')
 
     const navigate = useNavigate()
 
@@ -22,7 +26,7 @@ const Register = () => {
             },
         }
 
-        if (password !== confirmpassword) {
+        if (password !== confirmPassword) {
             setPassword('')
             setConfirmPassword('')
             setTimeout(() => {
@@ -35,8 +39,6 @@ const Register = () => {
             const { data } = await axios.post(
                 'http://localhost:5000/api/auth/register',
                 {
-                    firstName,
-                    lastName,
                     email,
                     password,
                 },
@@ -55,41 +57,22 @@ const Register = () => {
     }
 
     return (
-        <div className='register-screen'>
-            <form onSubmit={registerHandler} className='register-screen__form'>
-                <h3 className='register-screen__title'>Register</h3>
-                {error && <span className='error-message'>{error}</span>}
-                <div className='form-group'>
-                    <label htmlFor='firstName'>First Name:</label>
-                    <input type='text' required id='firstName' placeholder='Enter your first name.' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='lastName'>Last Name:</label>
-                    <input type='text' required id='lastName' placeholder='Enter your last name.' value={lastName} onChange={(e) => setLastName(e.target.value)} />
+        <>
+            <Form submitHandler={registerHandler}>
+                <FormHeader title='Register' />
+
+                <div className='space-y-4'>
+                    <FormInput type='text' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} value={email} />
+
+                    <FormInput type='text' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} value={password} />
+
+                    <FormInput type='text' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
                 </div>
 
-                <div className='form-group'>
-                    <label htmlFor='email'>Email:</label>
-                    <input type='email' required id='email' placeholder='Enter your email address.' value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='password'>Password:</label>
-                    <input type='password' required id='password' autoComplete='true' placeholder='Enter your password.' value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor='confirmpassword'>Confirm Password:</label>
-                    <input type='password' required id='confirmpassword' autoComplete='true' placeholder='Confirm your password.' value={confirmpassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                </div>
-
-                <button type='submit' className='btn btn-primary'>
-                    Register
-                </button>
-
-                <span className='register-screen__subtext'>
-                    Already have an account? <Link to='/login'>Login</Link>
-                </span>
-            </form>
-        </div>
+                <FormFooter subtitle='Already have an account?' subtitlePath='/login' buttonPath='/' buttonText='Create' />
+            </Form>
+            {error && <ErrorToast message={error} />}
+        </>
     )
 }
 

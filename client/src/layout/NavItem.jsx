@@ -8,7 +8,7 @@ const NavItem = ({ path, icon, title, hasNotifications }) => {
         <NavLink to={path} className={({ isActive }) => (isActive ? activeNavLink : navLink)}>
             {icon}
             <span className='ml-2 text-sm font-medium hidden md:block'>{title}</span>
-            {hasNotifications && <span className='absolute top-0 left-0 w-2 h-2 mt-2 ml-2 bg-indigo-500 rounded-full'></span>}
+            {hasNotifications && <span className='absolute top-0 left-0 w-2 h-2 mt-2 ml-2 bg-primary-alt rounded-full'></span>}
         </NavLink>
     )
 }

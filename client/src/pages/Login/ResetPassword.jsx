@@ -1,13 +1,18 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import '../../index.css'
+
+import Form from '../../components/Form'
+import FormHeader from '../../components/Form/FormHeader'
+import FormInput from '../../components/Form/FormInput'
+import FormFooter from '../../components/Form/FormFooter'
+
+import ErrorToast from '../../containers/messages/ErrorToast'
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
+    const [error, setError] = useState("Passwords don't match.")
 
     const params = useParams()
 
@@ -39,7 +44,6 @@ const ResetPassword = () => {
             )
 
             console.log(data)
-            setSuccess(data.data)
         } catch (error) {
             setError(error.response.data.error)
             setTimeout(() => {
@@ -49,31 +53,20 @@ const ResetPassword = () => {
     }
 
     return (
-        <div className='resetpassword-screen'>
-            <form onSubmit={resetPasswordHandler} className='resetpassword-screen__form'>
-                <h3 className='resetpassword-screen__title'>Reset Password</h3>
-                {error && <span className='error-message'>{error} </span>}
-                {success && (
-                    <span className='success-message'>
-                        {success} <Link to='/login'>Login</Link>
-                    </span>
-                )}
-                <div className='form-group'>
-                    <label htmlFor='password'>New Password:</label>
-                    <input type='password' required id='password' placeholder='Enter a new password.' autoComplete='true' value={password} onChange={(e) => setPassword(e.target.value)} />
+        <>
+            <Form submitHandler={resetPasswordHandler}>
+                <FormHeader title='Reset Password' />
+
+                <div className='space-y-4'>
+                    <FormInput type='text' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} value={password} />
+
+                    <FormInput type='text' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
                 </div>
-                <div className='form-group'>
-                    <label htmlFor='confirmpassword'>Confirm New Password:</label>
-                    <input type='password' required id='confirmpassword' placeholder='Confirm your new password.' autoComplete='true' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                </div>
-                <Link to='/login'>
-                    <button className='btn btn-primary'>Back to Login</button>
-                </Link>
-                <button type='submit' className='btn btn-primary'>
-                    Reset Password
-                </button>
-            </form>
-        </div>
+
+                <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonPath='/' buttonText='Reset' />
+            </Form>
+            {error && <ErrorToast message={error} />}
+        </>
     )
 }
 

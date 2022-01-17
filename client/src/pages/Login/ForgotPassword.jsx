@@ -1,12 +1,17 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import '../../index.css'
+
+import Form from '../../components/Form'
+import FormHeader from '../../components/Form/FormHeader'
+import FormFooter from '../../components/Form/FormFooter'
+import FormInput from '../../components/Form/FormInput'
+
+import ErrorToast from '../../containers/messages/ErrorToast'
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('')
-    const [error, setError] = useState('')
-    // const [success, setSuccess] = useState('')
+    const [error, setError] = useState('This email is not registered.')
     const navigate = useNavigate()
 
     const forgotPasswordHandler = async (e) => {
@@ -21,7 +26,6 @@ const ForgotPassword = () => {
         try {
             const { data } = await axios.post('http://localhost:5000/api/auth/forgotpassword', { email }, config)
 
-            // setSuccess(data.data)
             navigate(`/resetpassword/${data.data}`)
         } catch (error) {
             setError(error.response.data.error)
@@ -33,24 +37,21 @@ const ForgotPassword = () => {
     }
 
     return (
-        <div className='forgotpassword-screen'>
-            <form onSubmit={forgotPasswordHandler} className='forgotpassword-screen__form'>
-                <h3 className='forgotpassword-screen__title'>Forgot Password</h3>
-                {error && <span className='error-message'>{error}</span>}
-                {/* {success && <span className='success-message'>{success}</span>} */}
-                <div className='form-group'>
-                    <p className='forgotpassword-screen__subtext'>Please enter the email address you registered your account with.</p>
-                    <label htmlFor='email'>Email:</label>
-                    <input type='email' required id='email' placeholder='Enter your email address.' value={email} onChange={(e) => setEmail(e.target.value)} />
+        <>
+            <Form submitHandler={forgotPasswordHandler}>
+                <FormHeader title='Forgot Password' />
+                <p className='mb-8 text-center'>Please enter the email address you registered your account with.</p>
+                <div className='space-y-4'>
+                    <FormInput type='text' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} value={email} />
                 </div>
-                <Link to='/login'>
-                    <button className='btn btn-primary'>Back to Login</button>
-                </Link>
-                <button type='submit' className='btn btn-primary'>
-                    Confirm
-                </button>
-            </form>
-        </div>
+
+                <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonPath='/' buttonText='Confirm' />
+                <div className='mt-6 text-center hover:text-primary-alt'>
+                    <Link to='/register'>Don&rsquo;t have an account? Register</Link>
+                </div>
+            </Form>
+            {error && <ErrorToast message={error} />}
+        </>
     )
 }
 

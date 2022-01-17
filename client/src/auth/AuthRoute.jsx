@@ -22,8 +22,8 @@
 import { useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
 import AccessDenied from '../auth/AccessDenied'
-import { ROLE } from '../auth/auth'
-import { selectCurrentUser, selectIsAuthenticated } from '../auth/authSlice'
+import { ROLE } from './auth'
+import { selectCurrentUser, selectIsAuthenticated } from './authSlice'
 
 export const AuthRoute = () => {
     const roles = [ROLE]
