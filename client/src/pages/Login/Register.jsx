@@ -72,7 +72,7 @@ const Register = () => {
 
                 <FormFooter subtitle='Already have an account?' subtitlePath='/login' buttonPath='/' buttonText='Create' />
             </Form>
-            {error && <ErrorToast message={error} />}
+            {error && <ErrorToast message={error} closeHandler={() => setError('')} />}
         </>
     )
 }

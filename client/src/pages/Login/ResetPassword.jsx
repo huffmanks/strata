@@ -66,7 +66,7 @@ const ResetPassword = () => {
 
                 <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonPath='/' buttonText='Reset' />
             </Form>
-            {error && <ErrorToast message={error} />}
+            {error && <ErrorToast message={error} closeHandler={() => setError('')} />}
         </>
     )
 }

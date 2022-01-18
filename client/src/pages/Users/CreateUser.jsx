@@ -69,7 +69,7 @@ const CreateUser = () => {
                         <FormRadio id='admin' name='role' label='Admin' value='Admin' />
                     </FormRadioGroup>
 
-                    <FormSelect id='team' label='Choose a team:' changeHandler={(e) => setTeam(e.target.value)} value={team}>
+                    <FormSelect className='mb-10' id='team' label='Choose a team:' changeHandler={(e) => setTeam(e.target.value)} value={team}>
                         {teams.map((team) => (
                             <FormOption key={team._id} value={team._id} label={team.title} />
                         ))}
@@ -78,7 +78,7 @@ const CreateUser = () => {
 
                 <FormFooter buttonPath='/users' buttonText='Create' />
             </Form>
-            {error && <ErrorToast message={error} />}
+            {error && <ErrorToast message={error} closeHandler={() => setError('')} />}
         </>
     )
 }

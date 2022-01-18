@@ -51,7 +51,7 @@ const ForgotPassword = () => {
                     <Link to='/register'>Don&rsquo;t have an account? Register</Link>
                 </div>
             </Form>
-            {error && <ErrorToast message={error} />}
+            {error && <ErrorToast message={error} closeHandler={() => setError('')} />}
         </>
     )
 }

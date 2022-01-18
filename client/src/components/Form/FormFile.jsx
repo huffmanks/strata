@@ -1,10 +1,10 @@
 const FormFile = ({ name, label, changeHandler, value }) => {
     return (
-        <div className='relative'>
-            <input type='file' name={name} className='block w-full appearance-none focus:outline-none bg-transparent' onChange={changeHandler} value={value} />
-            <label htmlFor={name} className='absolute top-0 origin-0'>
+        <div className='mb-4'>
+            <label htmlFor={name} className='block mb-2 text-sm'>
                 {label}
             </label>
+            <input id={name} type='file' name={name} className='block w-full appearance-none text-sm bg-gray-600 rounded-lg cursor-pointer focus:outline-none' onChange={changeHandler} value={value} />
         </div>
     )
 }
