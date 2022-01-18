@@ -4,10 +4,11 @@ import axios from 'axios'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/FormHeader'
-import FormInput from '../../components/Form/FormInput'
+import FormBody from '../../components/Form/FormBody'
 import FormFooter from '../../components/Form/FormFooter'
+import FormInput from '../../components/Form/FormInput'
 
-import ErrorToast from '../../containers/messages/ErrorToast'
+import ErrorToast from '../../components/Errors/ErrorToast'
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('')
@@ -57,11 +58,11 @@ const ResetPassword = () => {
             <Form submitHandler={resetPasswordHandler}>
                 <FormHeader title='Reset Password' />
 
-                <div className='space-y-4'>
+                <FormBody>
                     <FormInput type='text' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} value={password} />
 
                     <FormInput type='text' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
-                </div>
+                </FormBody>
 
                 <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonPath='/' buttonText='Reset' />
             </Form>

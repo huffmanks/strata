@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { selectTeamById } from '../../reducers/teamsSlice'
-import { selectAllUsers } from '../../reducers/usersSlice'
+import { selectTeamById } from '../../api/teamsSlice'
+import { selectAllUsers } from '../../api/usersSlice'
 
 import { useEditTeamMutation, useDeleteTeamMutation } from '../../api/teamApiSlice'
 

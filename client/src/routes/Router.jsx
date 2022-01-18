@@ -1,4 +1,4 @@
-import { useRoutes, Outlet } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 // Layout
 import LoginLayout from '../layout/LoginLayout'
@@ -10,54 +10,57 @@ import Register from '../pages/Login/Register'
 import ForgotPassword from '../pages/Login/ForgotPassword'
 import ResetPassword from '../pages/Login/ResetPassword'
 
-// Pages
+// Home
 import Home from '../pages/Home'
+
+// User
+import Users from '../pages/Users'
+import UsersList from '../pages/Users/UsersList'
+// import SingleUser from '../pages/Users/SingleUser'
+import CreateUser from '../pages/Users/CreateUser'
+// import EditUser from '../pages/Users/EditUser'
+
+// Team
+import Teams from '../pages/Teams'
 import TeamsList from '../pages/Teams/TeamsList'
 import SingleTeam from '../pages/Teams/SingleTeam'
 import CreateTeam from '../pages/Teams/CreateTeam'
 import EditTeam from '../pages/Teams/EditTeam'
 
-// Messages
-import NotFound from '../containers/messages/NotFound'
-import AccessDenied from '../containers/messages/AccessDenied'
+// Errors
+import NotFound from '../components/Errors/NotFound'
+import AccessDenied from '../components/Errors/AccessDenied'
 
 const Router = () => {
-    let routes = useRoutes([
-        {
-            element: <LoginLayout />,
-            children: [
-                { path: 'login', element: <Login /> },
-                { path: 'register', element: <Register /> },
-                { path: 'forgot-password', element: <ForgotPassword /> },
-                { path: 'reset-password/:resetToken', element: <ResetPassword /> },
-                { path: 'access-denied', element: <AccessDenied /> },
-            ],
-        },
-        {
-            element: <MainLayout />,
-            children: [
-                { path: '/', element: <Home /> },
-                {
-                    path: 'teams',
-                    element: (
-                        <>
-                            <TeamsList>
-                                <Outlet />
-                            </TeamsList>
-                        </>
-                    ),
-                    children: [
-                        { path: ':teamId', element: <SingleTeam /> },
-                        { path: 'create', element: <CreateTeam /> },
-                        { path: 'edit/:teamId', element: <EditTeam /> },
-                    ],
-                },
-                { path: '*', element: <NotFound /> },
-            ],
-        },
-    ])
+    return (
+        <Routes>
+            <Route element={<LoginLayout />}>
+                <Route path='login' element={<Login />} />
+                <Route path='register' element={<Register />} />
+                <Route path='forgot-password' element={<ForgotPassword />} />
+                <Route path='reset-password/:resetToken' element={<ResetPassword />} />
+                <Route path='access-denied' element={<AccessDenied />} />
+                <Route path='*' element={<NotFound />} />
+            </Route>
 
-    return routes
+            <Route element={<MainLayout />}>
+                <Route path='/' element={<Home />} />
+                <Route path='users' element={<Users />}>
+                    <Route index element={<UsersList />} />
+                    {/* <Route path=':userId' element={<SingleUser />} /> */}
+                    <Route path='create' element={<CreateUser />} />
+                    {/* <Route path='edit/:userId' element={<EditUser />} /> */}
+                </Route>
+
+                <Route path='teams' element={<Teams />}>
+                    <Route index element={<TeamsList />} />
+                    <Route path=':teamId' element={<SingleTeam />} />
+                    <Route path='create' element={<CreateTeam />} />
+                    <Route path='edit/:teamId' element={<EditTeam />} />
+                </Route>
+            </Route>
+        </Routes>
+    )
 }
 
 export default Router

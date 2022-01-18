@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/FormHeader'
-import FormInput from '../../components/Form/FormInput'
+import FormBody from '../../components/Form/FormBody'
 import FormFooter from '../../components/Form/FormFooter'
+import FormInput from '../../components/Form/FormInput'
 
-import ErrorToast from '../../containers/messages/ErrorToast'
+import ErrorToast from '../../components/Errors/ErrorToast'
 
 const Register = () => {
     const [email, setEmail] = useState('')
@@ -61,13 +62,13 @@ const Register = () => {
             <Form submitHandler={registerHandler}>
                 <FormHeader title='Register' />
 
-                <div className='space-y-4'>
+                <FormBody>
                     <FormInput type='text' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} value={email} />
 
                     <FormInput type='text' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} value={password} />
 
                     <FormInput type='text' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
-                </div>
+                </FormBody>
 
                 <FormFooter subtitle='Already have an account?' subtitlePath='/login' buttonPath='/' buttonText='Create' />
             </Form>

@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/FormHeader'
+import FormBody from '../../components/Form/FormBody'
 import FormFooter from '../../components/Form/FormFooter'
 import FormInput from '../../components/Form/FormInput'
 
-import ErrorToast from '../../containers/messages/ErrorToast'
+import ErrorToast from '../../components/Errors/ErrorToast'
 
 // import { useSelector } from 'react-redux'
 // import { selectIsAuthenticated } from '../../auth/authSlice'
@@ -38,11 +39,11 @@ const Login = () => {
             <Form submitHandler={loginHandler}>
                 <FormHeader title='Login' />
 
-                <div className='space-y-4'>
+                <FormBody>
                     <FormInput type='text' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} value={email} />
 
                     <FormInput type='text' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} value={password} />
-                </div>
+                </FormBody>
 
                 <FormFooter subtitle='Forgot Password' subtitlePath='/forgot-password' buttonPath='/' buttonText='Sign In' />
                 <div className='mt-6 text-center hover:text-primary-alt'>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectAllUsers } from '../../reducers/usersSlice'
+import { selectAllUsers } from '../../api/usersSlice'
 import { useCreateTeamMutation } from '../../api/teamApiSlice'
 
 const CreateTeam = () => {

@@ -20,13 +20,7 @@ module.exports = {
             transformOrigin: {
                 0: '0%',
             },
-            zIndex: {
-                '-1': '-1',
-            },
         },
     },
     plugins: [],
-    variants: {
-        borderColor: ['responsive', 'hover', 'focus', 'focus-within'],
-    },
 }

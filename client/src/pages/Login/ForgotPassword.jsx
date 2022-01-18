@@ -4,10 +4,11 @@ import axios from 'axios'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/FormHeader'
+import FormBody from '../../components/Form/FormBody'
 import FormFooter from '../../components/Form/FormFooter'
 import FormInput from '../../components/Form/FormInput'
 
-import ErrorToast from '../../containers/messages/ErrorToast'
+import ErrorToast from '../../components/Errors/ErrorToast'
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('')
@@ -41,9 +42,9 @@ const ForgotPassword = () => {
             <Form submitHandler={forgotPasswordHandler}>
                 <FormHeader title='Forgot Password' />
                 <p className='mb-8 text-center'>Please enter the email address you registered your account with.</p>
-                <div className='space-y-4'>
+                <FormBody>
                     <FormInput type='text' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} value={email} />
-                </div>
+                </FormBody>
 
                 <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonPath='/' buttonText='Confirm' />
                 <div className='mt-6 text-center hover:text-primary-alt'>

@@ -1,4 +1,4 @@
-import { MdSearch, MdPeople, MdFileCopy, MdChat, MdSettings, MdLogout } from 'react-icons/md'
+import { MdSearch, MdPerson, MdPeople, MdFileCopy, MdChat, MdSettings, MdLogout } from 'react-icons/md'
 
 const iconStyle = 'w-7 h-7 stroke-current'
 
@@ -7,6 +7,11 @@ export const primaryRoutes = [
         title: 'Search',
         path: '/search',
         icon: <MdSearch className={iconStyle} />,
+    },
+    {
+        title: 'Users',
+        path: '/users',
+        icon: <MdPerson className={iconStyle} />,
     },
     {
         title: 'Teams',
