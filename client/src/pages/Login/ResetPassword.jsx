@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import axios from 'axios'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+
+import { setCredentials } from '../../features/auth/authSlice'
+import { useResetPasswordMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/FormHeader'
@@ -11,45 +14,49 @@ import FormInput from '../../components/Form/FormInput'
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const ResetPassword = () => {
+    const params = useParams()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState("Passwords don't match.")
+    const [toast, setToast] = useState('')
 
-    const params = useParams()
+    const [resetPassword, { error }] = useResetPasswordMutation()
 
     const resetPasswordHandler = async (e) => {
         e.preventDefault()
 
-        const config = {
-            header: {
-                'Content-Type': 'application/json',
-            },
-        }
-
         if (password !== confirmPassword) {
             setPassword('')
             setConfirmPassword('')
-            setTimeout(() => {
-                setError('')
-            }, 5000)
-            return setError("Passwords don't match.")
+
+            return setToast(`Passwords don't match.`)
         }
 
         try {
-            const { data } = await axios.put(
-                `http://localhost:5000/api/auth/resetpassword/${params.resetToken}`,
-                {
-                    password,
-                },
-                config
-            )
+            if (error) {
+                setToast(error.data)
+            }
 
-            console.log(data)
-        } catch (error) {
-            setError(error.response.data.error)
-            setTimeout(() => {
-                setError('')
-            }, 5000)
+            const resetToken = params.resetToken
+
+            const res = await resetPassword({ resetToken, password }).unwrap()
+
+            localStorage.setItem('auth-token', res.token)
+
+            const cred = {
+                user: {
+                    email: res.user.email,
+                },
+                token: res.token,
+            }
+
+            dispatch(setCredentials(cred))
+
+            navigate('/')
+        } catch (err) {
+            setToast(err.data)
         }
     }
 
@@ -59,14 +66,16 @@ const ResetPassword = () => {
                 <FormHeader title='Reset Password' />
 
                 <FormBody>
-                    <FormInput type='text' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} value={password} />
+                    <FormInput isVisible='false' type='hidden' name='username' label='Username' />
 
-                    <FormInput type='text' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
+                    <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} autoComplete='new-password' inputValue={password} />
+
+                    <FormInput type='password' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} autoComplete='confirm-new-password' inputValue={confirmPassword} />
                 </FormBody>
 
-                <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonPath='/' buttonText='Reset' />
+                <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonText='Reset' />
             </Form>
-            {error && <ErrorToast message={error} closeHandler={() => setError('')} />}
+            {toast && <ErrorToast message={toast} closeHandler={() => setToast('')} />}
         </>
     )
 }

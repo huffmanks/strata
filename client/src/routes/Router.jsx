@@ -43,8 +43,13 @@ const Router = () => {
                 <Route path='*' element={<NotFound />} />
             </Route>
 
-            <Route element={<MainLayout />}>
-                <Route path='/' element={<Home />} />
+            <Route
+                path='/'
+                element={
+                    <MainLayout>
+                        <Home />
+                    </MainLayout>
+                }>
                 <Route path='users' element={<Users />}>
                     <Route index element={<UsersList />} />
                     {/* <Route path=':userId' element={<SingleUser />} /> */}

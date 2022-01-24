@@ -1,22 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import usersReducer from './feature/UserSlice'
-
-// import { teamApiSlice } from './api/teamApiSlice'
-// import { auth } from './auth/auth'
-// import authReducer from './auth/authSlice'
+import { authApi } from './features/auth/authApi'
+import authReducer from './features/auth/authSlice'
 
 // const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : undefined
 
 export const store = configureStore({
     reducer: {
-        users: usersReducer,
-        // teams: teamsReducer,
         // persistedState,
-        // [auth.reducerPath]: auth.reducer,
-        // auth: authReducer,
-        // [teamApiSlice.reducerPath]: teamApiSlice.reducer,
+        [authApi.reducerPath]: authApi.reducer,
+        auth: authReducer,
     },
-    // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(auth.middleware),
-    // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(teamApiSlice.middleware, auth.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authApi.middleware),
 })

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+
+import { useForgotPasswordMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/FormHeader'
@@ -11,29 +12,26 @@ import FormInput from '../../components/Form/FormInput'
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const ForgotPassword = () => {
-    const [email, setEmail] = useState('')
-    const [error, setError] = useState('This email is not registered.')
     const navigate = useNavigate()
+
+    const [email, setEmail] = useState('')
+    const [toast, setToast] = useState('')
+
+    const [forgotPassword, { error }] = useForgotPasswordMutation()
 
     const forgotPasswordHandler = async (e) => {
         e.preventDefault()
 
-        const config = {
-            header: {
-                'Content-Type': 'application/json',
-            },
-        }
-
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/forgotpassword', { email }, config)
+            if (error) {
+                setToast(error.data)
+            }
 
-            navigate(`/resetpassword/${data.data}`)
-        } catch (error) {
-            setError(error.response.data.error)
-            setEmail('')
-            setTimeout(() => {
-                setError('')
-            }, 5000)
+            const res = await forgotPassword({ email }).unwrap()
+
+            navigate(`/reset-password/${res.data}`)
+        } catch (err) {
+            setToast(err.data)
         }
     }
 
@@ -43,15 +41,15 @@ const ForgotPassword = () => {
                 <FormHeader title='Forgot Password' />
                 <p className='mb-8 text-center'>Please enter the email address you registered your account with.</p>
                 <FormBody>
-                    <FormInput type='text' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} value={email} />
+                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} autoComplete='reset-email' />
                 </FormBody>
 
-                <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonPath='/' buttonText='Confirm' />
+                <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonText='Confirm' />
                 <div className='mt-6 text-center hover:text-primary-alt'>
                     <Link to='/register'>Don&rsquo;t have an account? Register</Link>
                 </div>
             </Form>
-            {error && <ErrorToast message={error} closeHandler={() => setError('')} />}
+            {toast && <ErrorToast message={toast} closeHandler={() => setToast('')} />}
         </>
     )
 }

@@ -1,27 +1,27 @@
-import { useGetTeamsQuery, useDeleteTeamMutation } from '../../api/teamApiSlice'
+// import { useGetTeamsQuery, useDeleteTeamMutation } from '../../api/teamApiSlice'
 
 import { Link } from 'react-router-dom'
 
 const TeamsList = () => {
-    const { data, isLoading, error } = useGetTeamsQuery()
-    const [deleteTeam] = useDeleteTeamMutation()
+    // const { data, isLoading, error } = useGetTeamsQuery()
+    // const [deleteTeam] = useDeleteTeamMutation()
 
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
-    if (error) {
-        return <div>Oops, an error occured</div>
-    }
+    // if (isLoading) {
+    //     return <div>Loading...</div>
+    // }
+    // if (error) {
+    //     return <div>Oops, an error occured</div>
+    // }
 
-    const onDeleteTeamClicked = async (e) => {
-        const parent = e.target.parentNode.parentNode
+    // const onDeleteTeamClicked = async (e) => {
+    //     const parent = e.target.parentNode.parentNode
 
-        try {
-            await deleteTeam(parent.id)
-        } catch (err) {
-            console.error('Failed to delete team: ', err)
-        }
-    }
+    //     try {
+    //         await deleteTeam(parent.id)
+    //     } catch (err) {
+    //         console.error('Failed to delete team: ', err)
+    //     }
+    // }
 
     return (
         <div>
@@ -36,7 +36,7 @@ const TeamsList = () => {
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                     {data.data.map((team) => (
                         <tr key={team.id} id={team.id} className='border-b border-gray-400'>
                             <td>{team.attributes.title}</td>
@@ -53,7 +53,7 @@ const TeamsList = () => {
                             </td>
                         </tr>
                     ))}
-                </tbody>
+                </tbody> */}
             </table>
             <div className='fixed bottom-6 right-6'>
                 <Link to={`/teams/create`}>

@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import axios from 'axios'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+
+import { setCredentials } from '../../features/auth/authSlice'
+import { useRegisterMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/FormHeader'
@@ -11,49 +14,47 @@ import FormInput from '../../components/Form/FormInput'
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const Register = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [error, setError] = useState('Passwords do not match.')
+    const [toast, setToast] = useState('')
 
-    const navigate = useNavigate()
+    const [register, { error }] = useRegisterMutation()
 
     const registerHandler = async (e) => {
         e.preventDefault()
 
-        const config = {
-            header: {
-                'Content-Type': 'application/json',
-            },
-        }
-
         if (password !== confirmPassword) {
             setPassword('')
             setConfirmPassword('')
-            setTimeout(() => {
-                setError('')
-            }, 5000)
-            return setError('Passwords do not match.')
+
+            return setToast(`Passwords don't match.`)
         }
 
         try {
-            const { data } = await axios.post(
-                'http://localhost:5000/api/auth/register',
-                {
-                    email,
-                    password,
-                },
-                config
-            )
+            if (error) {
+                setToast(error.data)
+            }
 
-            localStorage.setItem('authToken', data.token)
+            const res = await register({ email, password }).unwrap()
+
+            localStorage.setItem('auth-token', res.token)
+
+            const cred = {
+                user: {
+                    email: res.user.email,
+                },
+                token: res.token,
+            }
+
+            dispatch(setCredentials(cred))
 
             navigate('/')
-        } catch (error) {
-            setError(error.response.data.error)
-            setTimeout(() => {
-                setError('')
-            }, 5000)
+        } catch (err) {
+            setToast(err.data)
         }
     }
 
@@ -63,16 +64,16 @@ const Register = () => {
                 <FormHeader title='Register' />
 
                 <FormBody>
-                    <FormInput type='text' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} value={email} />
+                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} autoComplete='register-email' inputValue={email} />
 
-                    <FormInput type='text' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} value={password} />
+                    <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} autoComplete='register-password' inputValue={password} />
 
-                    <FormInput type='text' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
+                    <FormInput type='password' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} autoComplete='register-confirm-password' inputValue={confirmPassword} />
                 </FormBody>
 
-                <FormFooter subtitle='Already have an account?' subtitlePath='/login' buttonPath='/' buttonText='Create' />
+                <FormFooter subtitle='Already have an account?' subtitlePath='/login' buttonText='Create' />
             </Form>
-            {error && <ErrorToast message={error} closeHandler={() => setError('')} />}
+            {toast && <ErrorToast message={toast} closeHandler={() => setToast('')} />}
         </>
     )
 }

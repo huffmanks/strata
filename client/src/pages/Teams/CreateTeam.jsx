@@ -1,51 +1,51 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { selectAllUsers } from '../../api/usersSlice'
-import { useCreateTeamMutation } from '../../api/teamApiSlice'
+// import { useSelector } from 'react-redux'
+// import { selectAllUsers } from '../../api/usersSlice'
+// import { useCreateTeamMutation } from '../../api/teamApiSlice'
 
 const CreateTeam = () => {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [userId, setUserId] = useState([])
+    // const [userId, setUserId] = useState([])
 
-    const [createTeam, { isLoading }] = useCreateTeamMutation()
-    const users = useSelector(selectAllUsers)
+    // const [createTeam, { isLoading }] = useCreateTeamMutation()
+    // const users = useSelector(selectAllUsers)
 
     const onTitleChanged = (e) => setTitle(e.target.value)
     const onDescriptionChanged = (e) => setDescription(e.target.value)
-    const onUsersChanged = (e) => {
-        let users = [...userId]
+    // const onUsersChanged = (e) => {
+    //     let users = [...userId]
 
-        if (e.target.checked) {
-            users = [...userId, e.target.value]
-        } else {
-            users.splice(userId.indexOf(e.target.value), 1)
-        }
-        setUserId(users)
-    }
+    //     if (e.target.checked) {
+    //         users = [...userId, e.target.value]
+    //     } else {
+    //         users.splice(userId.indexOf(e.target.value), 1)
+    //     }
+    //     setUserId(users)
+    // }
 
-    const canSave = [title, description, userId].every(Boolean) && !isLoading
+    // const canSave = [title, description, userId].every(Boolean) && !isLoading
 
-    const onCreateTeamClicked = async () => {
-        if (canSave) {
-            try {
-                await createTeam({ title, description, users: userId }).unwrap()
-                setTitle('')
-                setDescription('')
-                setUserId([])
-            } catch (err) {
-                console.error('Failed to save team: ', err)
-            }
-        }
-    }
-    const usersOptions = users.map((user) => (
-        <div key={user.id}>
-            <input type='checkbox' id={user.id} name='users' value={user.id} onChange={onUsersChanged} />
-            <label className='ml-2' htmlFor={user.id}>
-                {user.username}
-            </label>
-        </div>
-    ))
+    // const onCreateTeamClicked = async () => {
+    //     if (canSave) {
+    //         try {
+    //             await createTeam({ title, description, users: userId }).unwrap()
+    //             setTitle('')
+    //             setDescription('')
+    //             setUserId([])
+    //         } catch (err) {
+    //             console.error('Failed to save team: ', err)
+    //         }
+    //     }
+    // }
+    // const usersOptions = users.map((user) => (
+    //     <div key={user.id}>
+    //         <input type='checkbox' id={user.id} name='users' value={user.id} onChange={onUsersChanged} />
+    //         <label className='ml-2' htmlFor={user.id}>
+    //             {user.username}
+    //         </label>
+    //     </div>
+    // ))
 
     return (
         <div className='flex flex-col items-center justify-center'>
@@ -60,7 +60,7 @@ const CreateTeam = () => {
                 <div className='mb-5'>
                     <label className='block text-lg font-bold mb-2'>Users:</label>
 
-                    <>{usersOptions}</>
+                    {/* <>{usersOptions}</> */}
                 </div>
                 <div className='mb-5'>
                     <label className='block text-lg font-bold mb-2' htmlFor='teamDescription'>
@@ -68,11 +68,11 @@ const CreateTeam = () => {
                     </label>
                     <textarea className='w-full h-48 px-4 py-3 text-neutral-900 text-lg border-none outline-none rounded' id='teamDescription' name='teamDescription' value={description} onChange={onDescriptionChanged} />
                 </div>
-                <div className='w-full flex items-center justify-center'>
+                {/* <div className='w-full flex items-center justify-center'>
                     <button className='w-full flex items-center justify-center p-3 bg-gray-800 text-xl font-bold text-center rounded shadow-sm cursor-pointer hover:bg-gray-700' type='button' onClick={onCreateTeamClicked} disabled={!canSave}>
                         Create Team
                     </button>
-                </div>
+                </div> */}
             </form>
         </div>
     )
