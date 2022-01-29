@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const UsersList = () => {
     return (
@@ -7,7 +7,6 @@ const UsersList = () => {
                 <div>List of users</div>
                 <Link to='/users/create'>Create a user</Link>
             </>
-            <Outlet />
         </>
     )
 }

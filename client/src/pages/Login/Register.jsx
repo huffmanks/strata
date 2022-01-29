@@ -46,6 +46,7 @@ const Register = () => {
             const cred = {
                 user: {
                     email: res.user.email,
+                    role: res.user.role,
                 },
                 token: res.token,
             }

@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
+import { PrivateRoute } from './PrivateRoute'
+import { ROLES } from '../features/auth/authSlice'
 
 // Layout
 import LoginLayout from '../layout/LoginLayout'
@@ -10,8 +12,8 @@ import Register from '../pages/Login/Register'
 import ForgotPassword from '../pages/Login/ForgotPassword'
 import ResetPassword from '../pages/Login/ResetPassword'
 
-// Home
-import Home from '../pages/Home'
+// Dashboard
+import Dashboard from '../pages/Dashboard'
 
 // User
 import Users from '../pages/Users'
@@ -27,9 +29,8 @@ import SingleTeam from '../pages/Teams/SingleTeam'
 import CreateTeam from '../pages/Teams/CreateTeam'
 import EditTeam from '../pages/Teams/EditTeam'
 
-// Errors
-import NotFound from '../components/Errors/NotFound'
-import AccessDenied from '../components/Errors/AccessDenied'
+// Common
+import { AccessDenied, NotFound } from '../pages/Common'
 
 const Router = () => {
     return (
@@ -39,18 +40,11 @@ const Router = () => {
                 <Route path='register' element={<Register />} />
                 <Route path='forgot-password' element={<ForgotPassword />} />
                 <Route path='reset-password/:resetToken' element={<ResetPassword />} />
-                <Route path='access-denied' element={<AccessDenied />} />
-                <Route path='*' element={<NotFound />} />
             </Route>
 
-            <Route
-                path='/'
-                element={
-                    <MainLayout>
-                        <Home />
-                    </MainLayout>
-                }>
-                <Route path='users' element={<Users />}>
+            <Route path='/' element={<MainLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path='users' element={<PrivateRoute roles={[ROLES.ADMIN]} component={Users} />}>
                     <Route index element={<UsersList />} />
                     {/* <Route path=':userId' element={<SingleUser />} /> */}
                     <Route path='create' element={<CreateUser />} />
@@ -63,6 +57,8 @@ const Router = () => {
                     <Route path='create' element={<CreateTeam />} />
                     <Route path='edit/:teamId' element={<EditTeam />} />
                 </Route>
+                <Route path='access-denied' element={<AccessDenied />} />
+                <Route path='*' element={<NotFound />} />
             </Route>
         </Routes>
     )

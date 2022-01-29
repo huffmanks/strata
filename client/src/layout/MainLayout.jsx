@@ -1,22 +1,20 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 import Sidebar from './Sidebar'
 import PageContainer from './PageContainer'
 
 const MainLayout = () => {
-    let user = useAuth()
-    let location = useLocation()
+    const auth = useAuth()
 
-    if (!user) {
-        return <Navigate to='/login' state={{ from: location }} replace />
+    if (!auth.isAuthenticated) {
+        return <Navigate to='/login' replace />
     } else {
         return (
             <div className='w-screen h-screen flex'>
                 <Sidebar />
 
                 <PageContainer />
-                <Outlet />
             </div>
         )
     }

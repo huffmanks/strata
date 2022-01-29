@@ -1,5 +1,5 @@
-const FormOption = ({ value, label }) => {
-    return <option value={value}>{label}</option>
+const FormOption = ({ optionValue, label }) => {
+    return <option value={optionValue}>{label}</option>
 }
 
 export default FormOption

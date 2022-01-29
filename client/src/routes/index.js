@@ -41,5 +41,6 @@ export const secondaryRoutes = [
         title: 'Logout',
         path: '/login',
         icon: <MdLogout className={iconStyle} />,
+        hasLogout: true,
     },
 ]

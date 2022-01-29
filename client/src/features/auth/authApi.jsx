@@ -51,7 +51,10 @@ export const authApi = createApi({
             invalidatesTags: [{ type: 'User' }],
             // invalidatesTags: (result, error, { id }) => [{ type: 'User', id }],
         }),
+        protected: build.mutation({
+            query: () => 'protected',
+        }),
     }),
 })
 
-export const { useLoginMutation, useRegisterMutation, useForgotPasswordMutation, useResetPasswordMutation } = authApi
+export const { useLoginMutation, useRegisterMutation, useForgotPasswordMutation, useResetPasswordMutation, useProtectedMutation } = authApi
