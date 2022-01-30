@@ -5,7 +5,7 @@ const FormFile = ({ name, label, changeHandler, previewImg }) => {
         <div className='flex items-center gap-5 mb-5 '>
             {!previewImg ? <MdAccountCircle className='w-12 h-12 stroke-current' /> : <img className='w-12 h-12 object-cover rounded-full' src={previewImg} />}
             <>
-                <label htmlFor={name} className='p-2 bg-gray-600 text-sm rounded-lg border border-neutral-500 cursor-pointer focus:border-primary-main'>
+                <label htmlFor={name} className='p-2 bg-primary-main text-sm rounded-lg border border-neutral-500 cursor-pointer active:border-primary-main'>
                     {label}
                 </label>
             </>

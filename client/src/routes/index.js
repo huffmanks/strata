@@ -1,4 +1,4 @@
-import { MdSearch, MdPerson, MdPeople, MdFileCopy, MdChat, MdSettings, MdLogout } from 'react-icons/md'
+import { MdSearch, MdPerson, MdPeople, MdFileCopy, MdChat, MdSettings } from 'react-icons/md'
 
 const iconStyle = 'w-7 h-7 stroke-current'
 
@@ -36,11 +36,5 @@ export const secondaryRoutes = [
         title: 'Settings',
         path: '/settings',
         icon: <MdSettings className={iconStyle} />,
-    },
-    {
-        title: 'Logout',
-        path: '/login',
-        icon: <MdLogout className={iconStyle} />,
-        hasLogout: true,
     },
 ]

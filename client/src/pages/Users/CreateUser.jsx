@@ -30,11 +30,39 @@ const CreateUser = () => {
     const teams = [
         {
             _id: 1,
-            title: 'My Team',
+            title: 'My Team 1',
         },
         {
             _id: 2,
             title: 'My Team 2',
+        },
+        {
+            _id: 3,
+            title: 'My Team 3',
+        },
+        {
+            _id: 4,
+            title: 'My Team 4',
+        },
+        {
+            _id: 5,
+            title: 'My Team 5',
+        },
+        {
+            _id: 6,
+            title: 'My Team 6',
+        },
+        {
+            _id: 7,
+            title: 'My Team 7',
+        },
+        {
+            _id: 8,
+            title: 'My Team 8',
+        },
+        {
+            _id: 9,
+            title: 'My Team 9',
         },
     ]
 
@@ -73,15 +101,10 @@ const CreateUser = () => {
 
                     <FormFile type='file' name='profileImage' label='Upload Profile Image' changeHandler={handleImage} previewImg={profileImage} />
 
-                    <FormRadioGroup label='Role' value={role} changeHandler={(e) => setRole(e.target.value)}>
-                        <FormRadio id='user' name='role' label='User' radioValue='user' isDefault={true} />
-                        <FormRadio id='admin' name='role' label='Admin' radioValue='admin' />
-                    </FormRadioGroup>
-
                     <Select title='Team'>
-                        <FormSelectBox inputName='team'>
+                        <FormSelectBox defaultName='team' defaultValue='Choose a team:'>
                             {teams.map((team) => (
-                                <FormSelectValue key={team.title} id={team._id} name='team' selectValue={team.title} isDefault={false} isDisabled={false} />
+                                <FormSelectValue key={team.title} valueId={team._id} groupName='team' selectValue={team.title} />
                             ))}
                         </FormSelectBox>
 
@@ -91,37 +114,10 @@ const CreateUser = () => {
                             ))}
                         </FormOptionList>
                     </Select>
-                    {/* <div className='block mb-2 text-light-main text-base'>Team</div>
-                    <div className='select-box relative block w-full h-12 mx-auto  text-light-main'>
-                        <div className='select-box__current group peer relative shadow-md outline-none cursor-pointer' tabIndex='1'>
-                            <div className='select-box__value flex'>
-                                <input className='select-box__input peer hidden' type='radio' id='0' value='1' name='Ben' defaultChecked disabled />
-                                <p className='select-box__input-text hidden w-full p-4 bg-neutral-600 peer-checked:block'>Select a team:</p>
-                            </div>
-                            <div className='select-box__value flex'>
-                                <input className='select-box__input peer hidden' type='radio' id='1' value='2' name='Ben' />
-                                <p className='select-box__input-text hidden w-full p-4 bg-neutral-600 peer-checked:block'>Team 1</p>
-                            </div>
-                            <div className='select-box__value flex'>
-                                <input className='select-box__input peer hidden' type='radio' id='2' value='3' name='Ben' />
-                                <p className='select-box__input-text hidden w-full p-4 bg-neutral-600 peer-checked:block'>Team 2</p>
-                            </div>
-
-                            <img className='select-box__icon group-focus:-translate-y-1/2 group-focus:rotate-180 absolute top-1/2 right-4 w-5 opacity-30 -translate-y-1/2 transition-all' src='https://cdn.onlinewebfonts.com/svg/img_295694.svg' alt='Arrow Icon' aria-hidden='true' />
-                        </div>
-                        <ul className='select-box__list peer-focus:opacity-100 peer-focus:[animation-name:none] absolute w-full bg-primary-main list-none shadow-md opacity-0 duration-300 delay-200 animate-hideSelect'>
-                            <li>
-                                <label className='select-box__option block p-4 bg-gray-700 cursor-pointer hover:bg-primary-alt focus:bg-primary-alt' htmlFor='1' aria-hidden='aria-hidden'>
-                                    Team 1
-                                </label>
-                            </li>
-                            <li>
-                                <label className='select-box__option block p-4 bg-gray-700 cursor-pointer hover:bg-primary-alt focus:bg-primary-alt' htmlFor='2' aria-hidden='aria-hidden'>
-                                    Team 2
-                                </label>
-                            </li>
-                        </ul>
-                    </div> */}
+                    <FormRadioGroup label='Role' value={role} changeHandler={(e) => setRole(e.target.value)}>
+                        <FormRadio id='user' name='role' label='User' radioValue='user' isDefault={true} />
+                        <FormRadio id='admin' name='role' label='Admin' radioValue='admin' />
+                    </FormRadioGroup>
                 </FormBody>
 
                 <FormFooter buttonText='Create' />

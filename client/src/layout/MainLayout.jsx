@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth'
 
 import Sidebar from './Sidebar'
 import PageContainer from './PageContainer'
+import Navbar from './Navbar'
 
 const MainLayout = () => {
     const auth = useAuth()
@@ -11,9 +12,9 @@ const MainLayout = () => {
         return <Navigate to='/login' replace />
     } else {
         return (
-            <div className='w-screen h-screen flex'>
+            <div className='min-w-screen min-h-screen flex'>
                 <Sidebar />
-
+                <Navbar />
                 <PageContainer />
             </div>
         )
