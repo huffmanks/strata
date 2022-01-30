@@ -13,7 +13,7 @@ export const authApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['User'],
+    tagTypes: ['Auth'],
     endpoints: (build) => ({
         login: build.mutation({
             query: (credentials) => ({
@@ -21,7 +21,7 @@ export const authApi = createApi({
                 method: 'POST',
                 body: credentials,
             }),
-            invalidatesTags: [{ type: 'User' }],
+            invalidatesTags: [{ type: 'Auth' }],
         }),
 
         register: build.mutation({
@@ -30,7 +30,7 @@ export const authApi = createApi({
                 method: 'POST',
                 body,
             }),
-            invalidatesTags: [{ type: 'User' }],
+            invalidatesTags: [{ type: 'Auth' }],
         }),
 
         forgotPassword: build.mutation({
@@ -39,7 +39,7 @@ export const authApi = createApi({
                 method: 'POST',
                 body: email,
             }),
-            invalidatesTags: [{ type: 'User' }],
+            invalidatesTags: [{ type: 'Auth' }],
         }),
 
         resetPassword: build.mutation({
@@ -48,8 +48,8 @@ export const authApi = createApi({
                 method: 'PATCH',
                 body: password,
             }),
-            invalidatesTags: [{ type: 'User' }],
-            // invalidatesTags: (result, error, { id }) => [{ type: 'User', id }],
+            invalidatesTags: [{ type: 'Auth' }],
+            // invalidatesTags: (result, error, { id }) => [{ type: 'Auth', id }],
         }),
         protected: build.mutation({
             query: () => 'protected',

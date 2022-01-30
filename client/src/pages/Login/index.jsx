@@ -32,7 +32,7 @@ const Login = () => {
 
             const res = await login({ email, password }).unwrap()
 
-            localStorage.setItem('auth-token', res.token)
+            document.cookie = 'token=' + res.token
 
             const cred = {
                 user: {

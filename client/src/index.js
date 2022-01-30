@@ -7,10 +7,6 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
 
-// store.subscribe(() => {
-//     localStorage.setItem('reduxState', JSON.stringify(store.getState()))
-// })
-
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>

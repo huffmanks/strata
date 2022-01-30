@@ -24,7 +24,7 @@ const CreateUser = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [profileImage, setProfileImage] = useState('')
     const [role, setRole] = useState('user')
-    // const [team, setTeam] = useState('')
+    const [team, setTeam] = useState('')
     const [error, setError] = useState('')
 
     const teams = [
@@ -72,6 +72,7 @@ const CreateUser = () => {
 
     const createUserHandler = (e) => {
         e.preventDefault()
+        console.log(team)
 
         if (!email || !password || !confirmPassword) {
             setError('You must enter an email and a password')
@@ -80,8 +81,6 @@ const CreateUser = () => {
             setError('Passwords do not match.')
         }
     }
-
-    console.log(role)
 
     return (
         <>
@@ -104,7 +103,7 @@ const CreateUser = () => {
                     <Select title='Team'>
                         <FormSelectBox defaultName='team' defaultValue='Choose a team:'>
                             {teams.map((team) => (
-                                <FormSelectValue key={team.title} valueId={team._id} groupName='team' selectValue={team.title} />
+                                <FormSelectValue key={team.title} valueId={team._id} groupName='team' selectValue={team.title} changeHandler={(e) => setTeam(e.target.value)} />
                             ))}
                         </FormSelectBox>
 

@@ -1,4 +1,5 @@
 import FormSelectValue from './FormSelectValue'
+import { MdKeyboardArrowDown } from 'react-icons/md'
 
 const FormSelectBox = ({ defaultName, defaultValue, children }) => {
     return (
@@ -7,7 +8,7 @@ const FormSelectBox = ({ defaultName, defaultValue, children }) => {
 
             <>{children}</>
 
-            <img className='absolute top-1/2 right-4 w-5 opacity-70 -translate-y-1/2 transition-all group-focus:-translate-y-1/2 group-focus:rotate-180' src='https://cdn.onlinewebfonts.com/svg/img_295694.svg' alt='Arrow Icon' aria-hidden='true' />
+            <MdKeyboardArrowDown className='absolute top-1/2 right-4 w-6 h-6 opacity-70 -translate-y-1/2 transition-all group-focus:-translate-y-1/2 group-focus:rotate-180' alt='Arrow Icon' aria-hidden='true' />
         </div>
     )
 }
