@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForgotPasswordMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
-import FormHeader from '../../components/Form/FormHeader'
-import FormBody from '../../components/Form/FormBody'
-import FormFooter from '../../components/Form/FormFooter'
+import FormHeader from '../../components/Form/Layout/FormHeader'
+import FormBody from '../../components/Form/Layout/FormBody'
+import FormFooter from '../../components/Form/Layout/FormFooter'
 import FormInput from '../../components/Form/FormInput'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
@@ -41,7 +41,7 @@ const ForgotPassword = () => {
                 <FormHeader title='Forgot Password' />
                 <p className='mb-8 text-center'>Please enter the email address you registered your account with.</p>
                 <FormBody>
-                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} autoComplete='reset-email' />
+                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} />
                 </FormBody>
 
                 <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonText='Confirm' />

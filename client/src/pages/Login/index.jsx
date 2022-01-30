@@ -6,9 +6,9 @@ import { setCredentials } from '../../features/auth/authSlice'
 import { useLoginMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
-import FormHeader from '../../components/Form/FormHeader'
-import FormBody from '../../components/Form/FormBody'
-import FormFooter from '../../components/Form/FormFooter'
+import FormHeader from '../../components/Form/Layout/FormHeader'
+import FormBody from '../../components/Form/Layout/FormBody'
+import FormFooter from '../../components/Form/Layout/FormFooter'
 import FormInput from '../../components/Form/FormInput'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
@@ -56,9 +56,9 @@ const Login = () => {
                 <FormHeader title='Login' />
 
                 <FormBody>
-                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} autoComplete='current-email' inputValue={email} />
+                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} inputValue={email} />
 
-                    <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} autoComplete='current-password' inputValue={password} />
+                    <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} inputValue={password} />
                 </FormBody>
 
                 <FormFooter subtitle='Forgot Password' subtitlePath='/forgot-password' buttonText='Sign In' />

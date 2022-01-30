@@ -6,9 +6,9 @@ import { setCredentials } from '../../features/auth/authSlice'
 import { useResetPasswordMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
-import FormHeader from '../../components/Form/FormHeader'
-import FormBody from '../../components/Form/FormBody'
-import FormFooter from '../../components/Form/FormFooter'
+import FormHeader from '../../components/Form/Layout/FormHeader'
+import FormBody from '../../components/Form/Layout/FormBody'
+import FormFooter from '../../components/Form/Layout/FormFooter'
 import FormInput from '../../components/Form/FormInput'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
@@ -68,9 +68,9 @@ const ResetPassword = () => {
                 <FormBody>
                     <FormInput isVisible='false' type='hidden' name='username' label='Username' />
 
-                    <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} autoComplete='new-password' inputValue={password} />
+                    <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} inputValue={password} />
 
-                    <FormInput type='password' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} autoComplete='confirm-new-password' inputValue={confirmPassword} />
+                    <FormInput type='password' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} inputValue={confirmPassword} />
                 </FormBody>
 
                 <FormFooter subtitle='Back to Login' subtitlePath='/login' buttonText='Reset' />

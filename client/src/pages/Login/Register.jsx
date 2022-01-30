@@ -6,9 +6,9 @@ import { setCredentials } from '../../features/auth/authSlice'
 import { useRegisterMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
-import FormHeader from '../../components/Form/FormHeader'
-import FormBody from '../../components/Form/FormBody'
-import FormFooter from '../../components/Form/FormFooter'
+import FormHeader from '../../components/Form/Layout/FormHeader'
+import FormBody from '../../components/Form/Layout/FormBody'
+import FormFooter from '../../components/Form/Layout/FormFooter'
 import FormInput from '../../components/Form/FormInput'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
@@ -65,11 +65,11 @@ const Register = () => {
                 <FormHeader title='Register' />
 
                 <FormBody>
-                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} autoComplete='register-email' inputValue={email} />
+                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} inputValue={email} />
 
-                    <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} autoComplete='register-password' inputValue={password} />
+                    <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} inputValue={password} />
 
-                    <FormInput type='password' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} autoComplete='register-confirm-password' inputValue={confirmPassword} />
+                    <FormInput type='password' name='confirmPassword' label='Confirm Password' changeHandler={(e) => setConfirmPassword(e.target.value)} inputValue={confirmPassword} />
                 </FormBody>
 
                 <FormFooter subtitle='Already have an account?' subtitlePath='/login' buttonText='Create' />

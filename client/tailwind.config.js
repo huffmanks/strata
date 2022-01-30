@@ -20,6 +20,15 @@ module.exports = {
             transformOrigin: {
                 0: '0%',
             },
+            keyframes: {
+                hideSelect: {
+                    '0%': { transform: 'scaleY(1)' },
+                    '100%': { transform: 'scaleY(0)' },
+                },
+            },
+            animation: {
+                hideSelect: 'hideSelect 0.5s forwards 0.5s',
+            },
         },
     },
     plugins: [],

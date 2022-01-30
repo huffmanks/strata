@@ -46,15 +46,15 @@
 
 /* File input */
 input::-webkit-file-upload-button {
-    @apply bg-primary-main mr-4 py-2 px-3 border-none text-light-main;
+    @apply bg-primary-main mr-4 py-2 px-3 border-none text-light-main sm:flex flex-col;
 }
 
 /* Floating label inputs */
-input:focus-within ~ label,
-input:not(:placeholder-shown) ~ label {
+.text-input input:focus-within ~ label,
+.text-input input:not(:placeholder-shown) ~ label {
     @apply transform scale-75 -translate-y-6;
 }
 
-input:focus-within ~ label {
+.text-input input:focus-within ~ label {
     @apply text-primary-alt;
 }
