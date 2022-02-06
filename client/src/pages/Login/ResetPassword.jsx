@@ -39,17 +39,18 @@ const ResetPassword = () => {
                 setToast(error.data)
             }
 
-            const resetToken = params.resetToken
+            const resetPasswordToken = params.resetPasswordToken
 
-            const res = await resetPassword({ resetToken, password }).unwrap()
+            const res = await resetPassword({ resetPasswordToken, password }).unwrap()
 
-            localStorage.setItem('auth-token', res.token)
+            document.cookie = 'accessToken=' + res.accessToken
 
             const cred = {
                 user: {
                     email: res.user.email,
+                    role: res.user.role,
                 },
-                token: res.token,
+                accessToken: res.accessToken,
             }
 
             dispatch(setCredentials(cred))

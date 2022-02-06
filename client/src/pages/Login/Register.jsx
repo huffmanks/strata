@@ -41,14 +41,14 @@ const Register = () => {
 
             const res = await register({ email, password }).unwrap()
 
-            localStorage.setItem('auth-token', res.token)
+            document.cookie = 'accessToken=' + res.accessToken
 
             const cred = {
                 user: {
                     email: res.user.email,
                     role: res.user.role,
                 },
-                token: res.token,
+                accessToken: res.accessToken,
             }
 
             dispatch(setCredentials(cred))

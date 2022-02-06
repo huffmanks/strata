@@ -5,11 +5,12 @@ export const userApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: `http://localhost:5000/api/private/`,
         // baseUrl: `${process.env.BASE_PRIVATE_API_URL}`,
-        prepareHeaders: (headers, { getState }) => {
-            const token = getState().auth.token
 
-            if (token) {
-                headers.set('authorization', `Bearer ${token}`)
+        prepareHeaders: async (headers, { getState }) => {
+            const accessToken = getState().auth.accessToken
+
+            if (accessToken) {
+                headers.set('authorization', `Bearer ${accessToken}`)
             }
             return headers
         },
@@ -18,10 +19,10 @@ export const userApi = createApi({
     tagTypes: ['User'],
     endpoints: (build) => ({
         getUsers: build.query({
-            query: (token) => ({
+            query: () => ({
                 url: 'users',
                 method: 'GET',
-                token,
+                // accessToken,
             }),
             invalidatesTags: [{ type: 'User' }],
         }),

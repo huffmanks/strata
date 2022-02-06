@@ -6,9 +6,9 @@ export const authApi = createApi({
         baseUrl: `http://localhost:5000/api/auth/`,
         // baseUrl: `${process.env.BASE_AUTH_API_URL}`,
         prepareHeaders: (headers, { getState }) => {
-            const token = getState().auth.token
-            if (token) {
-                headers.set('authorization', `Bearer ${token}`)
+            const accessToken = getState().auth.accessToken
+            if (accessToken) {
+                headers.set('authorization', `Bearer ${accessToken}`)
             }
             return headers
         },
@@ -35,7 +35,7 @@ export const authApi = createApi({
 
         forgotPassword: build.mutation({
             query: (email) => ({
-                url: 'forgotpassword',
+                url: 'forgot-password',
                 method: 'POST',
                 body: email,
             }),
@@ -43,14 +43,15 @@ export const authApi = createApi({
         }),
 
         resetPassword: build.mutation({
-            query: ({ resetToken, ...password }) => ({
-                url: `resetpassword/${resetToken}`,
+            query: ({ resetPasswordToken, ...password }) => ({
+                url: `reset-password/${resetPasswordToken}`,
                 method: 'PATCH',
                 body: password,
             }),
             invalidatesTags: [{ type: 'Auth' }],
             // invalidatesTags: (result, error, { id }) => [{ type: 'Auth', id }],
         }),
+
         protected: build.mutation({
             query: () => 'protected',
         }),

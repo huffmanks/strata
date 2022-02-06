@@ -6,7 +6,7 @@ import Button from '../../components/Button'
 const UsersList = () => {
     const { data: users, isLoading } = useGetUsersQuery()
 
-    console.log(users, isLoading)
+    console.log(users)
 
     isLoading && <div>Loading...</div>
 
@@ -16,7 +16,7 @@ const UsersList = () => {
             <div>List of users</div>
             {users.map((user) => (
                 <div className='my-10' key={user._id}>
-                    {user.profileImage && <img className='w-20 h-20 object-cover rounded-full' src={`http://localhost:5000/static/images/${user.profileImage.fileName}`} alt={user.userName} />}
+                    {user.profileImage && <img className='w-20 h-20 object-cover rounded-full' src={`http://localhost:5000/uploads/images/${user.profileImage.fileName}`} alt={user.userName} />}
                     <div>Email: {user.email}</div>
                     <div>Username: {user.userName}</div>
                     <div>Role: {user.role}</div>

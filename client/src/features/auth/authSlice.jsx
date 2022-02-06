@@ -2,29 +2,30 @@ import { createSlice } from '@reduxjs/toolkit'
 import { authApi } from './authApi'
 
 export const ROLES = {
-    ADMIN: 'admin',
-    USER: 'user',
+    ADMIN: 'bull',
+    MANAGER: 'mako',
+    USER: 'tiger',
 }
 
 const slice = createSlice({
     name: 'auth',
-    initialState: { user: null, token: null, isAuthenticated: false },
+    initialState: { user: null, accessToken: null, isAuthenticated: false },
     reducers: {
-        setCredentials: (state, { payload: { user, token } }) => {
+        setCredentials: (state, { payload: { user, accessToken } }) => {
             state.user = user
-            state.token = token
+            state.accessToken = accessToken
             state.isAuthenticated = true
         },
         logout: (state) => {
             state.user = null
-            state.token = null
+            state.accessToken = null
             state.isAuthenticated = false
         },
     },
     extraReducers: (builder) => {
-        builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, { payload: { user, token } }) => {
+        builder.addMatcher(authApi.endpoints.login.matchFulfilled, (state, { payload: { user, accessToken } }) => {
             state.user = user
-            state.token = token
+            state.accessToken = accessToken
             state.isAuthenticated = true
         })
     },

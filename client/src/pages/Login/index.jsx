@@ -32,14 +32,16 @@ const Login = () => {
 
             const res = await login({ email, password }).unwrap()
 
-            document.cookie = 'token=' + res.token
+            console.log(res)
+
+            document.cookie = 'accessToken=' + res.accessToken
 
             const cred = {
                 user: {
                     email: res.user.email,
                     role: res.user.role,
                 },
-                token: res.token,
+                accessToken: res.accessToken,
             }
 
             dispatch(setCredentials(cred))

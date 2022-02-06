@@ -21,7 +21,7 @@ const UserSchema = new Schema(
             type: String,
             required: [true, 'Please provide your email address.'],
             unique: true,
-            match: [/^\S+@\S+\.\S{2,}$/, 'Please provide a valid email'],
+            match: [/^\S+@\S+\.\S{2,}$/, 'Please provide a valid email.'],
             lowercase: true,
         },
         password: {
@@ -46,14 +46,17 @@ const UserSchema = new Schema(
         },
         role: {
             type: String,
-            enum: ['user', 'admin'],
-            default: 'user',
+            enum: ['bull', 'mako', 'tiger'],
+            default: 'tiger',
         },
         team: {
             type: Schema.Types.ObjectId,
             ref: 'Team',
         },
-        refreshToken: String,
+        refreshToken: {
+            type: String,
+            select: false,
+        },
         resetPasswordToken: String,
         resetPasswordExpire: Date,
     },
@@ -88,6 +91,7 @@ UserSchema.methods.getSignedToken = function (secret, expiresIn) {
     return jwt.sign(
         {
             user: {
+                id: this._id,
                 email: this.email,
                 role: this.role,
             },
