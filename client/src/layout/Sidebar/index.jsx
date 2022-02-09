@@ -1,6 +1,6 @@
 import SidebarLogo from './SidebarLogo'
 import SidebarNavLinks from './SidebarNavLinks'
-import SidebarAccount from './SidebarAccount'
+import SidebarLogout from './SidebarLogout'
 
 const Sidebar = () => {
     return (
@@ -12,7 +12,7 @@ const Sidebar = () => {
                     <SidebarNavLinks />
                 </div>
 
-                <SidebarAccount />
+                <SidebarLogout />
             </aside>
         </>
     )

@@ -51,10 +51,8 @@ input::-webkit-file-upload-button {
 
 /* Floating label inputs */
 .text-input input:focus-within ~ label,
-.text-input input:not(:placeholder-shown) ~ label {
-    @apply transform scale-75 -translate-y-6;
-}
-
-.text-input input:focus-within ~ label {
-    @apply text-primary-alt;
+.text-input input:not(:placeholder-shown) ~ label,
+.text-input input:-webkit-autofill ~ label,
+.text-input input:-webkit-autofill:focus ~ label {
+    @apply transform scale-75 -translate-y-6 text-primary-alt;
 }

@@ -1,12 +1,10 @@
 import { NavLink } from 'react-router-dom'
-
-import { useSelector } from 'react-redux'
-import { selectCurrentUser } from '../features/auth/authSlice'
+import { useAuth } from '../hooks/useAuth'
 
 import { MdAccountCircle } from 'react-icons/md'
 
 const Navbar = () => {
-    const user = useSelector(selectCurrentUser)
+    const { user } = useAuth()
 
     return (
         <>
@@ -16,9 +14,9 @@ const Navbar = () => {
 
                     <NavLink to='/account' className='flex ml-auto pr-3 h-16'>
                         <div className='flex items-center gap-3 px-3 py-1 rounded-lg hover:bg-gray-700 hover:text-gray-300'>
-                            <span className='font-medium'>{user.firstName || user.email || 'Account'}</span>
+                            <span className='font-medium'>{user ? user?.firstName || user?.email : 'Account'}</span>
 
-                            {user.profileImage ? <img className='w-10 h-10 object-cover rounded-full' src={user.profileImage} /> : <MdAccountCircle className='w-10 h-10 stroke-current' />}
+                            {user && user?.profileImage ? <img className='w-10 h-10 object-cover rounded-full' src={user.profileImage} /> : <MdAccountCircle className='w-10 h-10 stroke-current' />}
                         </div>
                     </NavLink>
                 </div>

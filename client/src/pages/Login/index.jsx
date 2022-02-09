@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
+import { useAuth } from '../../hooks/useAuth'
 import { setCredentials } from '../../features/auth/authSlice'
 import { useLoginMutation } from '../../features/auth/authApi'
 
@@ -14,6 +15,7 @@ import FormInput from '../../components/Form/FormInput'
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const Login = () => {
+    const { isAuthenticated } = useAuth()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [login, { error }] = useLoginMutation()
@@ -32,14 +34,14 @@ const Login = () => {
 
             const res = await login({ email, password }).unwrap()
 
-            console.log(res)
-
             document.cookie = 'accessToken=' + res.accessToken
 
             const cred = {
                 user: {
+                    firstName: res.user?.firstName,
                     email: res.user.email,
                     role: res.user.role,
+                    profileImage: res.user?.profileImage,
                 },
                 accessToken: res.accessToken,
             }
@@ -51,6 +53,10 @@ const Login = () => {
             setToast(err.data)
         }
     }
+
+    useEffect(() => {
+        if (isAuthenticated) return navigate('/')
+    }, [])
 
     return (
         <>
