@@ -3,8 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: `http://localhost:5000/api/private/`,
-        // baseUrl: `${process.env.BASE_PRIVATE_API_URL}`,
+        baseUrl: `${process.env.REACT_APP_BASE_PRIVATE_API_URL}`,
 
         prepareHeaders: async (headers, { getState }) => {
             const accessToken = getState().auth.accessToken
@@ -14,6 +13,7 @@ export const userApi = createApi({
             }
             return headers
         },
+
         // credentials: 'include',
     }),
     tagTypes: ['User'],
@@ -22,7 +22,7 @@ export const userApi = createApi({
             query: () => ({
                 url: 'users',
                 method: 'GET',
-                // accessToken,
+                // credentials,
             }),
             invalidatesTags: [{ type: 'User' }],
         }),

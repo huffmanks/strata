@@ -82,20 +82,20 @@ const EditTeam = () => {
 
     return (
         <div className='flex flex-col items-center justify-center'>
-            <h1 className='mb-10 text-2xl font-bold text-center'>Edit Team</h1>
+            <h1 className='mb-10 text-center text-2xl font-bold'>Edit Team</h1>
             <form className='w-full max-w-lg'>
                 <div className='mb-5'>
-                    <label className='block text-lg font-bold mb-2' htmlFor='teamTitle'>
+                    <label className='mb-2 block text-lg font-bold' htmlFor='teamTitle'>
                         Team Title:
                     </label>
                     {/* <input className='w-full p-2 text-neutral-900 text-lg border-none outline-none rounded' type='text' id='teamTitle' name='teamTitle' placeholder='Enter a title.' value={title} onChange={onTitleChanged} /> */}
                 </div>
                 <div className='mb-5'>
-                    <label className='block text-lg font-bold mb-2'>Users:</label>
+                    <label className='mb-2 block text-lg font-bold'>Users:</label>
                     {/* <>{usersOptions}</> */}
                 </div>
                 <div className='mb-5'>
-                    <label className='block text-lg font-bold mb-2' htmlFor='teamDescription'>
+                    <label className='mb-2 block text-lg font-bold' htmlFor='teamDescription'>
                         Description:
                     </label>
                     {/* <textarea className='w-full h-48 px-4 py-3 text-neutral-900 text-lg border-none outline-none rounded' id='teamDescription' name='teamDescription' value={description} onChange={onDescriptionChanged} /> */}

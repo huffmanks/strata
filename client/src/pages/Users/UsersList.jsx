@@ -10,12 +10,12 @@ const UsersList = () => {
 
     return (
         <>
-            <h1 className='text-2xl font-bold text-center text-primary-alt'>USERS</h1>
+            <h1 className='text-center text-2xl font-bold text-primary-alt'>USERS</h1>
             <div>List of users</div>
             {users &&
                 users.map((user) => (
                     <div className='my-10' key={user._id}>
-                        {user.profileImage && <img className='w-20 h-20 object-cover rounded-full' src={`http://localhost:5000/uploads/images/${user.profileImage.fileName}`} alt={user.userName} />}
+                        {user.profileImage && <img className='h-20 w-20 rounded-full object-cover' src={`http://localhost:5000/uploads/images/${user.profileImage.fileName}`} alt={user.userName} />}
                         <div>Email: {user.email}</div>
                         <div>Username: {user.userName}</div>
                         <div>Role: {user.role}</div>

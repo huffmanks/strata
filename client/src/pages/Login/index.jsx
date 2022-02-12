@@ -34,15 +34,10 @@ const Login = () => {
 
             const res = await login({ email, password }).unwrap()
 
-            document.cookie = 'accessToken=' + res.accessToken
+            // document.cookie = 'accessToken=' + res.accessToken
 
             const cred = {
-                user: {
-                    firstName: res.user?.firstName,
-                    email: res.user.email,
-                    role: res.user.role,
-                    profileImage: res.user?.profileImage,
-                },
+                user: res.user,
                 accessToken: res.accessToken,
             }
 
@@ -71,7 +66,7 @@ const Login = () => {
 
                 <FormFooter subtitle='Forgot Password' subtitlePath='/forgot-password' buttonText='Sign In' />
 
-                <div className='mt-6 text-center hover:text-primary-alt'>
+                <div className='hover:text-primary-alt mt-6 text-center'>
                     <Link to='/register'>Don&rsquo;t have an account? Register</Link>
                 </div>
             </Form>

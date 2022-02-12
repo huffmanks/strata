@@ -9,8 +9,8 @@ const ErrorPage = ({ title }) => {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center gap-8'>
-            <h1 className='md:text-7xl text-4xl font-bold text-center text-primary-alt'>{title}</h1>
+        <div className='flex flex-col items-center justify-center gap-8'>
+            <h1 className='text-primary-alt text-center text-4xl font-bold md:text-7xl'>{title}</h1>
 
             <Button isLarge='true' buttonType='button' buttonText='Go Back' handleClick={handleGoBack} />
         </div>

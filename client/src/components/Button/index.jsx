@@ -1,5 +1,5 @@
 const Button = ({ buttonType, buttonText, isLarge, isFullWidth, handleClick }) => {
-    const baseStyles = 'bg-primary-main text-center rounded-lg shadow-sm cursor-pointer hover:bg-primary-alt'
+    const baseStyles = 'bg-primary-main hover:bg-primary-alt cursor-pointer rounded-lg text-center shadow-sm'
     const fullWidth = 'w-full px-3 py-2 text-xl'
     const large = 'px-5 py-3 text-3xl'
 

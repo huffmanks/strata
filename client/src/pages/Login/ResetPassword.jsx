@@ -43,13 +43,8 @@ const ResetPassword = () => {
 
             const res = await resetPassword({ resetPasswordToken, password }).unwrap()
 
-            document.cookie = 'accessToken=' + res.accessToken
-
             const cred = {
-                user: {
-                    email: res.user.email,
-                    role: res.user.role,
-                },
+                user: res.user,
                 accessToken: res.accessToken,
             }
 

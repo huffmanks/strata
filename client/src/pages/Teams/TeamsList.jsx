@@ -25,11 +25,11 @@ const TeamsList = () => {
 
     return (
         <div>
-            <h1 className='mb-10 text-2xl font-bold text-center'>All Teams</h1>
+            <h1 className='mb-10 text-center text-2xl font-bold'>All Teams</h1>
 
             <table>
                 <thead>
-                    <tr className='text-left border-b-2 border-gray-500'>
+                    <tr className='border-b-2 border-gray-500 text-left'>
                         <th>TITLE</th>
                         <th>DESCRIPTION</th>
                         <th></th>
@@ -57,7 +57,7 @@ const TeamsList = () => {
             </table>
             <div className='fixed bottom-6 right-6'>
                 <Link to={`/teams/create`}>
-                    <button className='inline-flex items-center justify-center px-5 py-2 bg-gray-800 text-2xl font-bold text-center rounded-full shadow-sm cursor-pointer hover:bg-gray-700'>Create</button>
+                    <button className='inline-flex cursor-pointer items-center justify-center rounded-full bg-gray-800 px-5 py-2 text-center text-2xl font-bold shadow-sm hover:bg-gray-700'>Create</button>
                 </Link>
             </div>
         </div>

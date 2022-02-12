@@ -6,6 +6,7 @@ export const sendToken = (res, statusCode, user, refreshToken, accessToken, mess
         .status(statusCode)
         .json({
             user: {
+                id: user._id,
                 firstName: user?.firstName,
                 email: user.email,
                 role: user.role,
