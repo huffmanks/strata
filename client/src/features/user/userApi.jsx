@@ -31,12 +31,17 @@ export const userApi = createApi({
             invalidatesTags: [{ type: 'User' }],
         }),
         updateUser: build.mutation({
-            query: ({ userId, patch }) => ({
+            query: ({ userId, body }) => ({
                 url: `users/edit/${userId}`,
                 method: 'PATCH',
-                patch,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                responseHandler: (response) => new FormData(response.data),
+                body,
             }),
-            invalidatesTags: [{ type: 'User' }],
+            // transformResponse: (response, meta, arg) => response.data,
+            // invalidatesTags: [{ type: 'User' }],
         }),
     }),
 })

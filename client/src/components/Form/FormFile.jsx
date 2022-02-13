@@ -9,7 +9,7 @@ const FormFile = ({ name, label, changeHandler, previewImg }) => {
                     {label}
                 </label>
             </>
-            <input id={name} type='file' name={name} className='absolute h-0 w-0 opacity-0' onChange={changeHandler} />
+            <input id={name} className='absolute h-0 w-0 opacity-0' type='file' name={name} onChange={changeHandler} />
         </div>
     )
 }

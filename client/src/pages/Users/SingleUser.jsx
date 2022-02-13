@@ -39,13 +39,13 @@ const SingleUser = () => {
 
     const [getUser] = useLazyGetSingleUserQuery()
     const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
-    // const { data, isLoading } = useGetSingleUserQuery(params.userId)
 
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true)
 
             const userInfo = await getUser(userId).unwrap()
+            console.log('userInfo', userInfo)
 
             setFirstName(userInfo.firstName)
             setLastName(userInfo.lastName)
@@ -72,11 +72,30 @@ const SingleUser = () => {
                 team,
             }
 
-            console.log(`userId: ${userId}`)
+            //     fullName: fullNameInputElement.current?.value,
+            // email: emailInputElement.current?.value,
+            // password: passwordInputElement.current?.value,
+            // console.log(formEl.current)
+            // formEl.current.map((input) => {
+            //     console.log(input)
+            // })
+            // console.log(formEl)
+
+            // const update = new FormData(formEl.current)
+            // console.log(update)
+            // update.append('firstName', firstName)
+            // update.append('lastName', lastName)
+            // update.append('email', email)
+            // update.append('profileImage', profileImage)
+            // update.append('role', role)
+            // update.append('team', team)
+
+            // console.log('user', JSON.stringify(user))
+            // console.log('update', update)
+            dispatch(setUserInfo(user))
 
             const res = await updateUser({ userId, user }).unwrap()
             console.log(res)
-            dispatch(setUserInfo(res))
         } catch (error) {
             setToast(error)
         }
@@ -107,13 +126,13 @@ const SingleUser = () => {
                         label='Upload Profile Image'
                         changeHandler={(e) => {
                             console.log(e.target.files[0])
-                            // setProfileImage({
-                            //     fileName: e.target.files[0].name,
-                            //     filePath: `uploads/images/${e.target.files[0].name}`,
-                            //     fileType: e.target.files[0].type,
-                            //     fileSize: e.target.files[0].size,
-                            // })
-                            setProfileImage(e.target.files[0])
+                            setProfileImage({
+                                fileName: e.target.files[0].name,
+                                filePath: `uploads/images/${e.target.files[0].name}`,
+                                fileType: e.target.files[0].type,
+                                fileSize: e.target.files[0].size,
+                            })
+                            // setProfileImage(e.target.files[0])
                             setPreviewImage(URL.createObjectURL(e.target.files[0]))
                         }}
                         previewImg={previewImage}
@@ -137,6 +156,7 @@ const SingleUser = () => {
                                     ))}
                                 </FormOptionList>
                             </Select> */}
+
                     <FormRadioGroup label='Role' value={role} changeHandler={(e) => setRole(e.target.value)}>
                         <FormRadio id='tiger' name='role' label='Tiger' radioValue='tiger' isDefault={role === 'tiger'} />
                         <FormRadio id='mako' name='role' label='Mako' radioValue='mako' isDefault={role === 'mako'} />

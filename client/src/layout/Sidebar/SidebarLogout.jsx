@@ -1,27 +1,23 @@
-import { NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { NavLink } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
-import { logout } from "../../features/auth/authSlice";
+import { logout } from '../../features/auth/authSlice'
 
-import { MdLogout } from "react-icons/md";
+import { MdLogout } from 'react-icons/md'
 
 const SidebarLogout = () => {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch()
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
+    const handleLogout = () => {
+        dispatch(logout())
+    }
 
-  return (
-    <NavLink
-      to="/login"
-      className="mt-auto flex h-16 w-full items-center bg-neutral-800 px-4 hover:bg-gray-700 hover:text-gray-300"
-      onClick={handleLogout}
-    >
-      <MdLogout className="h-8 w-8 stroke-current" />
-      <span className="ml-2 hidden text-sm font-medium md:block">Logout</span>
-    </NavLink>
-  );
-};
+    return (
+        <NavLink to='/login' className='mt-auto flex h-16 w-full items-center bg-neutral-800 px-4 hover:bg-gray-700 hover:text-gray-300' onClick={handleLogout}>
+            <MdLogout className='h-8 w-8 stroke-current' />
+            <span className='ml-2 hidden text-sm font-medium md:block'>Logout</span>
+        </NavLink>
+    )
+}
 
-export default SidebarLogout;
+export default SidebarLogout
