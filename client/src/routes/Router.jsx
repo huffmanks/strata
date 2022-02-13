@@ -18,7 +18,7 @@ import Dashboard from '../pages/Dashboard'
 // User
 import Users from '../pages/Users'
 import UsersList from '../pages/Users/UsersList'
-// import SingleUser from '../pages/Users/SingleUser'
+import SingleUser from '../pages/Users/SingleUser'
 import CreateUser from '../pages/Users/CreateUser'
 // import EditUser from '../pages/Users/EditUser'
 
@@ -46,7 +46,7 @@ const Router = () => {
                 <Route index element={<Dashboard />} />
                 <Route path='users' element={<PrivateRoute roles={[ROLES.ADMIN]} component={Users} />}>
                     <Route index element={<UsersList />} />
-                    {/* <Route path=':userId' element={<SingleUser />} /> */}
+                    <Route path=':userId' element={<SingleUser />} />
                     <Route path='create' element={<CreateUser />} />
                     {/* <Route path='edit/:userId' element={<EditUser />} /> */}
                 </Route>

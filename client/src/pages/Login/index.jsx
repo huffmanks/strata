@@ -34,8 +34,6 @@ const Login = () => {
 
             const res = await login({ email, password }).unwrap()
 
-            // document.cookie = 'accessToken=' + res.accessToken
-
             const cred = {
                 user: res.user,
                 accessToken: res.accessToken,

@@ -9,23 +9,6 @@
         font-family: 'Lato', sans-serif;
     }
 
-    table {
-        width: 100%;
-    }
-
-    table thead tr {
-        background-color: #252526;
-    }
-
-    table tbody tr:nth-of-type(even) {
-        background-color: #333;
-    }
-
-    table tr th,
-    table tr td {
-        padding: 10px;
-    }
-
     textarea {
         resize: none;
     }
@@ -46,7 +29,7 @@
 
 /* File input */
 input::-webkit-file-upload-button {
-    @apply bg-primary-main mr-4 py-2 px-3 border-none text-light-main sm:flex flex-col;
+    @apply bg-primary-main text-light-main mr-4 flex-col border-none py-2 px-3 sm:flex;
 }
 
 /* Floating label inputs */
@@ -54,5 +37,5 @@ input::-webkit-file-upload-button {
 .text-input input:not(:placeholder-shown) ~ label,
 .text-input input:-webkit-autofill ~ label,
 .text-input input:-webkit-autofill:focus ~ label {
-    @apply transform scale-75 -translate-y-6 text-primary-alt;
+    @apply text-primary-alt -translate-y-6 scale-75 transform;
 }

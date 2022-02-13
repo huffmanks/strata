@@ -13,8 +13,6 @@ export const userApi = createApi({
             }
             return headers
         },
-
-        // credentials: 'include',
     }),
     tagTypes: ['User'],
     endpoints: (build) => ({
@@ -22,11 +20,25 @@ export const userApi = createApi({
             query: () => ({
                 url: 'users',
                 method: 'GET',
-                // credentials,
+            }),
+            invalidatesTags: [{ type: 'User' }],
+        }),
+        getSingleUser: build.query({
+            query: (userId) => ({
+                url: `users/${userId}`,
+                method: 'GET',
+            }),
+            invalidatesTags: [{ type: 'User' }],
+        }),
+        updateUser: build.mutation({
+            query: ({ userId, patch }) => ({
+                url: `users/edit/${userId}`,
+                method: 'PATCH',
+                patch,
             }),
             invalidatesTags: [{ type: 'User' }],
         }),
     }),
 })
 
-export const { useGetUsersQuery } = userApi
+export const { useGetUsersQuery, useLazyGetSingleUserQuery, useUpdateUserMutation } = userApi
