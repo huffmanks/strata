@@ -31,18 +31,22 @@ const UserSchema = new Schema(
             select: false,
         },
         profileImage: {
-            fileName: {
-                type: String,
-            },
-            filePath: {
-                type: String,
-            },
-            fileType: {
-                type: String,
-            },
-            fileSize: {
-                type: String,
-            },
+            type: String,
+            // fileUrl: {
+            //     type: String,
+            // },
+            // fileName: {
+            //     type: String,
+            // },
+            // filePath: {
+            //     type: String,
+            // },
+            // fileType: {
+            //     type: String,
+            // },
+            // fileSize: {
+            //     type: String,
+            // },
         },
         role: {
             type: String,

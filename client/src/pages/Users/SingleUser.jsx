@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+// import { useAxios } from '../../hooks/useAxios'
 
-import { useLazyGetSingleUserQuery, useUpdateUserMutation } from '../../features/user/userApi'
+import { useLazyGetSingleUserQuery } from '../../features/user/userApi'
 import { setUserInfo } from '../../features/user/userSlice'
 
 import Form from '../../components/Form'
@@ -20,10 +21,13 @@ import FormRadio from '../../components/Form/FormRadio'
 // import FormOptionItem from '../../components/Form/Select/FormOptionItem'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
+import { selectAccessToken } from '../../features/auth/authSlice'
+import axios from 'axios'
 
 const SingleUser = () => {
     const dispatch = useDispatch()
     const { userId } = useParams()
+    const accessToken = useSelector(selectAccessToken)
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -38,7 +42,7 @@ const SingleUser = () => {
     const [toast, setToast] = useState('')
 
     const [getUser] = useLazyGetSingleUserQuery()
-    const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
+    // const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
 
     useEffect(() => {
         const getData = async () => {
@@ -47,11 +51,11 @@ const SingleUser = () => {
             const userInfo = await getUser(userId).unwrap()
             console.log('userInfo', userInfo)
 
-            setFirstName(userInfo.firstName)
-            setLastName(userInfo.lastName)
+            setFirstName(userInfo?.firstName)
+            setLastName(userInfo?.lastName)
             setEmail(userInfo.email)
             setProfileImage(userInfo?.profileImage)
-            setPreviewImage(`http://localhost:5000/uploads/images/${userInfo?.profileImage?.fileName}`)
+            setPreviewImage(userInfo?.profileImage?.fileUrl)
             setRole(userInfo.role)
             setTeam(userInfo?.team?.title)
 
@@ -62,6 +66,7 @@ const SingleUser = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
         try {
             const user = {
                 firstName,
@@ -72,33 +77,47 @@ const SingleUser = () => {
                 team,
             }
 
-            //     fullName: fullNameInputElement.current?.value,
-            // email: emailInputElement.current?.value,
-            // password: passwordInputElement.current?.value,
-            // console.log(formEl.current)
-            // formEl.current.map((input) => {
-            //     console.log(input)
-            // })
-            // console.log(formEl)
+            // const config = {
+            //     headers: {
+            //         accept: '*/*',
+            //         Authorization: `Bearer ${accessToken}`,
+            //         'Content-Type': 'multipart/form-data; charset=utf-8;',
+            //         // 'Content-type': 'multipart/form-data',
+            //     },
+            // }
 
-            // const update = new FormData(formEl.current)
-            // console.log(update)
-            // update.append('firstName', firstName)
-            // update.append('lastName', lastName)
-            // update.append('email', email)
-            // update.append('profileImage', profileImage)
-            // update.append('role', role)
+            const update = new FormData()
+
+            update.append('firstName', firstName)
+            update.append('lastName', lastName)
+            update.append('email', email)
+            update.append('profileImage', profileImage)
+            update.append('role', role)
             // update.append('team', team)
 
-            // console.log('user', JSON.stringify(user))
-            // console.log('update', update)
-            dispatch(setUserInfo(user))
+            console.log(update.profileImage)
 
-            const res = await updateUser({ userId, user }).unwrap()
-            console.log(res)
-        } catch (error) {
-            setToast(error)
+            dispatch(setUserInfo(user))
+            const result = await axios({
+                method: 'patch',
+                url: `http://localhost:5000/api/private/users/edit/${userId}`,
+                data: update,
+                headers: {
+                    // accept: '*/*',
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'multipart/form-data; charset=utf-8;',
+                },
+            })
+            // const result = await axios.patch(`${process.env.REACT_APP_BASE_PRIVATE_API_URL}users/edit/${userId}`, update, config)
+
+            console.log(result)
+        } catch (err) {
+            console.log(err)
         }
+
+        // console.log('user', JSON.stringify(user))
+        // console.log('update', update)
+
         // const res = await updateUser({ userId, update }).unwrap()
 
         // console.log('update', update)
@@ -111,7 +130,7 @@ const SingleUser = () => {
 
     return (
         <>
-            <Form isLarge='true' submitHandler={handleSubmit} isLoading={isUpdating}>
+            <Form isLarge='true' submitHandler={handleSubmit}>
                 <FormHeader title={`Update ${firstName}`} />
                 <FormBody>
                     <FormInput type='text' name='firstName' label='First Name' changeHandler={(e) => setFirstName(e.target.value)} inputValue={firstName} />
@@ -125,14 +144,7 @@ const SingleUser = () => {
                         name='profileImage'
                         label='Upload Profile Image'
                         changeHandler={(e) => {
-                            console.log(e.target.files[0])
-                            setProfileImage({
-                                fileName: e.target.files[0].name,
-                                filePath: `uploads/images/${e.target.files[0].name}`,
-                                fileType: e.target.files[0].type,
-                                fileSize: e.target.files[0].size,
-                            })
-                            // setProfileImage(e.target.files[0])
+                            setProfileImage(e.target.files[0])
                             setPreviewImage(URL.createObjectURL(e.target.files[0]))
                         }}
                         previewImg={previewImage}

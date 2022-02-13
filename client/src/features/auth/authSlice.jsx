@@ -36,4 +36,5 @@ export const { setCredentials, logout } = slice.actions
 export default slice.reducer
 
 export const selectCurrentUser = (state) => state.auth.user
+export const selectAccessToken = (state) => state.auth.accessToken
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated
