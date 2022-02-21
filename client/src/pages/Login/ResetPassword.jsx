@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 
-import { setCredentials } from '../../features/auth/authSlice'
+// import { setCredentials } from '../../features/auth/authSlice'
 import { useResetPasswordMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
@@ -16,7 +16,7 @@ import ErrorToast from '../../components/Errors/ErrorToast'
 const ResetPassword = () => {
     const params = useParams()
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -42,13 +42,13 @@ const ResetPassword = () => {
             const resetPasswordToken = params.resetPasswordToken
 
             const res = await resetPassword({ resetPasswordToken, password }).unwrap()
+            console.log(res)
+            // const cred = {
+            //     user: res.user,
+            //     accessToken: res.accessToken,
+            // }
 
-            const cred = {
-                user: res.user,
-                accessToken: res.accessToken,
-            }
-
-            dispatch(setCredentials(cred))
+            // dispatch(setCredentials(cred))
 
             navigate('/')
         } catch (err) {

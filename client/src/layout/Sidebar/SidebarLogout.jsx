@@ -1,15 +1,19 @@
 import { NavLink } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useLogoutMutation } from '../../features/auth/authApi'
 
-import { logout } from '../../features/auth/authSlice'
+// import { useDispatch } from 'react-redux'
+
+// import { logout } from '../../features/auth/authSlice'
 
 import { MdLogout } from 'react-icons/md'
 
 const SidebarLogout = () => {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
+    const [logout] = useLogoutMutation()
 
-    const handleLogout = () => {
-        dispatch(logout())
+    const handleLogout = async () => {
+        // dispatch(logout())
+        await logout().unwrap()
     }
 
     return (

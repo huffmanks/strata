@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+// import { useDispatch } from 'react-redux'
 
-import { setCredentials } from '../../features/auth/authSlice'
+// import { setCredentials } from '../../features/auth/authSlice'
 import { useRegisterMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
@@ -14,7 +14,7 @@ import FormInput from '../../components/Form/FormInput'
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const Register = () => {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const [email, setEmail] = useState('')
@@ -41,12 +41,14 @@ const Register = () => {
 
             const res = await register({ email, password }).unwrap()
 
-            const cred = {
-                user: res.user,
-                accessToken: res.accessToken,
-            }
+            console.log(res)
 
-            dispatch(setCredentials(cred))
+            // const cred = {
+            //     user: res.user,
+            //     accessToken: res.accessToken,
+            // }
+
+            // dispatch(setCredentials(cred))
 
             navigate('/')
         } catch (err) {
