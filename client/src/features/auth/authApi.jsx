@@ -44,10 +44,18 @@ export const authApi = createApi({
             // invalidatesTags: (result, error, { id }) => [{ type: 'Auth', id }],
         }),
 
+        logout: build.mutation({
+            query: () => ({
+                url: 'logout',
+                method: 'POST',
+            }),
+            invalidatesTags: [{ type: 'Auth' }],
+        }),
+
         protected: build.mutation({
             query: () => 'protected',
         }),
     }),
 })
 
-export const { useLoginMutation, useRegisterMutation, useForgotPasswordMutation, useResetPasswordMutation, useProtectedMutation } = authApi
+export const { useLoginMutation, useRegisterMutation, useForgotPasswordMutation, useResetPasswordMutation, useLogoutMutation, useProtectedMutation } = authApi
