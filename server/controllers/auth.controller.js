@@ -79,7 +79,6 @@ export const forgotPassword = async (req, res, next) => {
 
         await user.save()
 
-        // Add email with magic link
         res.status(200).json({ resetPasswordToken })
     } catch (err) {
         user.resetPasswordToken = undefined

@@ -55,7 +55,7 @@ const SingleUser = () => {
             setLastName(userInfo?.lastName)
             setEmail(userInfo.email)
             setProfileImage(userInfo?.profileImage)
-            setPreviewImage(userInfo?.profileImage?.fileUrl)
+            setPreviewImage(userInfo?.profileImage)
             setRole(userInfo.role)
             setTeam(userInfo?.team?.title)
 
@@ -142,7 +142,7 @@ const SingleUser = () => {
                     <FormFile
                         type='file'
                         name='profileImage'
-                        label='Upload Profile Image'
+                        label={previewImage ? 'Update Profile Image' : 'Upload Profile Image'}
                         changeHandler={(e) => {
                             setProfileImage(e.target.files[0])
                             setPreviewImage(URL.createObjectURL(e.target.files[0]))

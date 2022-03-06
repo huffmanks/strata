@@ -19,7 +19,7 @@ const UsersList = () => {
                         <tr key={user._id} className='even:bg-dark-alt cursor-pointer hover:bg-neutral-700'>
                             {user.profileImage ? (
                                 <td className='p-2.5'>
-                                    <img className='h-10 w-10 rounded-full object-cover' src={user.profileImage.fileUrl} alt={user.userName} />
+                                    <img className='h-10 w-10 rounded-full object-cover' src={user.profileImage} alt={user.userName} />
                                 </td>
                             ) : (
                                 <td className='p-2.5'>
