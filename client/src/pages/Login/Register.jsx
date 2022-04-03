@@ -1,9 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import { useDispatch } from 'react-redux'
-
-// import { setCredentials } from '../../features/auth/authSlice'
-import { useRegisterMutation } from '../../features/auth/authApi'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Layout/FormHeader'
@@ -14,15 +10,12 @@ import FormInput from '../../components/Form/FormInput'
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const Register = () => {
-    // const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [toast, setToast] = useState('')
-
-    const [register, { error }] = useRegisterMutation()
 
     const registerHandler = async (e) => {
         e.preventDefault()
@@ -35,13 +28,9 @@ const Register = () => {
         }
 
         try {
-            if (error) {
-                setToast(error.data)
-            }
+            // const res = await register({ email, password }).unwrap()
 
-            const res = await register({ email, password }).unwrap()
-
-            console.log(res)
+            // console.log(res)
 
             // const cred = {
             //     user: res.user,

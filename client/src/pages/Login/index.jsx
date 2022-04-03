@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-// import { useDispatch } from 'react-redux'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/useAuth'
-// import { setCredentials } from '../../features/auth/authSlice'
-import { useLoginMutation } from '../../features/auth/authApi'
+import axios from '../../api/axios'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Layout/FormHeader'
 import FormBody from '../../components/Form/Layout/FormBody'
 import FormFooter from '../../components/Form/Layout/FormFooter'
 import FormInput from '../../components/Form/FormInput'
+import FormCheckbox from '../../components/Form/FormCheckbox'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const Login = () => {
-    const { isAuthenticated } = useAuth()
-    // const dispatch = useDispatch()
+    const { setAuth, persist, setPersist } = useAuth()
+
     const navigate = useNavigate()
-    const [login, { error }] = useLoginMutation()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || '/'
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -28,30 +28,36 @@ const Login = () => {
         e.preventDefault()
 
         try {
-            if (error) {
-                setToast(error.data)
-            }
+            const response = await axios.post(
+                'login',
+                { email, password },
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                }
+            )
 
-            const res = await login({ email, password }).unwrap()
+            const user = response?.data?.user
+            const accessToken = response?.data?.accessToken
 
-            console.log(res)
+            setAuth({ user, accessToken })
 
-            // const cred = {
-            //     user: res.user,
-            //     accessToken: res.accessToken,
-            // }
+            setEmail('')
+            setPassword('')
 
-            // dispatch(setCredentials(cred))
-
-            navigate('/')
+            navigate(from, { replace: true })
         } catch (err) {
             setToast(err.data)
         }
     }
 
+    const togglePersist = () => {
+        setPersist((prev) => !prev)
+    }
+
     useEffect(() => {
-        if (isAuthenticated) return navigate('/')
-    }, [])
+        localStorage.setItem('persist', persist)
+    }, [persist])
 
     return (
         <>
@@ -62,6 +68,8 @@ const Login = () => {
                     <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} inputValue={email} />
 
                     <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} inputValue={password} />
+
+                    <FormCheckbox id='persist' label='Stay logged in' changeHandler={togglePersist} checked={persist} />
                 </FormBody>
 
                 <FormFooter subtitle='Forgot Password' subtitlePath='/forgot-password' buttonText='Sign In' />

@@ -1,10 +1,7 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-// import { useAxios } from '../../hooks/useAxios'
+import { useState } from 'react'
+// import { useParams } from 'react-router-dom'
 
-import { useLazyGetSingleUserQuery } from '../../features/user/userApi'
-import { setUserInfo } from '../../features/user/userSlice'
+// import { useAxios } from '../../hooks/useAxios'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Layout/FormHeader'
@@ -21,13 +18,10 @@ import FormRadio from '../../components/Form/FormRadio'
 // import FormOptionItem from '../../components/Form/Select/FormOptionItem'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
-import { selectAccessToken } from '../../features/auth/authSlice'
-import axios from 'axios'
+// import axios from 'axios'
 
 const SingleUser = () => {
-    const dispatch = useDispatch()
-    const { userId } = useParams()
-    const accessToken = useSelector(selectAccessToken)
+    // const { userId } = useParams()
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -36,46 +30,45 @@ const SingleUser = () => {
     const [profileImage, setProfileImage] = useState()
     const [previewImage, setPreviewImage] = useState()
     const [role, setRole] = useState('')
-    const [team, setTeam] = useState('')
+    // const [team, setTeam] = useState('')
 
-    const [isLoading, setIsLoading] = useState()
+    // const [isLoading, setIsLoading] = useState()
     const [toast, setToast] = useState('')
 
-    const [getUser] = useLazyGetSingleUserQuery()
     // const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
 
-    useEffect(() => {
-        const getData = async () => {
-            setIsLoading(true)
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         setIsLoading(true)
 
-            const userInfo = await getUser(userId).unwrap()
-            console.log('userInfo', userInfo)
+    //         const userInfo = await getUser(userId).unwrap()
+    //         console.log('userInfo', userInfo)
 
-            setFirstName(userInfo?.firstName)
-            setLastName(userInfo?.lastName)
-            setEmail(userInfo.email)
-            setProfileImage(userInfo?.profileImage)
-            setPreviewImage(userInfo?.profileImage)
-            setRole(userInfo.role)
-            setTeam(userInfo?.team?.title)
+    //         setFirstName(userInfo?.firstName)
+    //         setLastName(userInfo?.lastName)
+    //         setEmail(userInfo.email)
+    //         setProfileImage(userInfo?.profileImage)
+    //         setPreviewImage(userInfo?.profileImage)
+    //         setRole(userInfo.role)
+    //         setTeam(userInfo?.team?.title)
 
-            setIsLoading(false)
-        }
-        getData()
-    }, [])
+    //         setIsLoading(false)
+    //     }
+    //     getData()
+    // }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         try {
-            const user = {
-                firstName,
-                lastName,
-                email,
-                profileImage,
-                role,
-                team,
-            }
+            // const user = {
+            //     firstName,
+            //     lastName,
+            //     email,
+            //     profileImage,
+            //     role,
+            //     // team,
+            // }
 
             // const config = {
             //     headers: {
@@ -97,20 +90,20 @@ const SingleUser = () => {
 
             console.log(update.profileImage)
 
-            dispatch(setUserInfo(user))
-            const result = await axios({
-                method: 'patch',
-                url: `http://localhost:5000/api/private/users/edit/${userId}`,
-                data: update,
-                headers: {
-                    // accept: '*/*',
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'multipart/form-data; charset=utf-8;',
-                },
-            })
+            // dispatch(setUserInfo(user))
+            // const result = await axios({
+            //     method: 'patch',
+            //     url: `http://localhost:5000/api/private/users/edit/${userId}`,
+            //     data: update,
+            //     headers: {
+            //         // accept: '*/*',
+            //         Authorization: `Bearer ${accessToken}`,
+            //         'Content-Type': 'multipart/form-data; charset=utf-8;',
+            //     },
+            // })
             // const result = await axios.patch(`${process.env.REACT_APP_BASE_PRIVATE_API_URL}users/edit/${userId}`, update, config)
 
-            console.log(result)
+            // console.log(result)
         } catch (err) {
             console.log(err)
         }
@@ -126,7 +119,7 @@ const SingleUser = () => {
         // console.log('res', res.firstName)
     }
 
-    if (isLoading) return <div>Loading...</div>
+    // if (isLoading) return <div>Loading...</div>
 
     return (
         <>
@@ -150,10 +143,10 @@ const SingleUser = () => {
                         previewImg={previewImage}
                     />
 
-                    <div className='mb-5'>
+                    {/* <div className='mb-5'>
                         <div className='mb-1 text-base'>Team</div>
                         <div className='text-sm'>{team ? team : 'Currently not on a team.'}</div>
-                    </div>
+                    </div> */}
 
                     {/* <Select title='Team'>
                                 <FormSelectBox defaultName='team' defaultValue='Choose a team:'>

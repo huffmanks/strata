@@ -1,9 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-// import { useDispatch } from 'react-redux'
-
-// import { setCredentials } from '../../features/auth/authSlice'
-import { useResetPasswordMutation } from '../../features/auth/authApi'
+import { useNavigate } from 'react-router-dom'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Layout/FormHeader'
@@ -14,15 +10,13 @@ import FormInput from '../../components/Form/FormInput'
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const ResetPassword = () => {
-    const params = useParams()
+    // const params = useParams()
     const navigate = useNavigate()
     // const dispatch = useDispatch()
 
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [toast, setToast] = useState('')
-
-    const [resetPassword, { error }] = useResetPasswordMutation()
 
     const resetPasswordHandler = async (e) => {
         e.preventDefault()
@@ -35,14 +29,9 @@ const ResetPassword = () => {
         }
 
         try {
-            if (error) {
-                setToast(error.data)
-            }
+            // const resetPasswordToken = params.resetPasswordToken
 
-            const resetPasswordToken = params.resetPasswordToken
-
-            const res = await resetPassword({ resetPasswordToken, password }).unwrap()
-            console.log(res)
+            // console.log(res)
             // const cred = {
             //     user: res.user,
             //     accessToken: res.accessToken,

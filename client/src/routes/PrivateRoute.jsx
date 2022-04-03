@@ -1,18 +1,19 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { AccessDenied } from '../pages/Common'
 import { useAuth } from '../hooks/useAuth'
 
-export const PrivateRoute = ({ component: RouteComponent, roles }) => {
-    const auth = useAuth()
+export const PrivateRoute = ({ roles }) => {
+    const { auth } = useAuth()
+
     const userHasRequiredRole = auth.user && roles.includes(auth.user.role) ? true : false
 
-    if (auth.isAuthenticated && userHasRequiredRole) {
-        return <RouteComponent />
+    if (auth.accessToken && userHasRequiredRole) {
+        return <Outlet />
     }
 
-    if (auth.isAuthenticated && !userHasRequiredRole) {
+    if (auth.accessToken && !userHasRequiredRole) {
         return <AccessDenied />
     }
 
-    return <Navigate to='/login' />
+    return <Navigate to='/login' replace />
 }
