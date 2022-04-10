@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import { AuthRoute } from './AuthRoute'
 import { PrivateRoute } from './PrivateRoute'
 
 // Layout
@@ -35,33 +36,37 @@ export const ROLES = {
 
 const Router = () => {
     return (
-        <Routes>
-            <Route element={<LoginLayout />}>
-                <Route path='login' element={<Login />} />
-                <Route path='register' element={<Register />} />
-                <Route path='forgot-password' element={<ForgotPassword />} />
-                <Route path='reset-password/:resetToken' element={<ResetPassword />} />
-            </Route>
-
-            <Route element={<MainLayout />}>
-                <Route path='/' element={<Dashboard />} />
-
-                <Route path='users' element={<PrivateRoute roles={[ROLES.ADMIN]} />}>
-                    <Route index element={<Users />} />
-                    <Route path=':userId' element={<SingleUser />} />
-                    <Route path='create' element={<CreateUser />} />
+        <>
+            <Routes>
+                <Route element={<LoginLayout />}>
+                    <Route path='login' element={<Login />} />
+                    <Route path='register' element={<Register />} />
+                    <Route path='forgot-password' element={<ForgotPassword />} />
+                    <Route path='reset-password/:resetPasswordToken' element={<ResetPassword />} />
                 </Route>
 
-                <Route path='teams' element={<PrivateRoute roles={[ROLES.ADMIN]} />}>
-                    <Route index element={<Teams />} />
-                    <Route path=':teamId' element={<SingleTeam />} />
-                    <Route path='create' element={<CreateTeam />} />
-                </Route>
+                <Route element={<AuthRoute />}>
+                    <Route element={<MainLayout />}>
+                        <Route path='/' element={<Dashboard />} />
 
-                <Route path='access-denied' element={<AccessDenied />} />
-                <Route path='*' element={<NotFound />} />
-            </Route>
-        </Routes>
+                        <Route path='users' element={<PrivateRoute roles={[ROLES.ADMIN]} />}>
+                            <Route index element={<Users />} />
+                            <Route path=':userId' element={<SingleUser />} />
+                            <Route path='create' element={<CreateUser />} />
+                        </Route>
+
+                        <Route path='teams' element={<PrivateRoute roles={[ROLES.ADMIN]} />}>
+                            <Route index element={<Teams />} />
+                            <Route path=':teamId' element={<SingleTeam />} />
+                            <Route path='create' element={<CreateTeam />} />
+                        </Route>
+
+                        <Route path='access-denied' element={<AccessDenied />} />
+                        <Route path='*' element={<NotFound />} />
+                    </Route>
+                </Route>
+            </Routes>
+        </>
     )
 }
 

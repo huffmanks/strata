@@ -5,9 +5,9 @@ import { useAuth } from '../../hooks/useAuth'
 import axios from '../../api/axios'
 
 import Form from '../../components/Form'
-import FormHeader from '../../components/Form/Layout/FormHeader'
-import FormBody from '../../components/Form/Layout/FormBody'
-import FormFooter from '../../components/Form/Layout/FormFooter'
+import FormHeader from '../../components/Form/Container/FormHeader'
+import FormBody from '../../components/Form/Container/FormBody'
+import FormFooter from '../../components/Form/Container/FormFooter'
 import FormInput from '../../components/Form/FormInput'
 import FormCheckbox from '../../components/Form/FormCheckbox'
 
@@ -47,7 +47,7 @@ const Login = () => {
 
             navigate(from, { replace: true })
         } catch (err) {
-            setToast(err.data)
+            setToast(err.response.data.message)
         }
     }
 

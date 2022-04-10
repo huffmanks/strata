@@ -188,7 +188,7 @@ export const refresh = async (req, res, next) => {
                 { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE }
             )
 
-            res.status(201).json({ accessToken })
+            res.status(201).json({ user, accessToken })
         })
     } catch (err) {
         next(err)

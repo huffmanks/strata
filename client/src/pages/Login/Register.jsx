@@ -1,23 +1,30 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+import { useAuth } from '../../hooks/useAuth'
+import axios from '../../api/axios'
 
 import Form from '../../components/Form'
-import FormHeader from '../../components/Form/Layout/FormHeader'
-import FormBody from '../../components/Form/Layout/FormBody'
-import FormFooter from '../../components/Form/Layout/FormFooter'
+import FormHeader from '../../components/Form/Container/FormHeader'
+import FormBody from '../../components/Form/Container/FormBody'
+import FormFooter from '../../components/Form/Container/FormFooter'
 import FormInput from '../../components/Form/FormInput'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
 
 const Register = () => {
+    const { setAuth } = useAuth()
+
     const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from?.pathname || '/'
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [toast, setToast] = useState('')
 
-    const registerHandler = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         if (password !== confirmPassword) {
@@ -28,26 +35,33 @@ const Register = () => {
         }
 
         try {
-            // const res = await register({ email, password }).unwrap()
+            const response = await axios.post(
+                'register',
+                { email, password },
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true,
+                }
+            )
 
-            // console.log(res)
+            const user = response?.data?.user
+            const accessToken = response?.data?.accessToken
 
-            // const cred = {
-            //     user: res.user,
-            //     accessToken: res.accessToken,
-            // }
+            setAuth({ user, accessToken })
 
-            // dispatch(setCredentials(cred))
+            setEmail('')
+            setPassword('')
+            setConfirmPassword('')
 
-            navigate('/')
+            navigate(from, { replace: true })
         } catch (err) {
-            setToast(err.data)
+            setToast(err.response.data.message)
         }
     }
 
     return (
         <>
-            <Form submitHandler={registerHandler}>
+            <Form submitHandler={handleSubmit}>
                 <FormHeader title='Register' />
 
                 <FormBody>

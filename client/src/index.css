@@ -25,6 +25,10 @@
         -webkit-text-fill-color: #fefefe;
         -webkit-box-shadow: 0 0 0px 1000px #333 inset;
     }
+
+    .load-spinner div:nth-child(2) {
+        animation-delay: -0.625s;
+    }
 }
 
 /* File input */

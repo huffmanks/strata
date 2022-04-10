@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { MdAccountCircle } from 'react-icons/md'
 
 const Navbar = () => {
-    const { user } = useAuth()
+    const { auth } = useAuth()
 
     return (
         <>
@@ -14,9 +14,13 @@ const Navbar = () => {
 
                     <NavLink to='/account' className='ml-auto flex h-16 pr-3'>
                         <div className='flex items-center gap-3 rounded-lg px-3 py-1 hover:bg-gray-700 hover:text-gray-300'>
-                            <span className='font-medium'>{user ? user?.firstName || user?.email : 'Account'}</span>
+                            <span className='font-medium'>{auth ? auth?.user?.firstName || auth?.user?.email : 'Account'}</span>
 
-                            {user && user?.profileImage ? <img className='h-10 w-10 rounded-full object-cover' src={user.profileImage} /> : <MdAccountCircle className='h-10 w-10 stroke-current' />}
+                            {auth && auth?.user?.profileImage ? (
+                                <img className='h-10 w-10 rounded-full object-cover' src={auth.user.profileImage} />
+                            ) : (
+                                <MdAccountCircle className='h-10 w-10 stroke-current' />
+                            )}
                         </div>
                     </NavLink>
                 </div>
