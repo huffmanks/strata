@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { AuthProvider } from './context/AuthProvider'
 import Router from './routes/Router'
@@ -11,6 +12,7 @@ const App = () => {
             <AuthProvider>
                 <Router />
             </AuthProvider>
+            <ReactQueryDevtools initialIsOpen />
         </QueryClientProvider>
     )
 }

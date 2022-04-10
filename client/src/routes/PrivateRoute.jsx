@@ -1,15 +1,19 @@
 import { useLocation, Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
+import LoadSpinner from '../components/LoadSpinner'
+
 export const PrivateRoute = ({ roles }) => {
-    const { auth } = useAuth()
+    const { auth, authIsRefreshing } = useAuth()
     const location = useLocation()
 
     const userHasRequiredRole = auth.user && roles.includes(auth.user.role) ? true : false
 
     return (
         <>
-            {userHasRequiredRole ? (
+            {authIsRefreshing ? (
+                <LoadSpinner />
+            ) : userHasRequiredRole ? (
                 <Outlet />
             ) : auth?.accessToken ? (
                 <Navigate to='/access-denied' state={{ from: location }} replace />

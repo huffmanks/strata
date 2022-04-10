@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import { useRefreshToken } from '../hooks/useRefreshToken'
 import { useAuth } from '../hooks/useAuth'
@@ -8,11 +8,11 @@ import ErrorToast from '../components/Errors/ErrorToast'
 import LoadSpinner from '../components/LoadSpinner'
 
 export const AuthRoute = () => {
+    const location = useLocation()
     const navigate = useNavigate()
     const refresh = useRefreshToken()
-    const { auth, persist } = useAuth()
+    const { auth, authIsRefreshing, setAuthIsRefreshing, persist } = useAuth()
 
-    const [isLoading, setIsLoading] = useState(true)
     const [toast, setToast] = useState('')
 
     useEffect(() => {
@@ -20,20 +20,22 @@ export const AuthRoute = () => {
 
         const verifyRefreshToken = async () => {
             try {
+                setAuthIsRefreshing(true)
                 await refresh()
             } catch (err) {
+                navigate('/login', { state: { from: location }, replace: true })
                 setToast(err.response.data.message)
             } finally {
-                isMounted && setIsLoading(false)
+                isMounted && setAuthIsRefreshing(false)
             }
         }
 
         if (!auth?.accessToken && !persist) {
-            isMounted && setIsLoading(false)
-            navigate('/login')
+            isMounted && setAuthIsRefreshing(false)
+            navigate('/login', { state: { from: location }, replace: true })
         }
 
-        !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false)
+        !auth?.accessToken && persist ? verifyRefreshToken() : setAuthIsRefreshing(false)
 
         return () => (isMounted = false)
     }, [])
@@ -41,14 +43,7 @@ export const AuthRoute = () => {
     return (
         <>
             {toast && <ErrorToast message={toast} closeHandler={() => setToast('')} />}
-            {isLoading ? (
-                <>
-                    <Outlet />
-                    <LoadSpinner />
-                </>
-            ) : (
-                <Outlet />
-            )}
+            {authIsRefreshing ? <LoadSpinner /> : <Outlet />}
         </>
     )
 }

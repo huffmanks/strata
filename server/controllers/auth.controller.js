@@ -141,14 +141,14 @@ export const logout = async (req, res, next) => {
         const user = await User.findOne({ refreshToken })
 
         if (!user) {
-            res.clearCookie('refreshToken', { httpOnly: true })
+            res.clearCookie('refreshToken', { httpOnly: true, maxAge: 0 })
             return res.sendStatus(204)
         }
 
         user.refreshToken = ''
         await user.save()
 
-        res.clearCookie('refreshToken', { httpOnly: true })
+        res.clearCookie('refreshToken', { httpOnly: true, maxAge: 0 })
         res.sendStatus(204)
     } catch (err) {
         next(err)

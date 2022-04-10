@@ -1,16 +1,31 @@
 import { Link } from 'react-router-dom'
 
+import { useGetUsers } from '../../api/users/useGetUsers'
+
 import Button from '../../components/Button'
-// import Table from '../../components/Table'
-// import { MdAccountCircle, MdModeEdit, MdDelete } from 'react-icons/md'
+import Table from '../../components/Table'
+import LoadSpinner from '../../components/LoadSpinner'
+import ErrorToast from '../../components/Errors/ErrorToast'
+import { MdAccountCircle, MdModeEdit, MdDelete } from 'react-icons/md'
 
 const Users = () => {
-    // const { data: users, isLoading } = useGetUsersQuery()
+    const { users, isLoading, isError, error } = useGetUsers()
+
+    if (isLoading) {
+        return <LoadSpinner />
+    }
+
+    if (isError) {
+        return <ErrorToast message={error.message} />
+    }
+    console.log('data', users)
+
+    // const users = data
 
     return (
         <>
             <h1 className='text-primary-alt text-center text-2xl font-bold'>USERS</h1>
-            {/* <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role']}>
+            <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role']}>
                 {users &&
                     users.map((user) => (
                         <tr key={user._id} className='even:bg-dark-alt cursor-pointer hover:bg-neutral-700'>
@@ -37,7 +52,7 @@ const Users = () => {
                             </td>
                         </tr>
                     ))}
-            </Table> */}
+            </Table>
             <Link to='/users/create'>
                 <Button buttonType='button' buttonText='Create a user' isLarge={true} />
             </Link>
