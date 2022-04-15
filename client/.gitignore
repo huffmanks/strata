@@ -14,6 +14,7 @@
 # misc
 /src/test
 /todo.md
+/*.DS_Store
 .DS_Store
 .env
 .env.local
