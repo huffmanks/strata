@@ -9,7 +9,7 @@ import ErrorToast from '../../components/Errors/ErrorToast'
 import { MdAccountCircle, MdModeEdit, MdDelete } from 'react-icons/md'
 
 const Users = () => {
-    const { users, isLoading, isError, error } = useGetUsers()
+    const { data, isLoading, isError, error } = useGetUsers()
 
     if (isLoading) {
         return <LoadSpinner />
@@ -18,9 +18,8 @@ const Users = () => {
     if (isError) {
         return <ErrorToast message={error.message} />
     }
-    console.log('data', users)
 
-    // const users = data
+    const users = data.data
 
     return (
         <>
