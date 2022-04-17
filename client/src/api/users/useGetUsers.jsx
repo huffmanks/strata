@@ -5,11 +5,9 @@ export const useGetUsers = () => {
     const privateRequest = useAxiosPrivate()
 
     const getUsers = async () => {
-        try {
-            return await privateRequest.get('/users')
-        } catch (error) {
-            console.log(error)
-        }
+        const { data } = await privateRequest.get('/users')
+        return data
     }
+
     return useQuery('users', getUsers)
 }

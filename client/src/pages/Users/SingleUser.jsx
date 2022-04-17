@@ -1,7 +1,7 @@
-import { useState } from 'react'
-// import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-// import { useAxios } from '../../hooks/useAxios'
+import { useGetUser } from '../../api/users/useGetUser'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Container/FormHeader'
@@ -17,68 +17,40 @@ import FormRadio from '../../components/Form/FormRadio'
 // import FormOptionList from '../../components/Form/Select/FormOptionList'
 // import FormOptionItem from '../../components/Form/Select/FormOptionItem'
 
+import LoadSpinner from '../../components/LoadSpinner'
 import ErrorToast from '../../components/Errors/ErrorToast'
-// import axios from 'axios'
 
 const SingleUser = () => {
-    // const { userId } = useParams()
+    const { userId } = useParams()
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
-
-    const [profileImage, setProfileImage] = useState()
-    const [previewImage, setPreviewImage] = useState()
+    const [profileImage, setProfileImage] = useState('')
+    const [previewImage, setPreviewImage] = useState('')
     const [role, setRole] = useState('')
     // const [team, setTeam] = useState('')
 
-    // const [isLoading, setIsLoading] = useState()
     const [toast, setToast] = useState('')
 
-    // const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
+    const { data, isLoading, isError, error, isSuccess } = useGetUser(userId)
 
-    // useEffect(() => {
-    //     const getData = async () => {
-    //         setIsLoading(true)
-
-    //         const userInfo = await getUser(userId).unwrap()
-    //         console.log('userInfo', userInfo)
-
-    //         setFirstName(userInfo?.firstName)
-    //         setLastName(userInfo?.lastName)
-    //         setEmail(userInfo.email)
-    //         setProfileImage(userInfo?.profileImage)
-    //         setPreviewImage(userInfo?.profileImage)
-    //         setRole(userInfo.role)
-    //         setTeam(userInfo?.team?.title)
-
-    //         setIsLoading(false)
-    //     }
-    //     getData()
-    // }, [])
+    useEffect(() => {
+        if (isSuccess) {
+            setFirstName(data?.firstName)
+            setLastName(data?.lastName)
+            setEmail(data?.email)
+            setProfileImage(data?.profileImage)
+            setPreviewImage(data?.profileImage)
+            setRole(data?.role)
+            // setTeam(data?.team?.title)
+        }
+    }, [isSuccess])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         try {
-            // const user = {
-            //     firstName,
-            //     lastName,
-            //     email,
-            //     profileImage,
-            //     role,
-            //     // team,
-            // }
-
-            // const config = {
-            //     headers: {
-            //         accept: '*/*',
-            //         Authorization: `Bearer ${accessToken}`,
-            //         'Content-Type': 'multipart/form-data; charset=utf-8;',
-            //         // 'Content-type': 'multipart/form-data',
-            //     },
-            // }
-
             const update = new FormData()
 
             update.append('firstName', firstName)
@@ -89,37 +61,18 @@ const SingleUser = () => {
             // update.append('team', team)
 
             console.log(update.profileImage)
-
-            // dispatch(setUserInfo(user))
-            // const result = await axios({
-            //     method: 'patch',
-            //     url: `http://localhost:5000/api/private/users/edit/${userId}`,
-            //     data: update,
-            //     headers: {
-            //         // accept: '*/*',
-            //         Authorization: `Bearer ${accessToken}`,
-            //         'Content-Type': 'multipart/form-data; charset=utf-8;',
-            //     },
-            // })
-            // const result = await axios.patch(`${process.env.REACT_APP_BASE_PRIVATE_API_URL}users/edit/${userId}`, update, config)
-
-            // console.log(result)
         } catch (err) {
             console.log(err)
         }
-
-        // console.log('user', JSON.stringify(user))
-        // console.log('update', update)
-
-        // const res = await updateUser({ userId, update }).unwrap()
-
-        // console.log('update', update)
-        // console.log('res', JSON.stringify(res, null, 2))
-        // console.log('update', update.firstName)
-        // console.log('res', res.firstName)
     }
 
-    // if (isLoading) return <div>Loading...</div>
+    if (isLoading) {
+        return <LoadSpinner />
+    }
+
+    if (isError) {
+        setToast(error.message)
+    }
 
     return (
         <>
@@ -162,10 +115,10 @@ const SingleUser = () => {
                                 </FormOptionList>
                             </Select> */}
 
-                    <FormRadioGroup label='Role' value={role} changeHandler={(e) => setRole(e.target.value)}>
-                        <FormRadio id='tiger' name='role' label='Tiger' radioValue='tiger' isDefault={role === 'tiger'} />
-                        <FormRadio id='mako' name='role' label='Mako' radioValue='mako' isDefault={role === 'mako'} />
-                        <FormRadio id='bull' name='role' label='Bull' radioValue='bull' isDefault={role === 'bull'} />
+                    <FormRadioGroup label='Role' changeHandler={(e) => setRole(e.target.value)}>
+                        <FormRadio id='tiger' name='role' label='Tiger' radioValue='tiger' isChecked={data?.role === 'tiger'} />
+                        <FormRadio id='mako' name='role' label='Mako' radioValue='mako' isChecked={data?.role === 'mako'} />
+                        <FormRadio id='bull' name='role' label='Bull' radioValue='bull' isChecked={data?.role === 'bull'} />
                     </FormRadioGroup>
                 </FormBody>
 
