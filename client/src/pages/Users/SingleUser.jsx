@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { useGetUser } from '../../api/users/useGetUser'
+import { useGetTeams } from '../../api/teams/useGetTeams'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Container/FormHeader'
@@ -11,11 +12,11 @@ import FormInput from '../../components/Form/FormInput'
 import FormFile from '../../components/Form/FormFile'
 import FormRadioGroup from '../../components/Form/FormRadioGroup'
 import FormRadio from '../../components/Form/FormRadio'
-// import Select from '../../components/Form/Select'
-// import FormSelectBox from '../../components/Form/Select/FormSelectBox'
-// import FormSelectValue from '../../components/Form/Select/FormSelectValue'
-// import FormOptionList from '../../components/Form/Select/FormOptionList'
-// import FormOptionItem from '../../components/Form/Select/FormOptionItem'
+import Select from '../../components/Form/Select'
+import FormSelectBox from '../../components/Form/Select/FormSelectBox'
+import FormSelectValue from '../../components/Form/Select/FormSelectValue'
+import FormOptionList from '../../components/Form/Select/FormOptionList'
+import FormOptionItem from '../../components/Form/Select/FormOptionItem'
 
 import LoadSpinner from '../../components/LoadSpinner'
 import ErrorToast from '../../components/Errors/ErrorToast'
@@ -29,11 +30,12 @@ const SingleUser = () => {
     const [profileImage, setProfileImage] = useState('')
     const [previewImage, setPreviewImage] = useState('')
     const [role, setRole] = useState('')
-    // const [team, setTeam] = useState('')
+    const [newTeam, setNewTeam] = useState('')
 
     const [toast, setToast] = useState('')
 
     const { data, isLoading, isError, error, isSuccess } = useGetUser(userId)
+    const { data: teams } = useGetTeams()
 
     useEffect(() => {
         if (isSuccess) {
@@ -43,7 +45,7 @@ const SingleUser = () => {
             setProfileImage(data?.profileImage)
             setPreviewImage(data?.profileImage)
             setRole(data?.role)
-            // setTeam(data?.team?.title)
+            setNewTeam(data?.team?.title)
         }
     }, [isSuccess])
 
@@ -58,7 +60,7 @@ const SingleUser = () => {
             update.append('email', email)
             update.append('profileImage', profileImage)
             update.append('role', role)
-            // update.append('team', team)
+            update.append('team', newTeam)
 
             console.log(update.profileImage)
         } catch (err) {
@@ -96,24 +98,28 @@ const SingleUser = () => {
                         previewImg={previewImage}
                     />
 
-                    {/* <div className='mb-5'>
-                        <div className='mb-1 text-base'>Team</div>
-                        <div className='text-sm'>{team ? team : 'Currently not on a team.'}</div>
-                    </div> */}
+                    {teams && (
+                        <Select title='Team'>
+                            <FormSelectBox defaultName='team' isDefault={!newTeam} isDisabled={!newTeam} changeHandler={() => setNewTeam(undefined)}>
+                                {teams.map((team) => (
+                                    <FormSelectValue
+                                        key={team._id}
+                                        valueId={team._id}
+                                        groupName='team'
+                                        selectValue={team.title}
+                                        isDefault={newTeam === team.title}
+                                        changeHandler={(e) => setNewTeam(e.target.value)}
+                                    />
+                                ))}
+                            </FormSelectBox>
 
-                    {/* <Select title='Team'>
-                                <FormSelectBox defaultName='team' defaultValue='Choose a team:'>
-                                    {teams.map((team) => (
-                                        <FormSelectValue key={team.title} valueId={team._id} groupName='team' selectValue={team.title} changeHandler={(e) => setTeam(e.target.value)} />
-                                    ))}
-                                </FormSelectBox>
-
-                                <FormOptionList>
-                                    {teams.map((team) => (
-                                        <FormOptionItem key={team._id} labelFor={team._id} label={team.title} />
-                                    ))}
-                                </FormOptionList>
-                            </Select> */}
+                            <FormOptionList groupName='team' isHidden={!newTeam}>
+                                {teams.map((team) => (
+                                    <FormOptionItem key={team._id} labelFor={team._id} label={team.title} />
+                                ))}
+                            </FormOptionList>
+                        </Select>
+                    )}
 
                     <FormRadioGroup label='Role' changeHandler={(e) => setRole(e.target.value)}>
                         <FormRadio id='tiger' name='role' label='Tiger' radioValue='tiger' isChecked={data?.role === 'tiger'} />

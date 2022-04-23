@@ -1,7 +1,7 @@
-const FormOptionItem = ({ labelFor, label }) => {
+const FormOptionItem = ({ labelFor, label, isHidden }) => {
     return (
-        <li className='overflow-hidden last-of-type:rounded-b-lg'>
-            <label className='block cursor-pointer bg-gray-700 px-4 py-2 hover:bg-primary-alt focus:bg-primary-alt' htmlFor={labelFor} aria-hidden='aria-hidden'>
+        <li className={isHidden ? 'hidden' : 'overflow-hidden last-of-type:rounded-b-lg'}>
+            <label className='hover:bg-primary-alt focus:bg-primary-alt block cursor-pointer bg-gray-700 px-4 py-2' htmlFor={labelFor} aria-hidden='aria-hidden'>
                 {label}
             </label>
         </li>
