@@ -79,7 +79,7 @@ const SingleUser = () => {
     return (
         <>
             <Form isLarge='true' submitHandler={handleSubmit}>
-                <FormHeader title={`Update ${firstName}`} />
+                <FormHeader title={`Update ${firstName ? firstName : 'User'}`} />
                 <FormBody>
                     <FormInput type='text' name='firstName' label='First Name' changeHandler={(e) => setFirstName(e.target.value)} inputValue={firstName} />
 
