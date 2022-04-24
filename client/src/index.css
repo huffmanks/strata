@@ -43,3 +43,9 @@ input::-webkit-file-upload-button {
 .text-input input:-webkit-autofill:focus ~ label {
     @apply text-primary-alt -translate-y-6 scale-75 transform;
 }
+
+/* Table */
+.table-responsive th,
+.table-responsive td {
+    @apply whitespace-nowrap;
+}

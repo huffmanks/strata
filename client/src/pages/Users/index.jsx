@@ -13,6 +13,7 @@ import Row from '../../components/Table/Row'
 
 const Users = () => {
     const [view, setView] = useState(true)
+    const [aIcon, setAIcon] = useState('list')
 
     const { data: users, isLoading, isError, error } = useGetUsers()
 
@@ -25,15 +26,16 @@ const Users = () => {
     }
 
     const handleClick = () => {
-        setView(!view)
+        setView((prev) => !prev)
+        setAIcon(!view ? 'list' : 'grid')
     }
-
+    console.log(aIcon)
     return (
         <>
-            <Header pageTitle='USERS' addLink='/users/create' viewIcon={view} clickHandler={handleClick} />
+            <Header pageTitle='USERS' addLink='/users/create' activeIcon={aIcon} clickHandler={handleClick} />
 
             {users && view ? (
-                <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role']}>
+                <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role', 'Edit', 'Delete']}>
                     {users.map((user) => (
                         <Row
                             key={user._id}
