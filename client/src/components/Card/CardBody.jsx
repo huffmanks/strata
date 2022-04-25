@@ -6,7 +6,11 @@ const CardBody = ({ userName, userEmail, userImage, userRole, userLink }) => {
     return (
         <>
             <div className='relative'>
-                {userImage ? <img className='mb-3 h-24 w-24 rounded-full object-cover shadow-lg' src={userImage} alt={userName} /> : <MdAccountCircle className='mb-3 h-24 w-24 stroke-current' />}
+                {userImage ? (
+                    <img className='mb-3 h-24 w-24 rounded-full object-cover shadow-lg' src={userImage} alt={userName} />
+                ) : (
+                    <MdAccountCircle className='mb-3 h-24 w-24 rounded-full stroke-current' viewBox='1 2 22 22' />
+                )}
                 <div className='bg-primary-main absolute -top-3 -right-4 h-10 w-10 rounded-full'>
                     <div className='grid h-full w-full place-content-center'>
                         {userRole === 'bull' ? (

@@ -1,44 +1,74 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Teams = () => {
-    return (
-        <div>
-            <h1 className='mb-10 text-center text-2xl font-bold'>All Teams</h1>
+import { useGetTeams } from '../../api/teams/useGetTeams'
 
-            <table>
-                <thead>
-                    <tr className='border-b-2 border-gray-500 text-left'>
-                        <th>TITLE</th>
-                        <th>DESCRIPTION</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                {/* <tbody>
-                    {data.data.map((team) => (
-                        <tr key={team.id} id={team.id} className='border-b border-gray-400'>
-                            <td>{team.attributes.title}</td>
-                            <td>{team.attributes.description}</td>
-                            <td>
-                                <Link to={`/teams/edit/${team.id}`}>
-                                    <button className='flex items-center justify-center px-3 py-1 bg-gray-800 text-base text-center rounded-lg shadow-sm cursor-pointer hover:bg-gray-700'>Edit</button>
-                                </Link>
-                            </td>
-                            <td className='m-10'>
-                                <button className='flex items-center justify-center px-3 py-1 bg-red-900 text-base text-center rounded-lg shadow-sm cursor-pointer hover:bg-red-800' onClick={onDeleteTeamClicked}>
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
+import Header from '../../layout/Header'
+import GridList from '../../components/GridList'
+import Card from '../../components/Card'
+import CardBody from '../../components/Card/CardBody'
+import LoadSpinner from '../../components/LoadSpinner'
+import ErrorToast from '../../components/Errors/ErrorToast'
+import Table from '../../components/Table'
+import Row from '../../components/Table/Row'
+
+const Teams = () => {
+    const [view, setView] = useState(true)
+
+    const { data: teams, isLoading, isError, error } = useGetTeams()
+
+    if (isLoading) {
+        return <LoadSpinner />
+    }
+
+    if (isError) {
+        return <ErrorToast message={error.message} />
+    }
+
+    const handleClick = () => {
+        setView((prev) => !prev)
+    }
+
+    return (
+        <>
+            <Header pageTitle='Teams' addLink='/teams/create' activeIcon={view} clickHandler={handleClick} />
+
+            {teams && view ? (
+                <Table headCols={['Image', 'Title', 'Description', 'Users', 'Edit', 'Delete']}>
+                    {teams.map((team) => (
+                        <Row
+                            key={team._id}
+                            hasImage={true}
+                            imageSrc={team?.teamImage}
+                            imageAlt={team.title}
+                            linkPath={`/teams/${team._id}`}
+                            teamTitle={team.title}
+                            teamDescription={team.description ? `${team.description.slice(0, 20)}...` : ' '}
+                            // teamDescription={team?.description > 20 ? team.description.slice(0, 20) + '...' : team?.description ? team.description : ' '}
+                            teamUsers={
+                                <div className='flex gap-2'>
+                                    {Object.values(team.users)
+                                        .slice(0, 3)
+                                        .map((user, index) => (
+                                            <Link key={index} to={`/users/${user._id}`}>
+                                                <img className='h-10 w-10 rounded-full' src={user.profileImage} />
+                                            </Link>
+                                        ))}
+                                </div>
+                            }
+                        />
                     ))}
-                </tbody> */}
-            </table>
-            <div className='fixed bottom-6 right-6'>
-                <Link to={`/teams/create`}>
-                    <button className='inline-flex cursor-pointer items-center justify-center rounded-full bg-gray-800 px-5 py-2 text-center text-2xl font-bold shadow-sm hover:bg-gray-700'>Create</button>
-                </Link>
-            </div>
-        </div>
+                </Table>
+            ) : (
+                <GridList>
+                    {teams.map((team) => (
+                        <Card key={team._id}>
+                            <CardBody teamTitle={team.title} teamDescription={team?.description} teamUsers={team.users} teamImage={team?.teamImage} teamLink={`/teams/${team._id}`} />
+                        </Card>
+                    ))}
+                </GridList>
+            )}
+        </>
     )
 }
 
