@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { useGetUser } from '../../api/users/useGetUser'
+import { useUpdateUser } from '../../api/users/useUpdateUser'
 import { useGetTeams } from '../../api/teams/useGetTeams'
 
 import Form from '../../components/Form'
@@ -23,97 +24,123 @@ import ErrorToast from '../../components/Errors/ErrorToast'
 
 const SingleUser = () => {
     const { userId } = useParams()
+    const updateUser = useUpdateUser(userId)
 
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [profileImage, setProfileImage] = useState('')
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        profileImage: '',
+        role: '',
+        team: '',
+    })
+
     const [previewImage, setPreviewImage] = useState('')
-    const [role, setRole] = useState('')
-    const [newTeam, setNewTeam] = useState('')
-
     const [toast, setToast] = useState('')
 
-    const { data, isLoading, isError, error, isSuccess } = useGetUser(userId)
-    const { data: teams } = useGetTeams()
+    const { data: user, isLoading: userLoading, isError: userError, error: userErrorMessage } = useGetUser(userId)
+    const { data: teams, isLoading: teamsLoading, isError: teamsError, error: teamsErrorMessage } = useGetTeams()
 
     useEffect(() => {
-        if (isSuccess) {
-            setFirstName(data?.firstName)
-            setLastName(data?.lastName)
-            setEmail(data?.email)
-            setProfileImage(data?.profileImage)
-            setPreviewImage(data?.profileImage)
-            setRole(data?.role)
-            setNewTeam(data?.team?.title)
+        if (user) {
+            setFormData({
+                firstName: user?.firstName,
+                lastName: user?.lastName,
+                email: user?.email,
+                profileImage: user?.profileImage,
+                role: user?.role,
+                team: user?.team?._id,
+            })
+
+            setPreviewImage(user?.profileImage)
         }
-    }, [isSuccess])
+    }, [user])
+
+    const handleChange = (e) => {
+        const { name, value, type, files } = e.target
+
+        if (files) {
+            setPreviewImage(URL.createObjectURL(e.target.files[0]))
+        }
+
+        setFormData((prev) => {
+            return {
+                ...prev,
+                [name]: type === 'file' ? e.target.files[0] : value,
+            }
+        })
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         try {
-            const update = new FormData()
+            const { team, ...newFormData } = formData
 
-            update.append('firstName', firstName)
-            update.append('lastName', lastName)
-            update.append('email', email)
-            update.append('profileImage', profileImage)
-            update.append('role', role)
-            update.append('team', newTeam)
+            console.log(team)
+            const update = !formData.team ? newFormData : formData
 
-            console.log(update.profileImage)
+            await updateUser.mutateAsync(update, {
+                onSuccess: (data) => {
+                    // setFormData({
+                    //     firstName: data?.firstName,
+                    //     lastName: data?.lastName,
+                    //     email: data?.email,
+                    //     profileImage: data?.profileImage,
+                    //     role: data?.role,
+                    //     team: data?.team?._id,
+                    // })
+                    console.log(`${data?.profileImage}?${data.updatedAt}`)
+                    setPreviewImage(`${data?.profileImage}?${data.updatedAt}`)
+                },
+            })
         } catch (err) {
             console.log(err)
         }
     }
 
-    if (isLoading) {
+    if (userLoading || teamsLoading) {
         return <LoadSpinner />
     }
 
-    if (isError) {
-        setToast(error.message)
+    if (userError) {
+        setToast(userErrorMessage.message)
+    }
+
+    if (teamsError) {
+        setToast(teamsErrorMessage.message)
     }
 
     return (
         <>
             <Form isLarge='true' submitHandler={handleSubmit}>
-                <FormHeader title={`Update ${firstName ? firstName : 'User'}`} />
+                <FormHeader title={`Update ${formData.firstName ? formData.firstName : 'User'}`} />
                 <FormBody>
-                    <FormInput type='text' name='firstName' label='First Name' changeHandler={(e) => setFirstName(e.target.value)} inputValue={firstName} />
+                    <FormInput type='text' name='firstName' label='First Name' changeHandler={handleChange} inputValue={formData.firstName} />
 
-                    <FormInput type='text' name='lastName' label='Last Name' changeHandler={(e) => setLastName(e.target.value)} inputValue={lastName} />
+                    <FormInput type='text' name='lastName' label='Last Name' changeHandler={handleChange} inputValue={formData.lastName} />
 
-                    <FormInput type='email' name='email' label='Email' changeHandler={(e) => setEmail(e.target.value)} inputValue={email} />
+                    <FormInput type='email' name='email' label='Email' changeHandler={handleChange} inputValue={formData.email} />
 
-                    <FormFile
-                        type='file'
-                        name='profileImage'
-                        label={previewImage ? 'Update Profile Image' : 'Upload Profile Image'}
-                        changeHandler={(e) => {
-                            setProfileImage(e.target.files[0])
-                            setPreviewImage(URL.createObjectURL(e.target.files[0]))
-                        }}
-                        previewImg={previewImage}
-                    />
+                    <FormFile type='file' name='profileImage' label={previewImage ? 'Update Profile Image' : 'Upload Profile Image'} changeHandler={handleChange} previewImg={previewImage} />
 
                     {teams && (
                         <Select title='Team'>
-                            <FormSelectBox defaultName='team' isDefault={!newTeam} isDisabled={!newTeam} changeHandler={() => setNewTeam(undefined)}>
+                            <FormSelectBox defaultName='team' isDefault={!formData.team} isDisabled={!formData.team} changeHandler={handleChange}>
                                 {teams.map((team) => (
                                     <FormSelectValue
                                         key={team._id}
                                         valueId={team._id}
                                         groupName='team'
-                                        selectValue={team.title}
-                                        isDefault={newTeam === team.title}
-                                        changeHandler={(e) => setNewTeam(e.target.value)}
+                                        selectLabel={team.title}
+                                        selectValue={team._id}
+                                        isChecked={formData.team === team._id}
+                                        changeHandler={handleChange}
                                     />
                                 ))}
                             </FormSelectBox>
 
-                            <FormOptionList groupName='team' isHidden={!newTeam}>
+                            <FormOptionList groupName='team' isHidden={!formData.team}>
                                 {teams.map((team) => (
                                     <FormOptionItem key={team._id} labelFor={team._id} label={team.title} />
                                 ))}
@@ -121,10 +148,10 @@ const SingleUser = () => {
                         </Select>
                     )}
 
-                    <FormRadioGroup label='Role' changeHandler={(e) => setRole(e.target.value)}>
-                        <FormRadio id='tiger' name='role' label='Tiger' radioValue='tiger' isChecked={data?.role === 'tiger'} />
-                        <FormRadio id='mako' name='role' label='Mako' radioValue='mako' isChecked={data?.role === 'mako'} />
-                        <FormRadio id='bull' name='role' label='Bull' radioValue='bull' isChecked={data?.role === 'bull'} />
+                    <FormRadioGroup label='Role' changeHandler={handleChange}>
+                        <FormRadio id='tiger' name='role' label='Tiger' radioValue='tiger' isChecked={user?.role === 'tiger'} />
+                        <FormRadio id='mako' name='role' label='Mako' radioValue='mako' isChecked={user?.role === 'mako'} />
+                        <FormRadio id='bull' name='role' label='Bull' radioValue='bull' isChecked={user?.role === 'bull'} />
                     </FormRadioGroup>
                 </FormBody>
 

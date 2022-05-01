@@ -12,7 +12,7 @@ const App = () => {
             <AuthProvider>
                 <Router />
             </AuthProvider>
-            <ReactQueryDevtools initialIsOpen />
+            <ReactQueryDevtools initialIsOpen='false' />
         </QueryClientProvider>
     )
 }

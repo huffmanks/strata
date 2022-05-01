@@ -4,7 +4,15 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 const FormSelectBox = ({ defaultName, isDefault, isDisabled, changeHandler, children }) => {
     return (
         <div className='group peer relative cursor-pointer shadow-md outline-none' tabIndex='1'>
-            <FormSelectValue valueId='default' groupName={defaultName} selectValue={`Choose a ${defaultName}:`} isDefault={isDefault} isDisabled={isDisabled} changeHandler={changeHandler} />
+            <FormSelectValue
+                valueId='default'
+                groupName={defaultName}
+                selectLabel={`Choose a ${defaultName}:`}
+                selectValue={''}
+                isDefault={isDefault}
+                isDisabled={isDisabled}
+                changeHandler={changeHandler}
+            />
 
             <>{children}</>
 

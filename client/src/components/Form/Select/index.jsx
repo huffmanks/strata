@@ -1,9 +1,9 @@
 const Select = ({ title, children }) => {
     return (
         <>
-            <div className='mb-2 text-base text-light-main'>{title}</div>
+            <div className='text-light-main mb-2 text-base'>{title}</div>
 
-            <div className='relative mx-auto block w-full text-light-main'>{children}</div>
+            <div className='text-light-main relative mx-auto mb-5 block w-full'>{children}</div>
         </>
     )
 }
