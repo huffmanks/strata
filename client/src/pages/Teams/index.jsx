@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { useGetTeams } from '../../api/teams/useGetTeams'
 
-import Header from '../../layout/Header'
+import Header from '../../layout/Content/Header'
 import GridList from '../../components/GridList'
 import Card from '../../components/Card'
 import CardBody from '../../components/Card/CardBody'
@@ -41,6 +41,7 @@ const Teams = () => {
                             hasImage={true}
                             imageSrc={team?.teamImage}
                             imageAlt={team.title}
+                            imageSize={10}
                             linkPath={`/teams/${team._id}`}
                             teamTitle={team.title}
                             teamDescription={team.description ? `${team.description.slice(0, 20)}...` : ' '}

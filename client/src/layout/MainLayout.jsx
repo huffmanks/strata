@@ -1,5 +1,5 @@
 import Sidebar from './Sidebar'
-import PageContainer from './PageContainer'
+import PageContainer from './Content/PageContainer'
 import Navbar from './Navbar'
 
 const MainLayout = () => {

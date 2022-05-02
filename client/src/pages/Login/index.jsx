@@ -8,8 +8,8 @@ import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Container/FormHeader'
 import FormBody from '../../components/Form/Container/FormBody'
 import FormFooter from '../../components/Form/Container/FormFooter'
-import FormInput from '../../components/Form/FormInput'
-import FormCheckbox from '../../components/Form/FormCheckbox'
+import FormInput from '../../components/Form/Inputs/FormInput'
+import FormCheckbox from '../../components/Form/Inputs/FormCheckbox'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
 

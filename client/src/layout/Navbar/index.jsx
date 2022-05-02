@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '../../hooks/useAuth'
 
-import { MdAccountCircle } from 'react-icons/md'
+import UserImage from '../../components/Image/UserImage'
 
 const Navbar = () => {
     const { auth } = useAuth()
@@ -16,11 +16,7 @@ const Navbar = () => {
                         <div className='flex items-center gap-3 rounded-lg px-3 py-1 hover:bg-gray-700 hover:text-gray-300'>
                             <span className='font-medium'>{auth ? auth?.user?.firstName || auth?.user?.email : 'Account'}</span>
 
-                            {auth && auth?.user?.profileImage ? (
-                                <img className='h-10 w-10 rounded-full object-cover' src={auth.user.profileImage} />
-                            ) : (
-                                <MdAccountCircle className='h-10 w-10 stroke-current' />
-                            )}
+                            <UserImage hasImage={auth && auth?.user?.profileImage} imageSrc={auth.user.profileImage} imageAlt={auth.user.userName} imageSize={10} />
                         </div>
                     </NavLink>
                 </div>

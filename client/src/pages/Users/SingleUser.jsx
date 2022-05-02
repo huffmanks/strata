@@ -9,10 +9,13 @@ import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Container/FormHeader'
 import FormBody from '../../components/Form/Container/FormBody'
 import FormFooter from '../../components/Form/Container/FormFooter'
-import FormInput from '../../components/Form/FormInput'
-import FormFile from '../../components/Form/FormFile'
-import FormRadioGroup from '../../components/Form/FormRadioGroup'
-import FormRadio from '../../components/Form/FormRadio'
+
+import FormInput from '../../components/Form/Inputs/FormInput'
+import FormFile from '../../components/Form/Inputs/FormFile'
+
+import FormRadioGroup from '../../components/Form/Radio/FormRadioGroup'
+import FormRadio from '../../components/Form/Radio/FormRadio'
+
 import Select from '../../components/Form/Select'
 import FormSelectBox from '../../components/Form/Select/FormSelectBox'
 import FormSelectValue from '../../components/Form/Select/FormSelectValue'
@@ -36,13 +39,13 @@ const SingleUser = () => {
     })
 
     const [previewImage, setPreviewImage] = useState('')
-    const [toast, setToast] = useState('')
+    const [toast, setToast] = useState(false)
 
-    const { data: user, isLoading: userLoading, isError: userError, error: userErrorMessage } = useGetUser(userId)
+    const { data: user, isLoading: userLoading, isError: userError, error: userErrorMessage, isSuccess } = useGetUser(userId)
     const { data: teams, isLoading: teamsLoading, isError: teamsError, error: teamsErrorMessage } = useGetTeams()
 
     useEffect(() => {
-        if (user) {
+        if (isSuccess) {
             setFormData({
                 firstName: user?.firstName,
                 lastName: user?.lastName,
@@ -52,15 +55,28 @@ const SingleUser = () => {
                 team: user?.team?._id,
             })
 
-            setPreviewImage(user?.profileImage)
+            setPreviewImage(`${user?.profileImage}?${user.updatedAt}`)
         }
-    }, [user])
+
+        if (userError) {
+            setToast(true)
+        }
+
+        if (teamsError) {
+            setToast(true)
+        }
+
+        return () => {
+            setPreviewImage('')
+            setToast(false)
+        }
+    }, [isSuccess, userError, teamsError])
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target
 
         if (files) {
-            setPreviewImage(URL.createObjectURL(e.target.files[0]))
+            setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
         }
 
         setFormData((prev) => {
@@ -71,44 +87,26 @@ const SingleUser = () => {
         })
     }
 
+    const handleClose = () => {
+        setToast(false)
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        const { team, ...newFormData } = formData
+
+        const update = !formData.team ? newFormData : formData
+
         try {
-            const { team, ...newFormData } = formData
-
-            console.log(team)
-            const update = !formData.team ? newFormData : formData
-
-            await updateUser.mutateAsync(update, {
-                onSuccess: (data) => {
-                    // setFormData({
-                    //     firstName: data?.firstName,
-                    //     lastName: data?.lastName,
-                    //     email: data?.email,
-                    //     profileImage: data?.profileImage,
-                    //     role: data?.role,
-                    //     team: data?.team?._id,
-                    // })
-                    console.log(`${data?.profileImage}?${data.updatedAt}`)
-                    setPreviewImage(`${data?.profileImage}?${data.updatedAt}`)
-                },
-            })
-        } catch (err) {
-            console.log(err)
+            updateUser.mutate(update)
+        } catch (error) {
+            console.log(error)
         }
     }
 
     if (userLoading || teamsLoading) {
         return <LoadSpinner />
-    }
-
-    if (userError) {
-        setToast(userErrorMessage.message)
-    }
-
-    if (teamsError) {
-        setToast(teamsErrorMessage.message)
     }
 
     return (
@@ -158,7 +156,8 @@ const SingleUser = () => {
                 <FormFooter buttonText='Update' />
             </Form>
 
-            {toast && <ErrorToast message={toast} closeHandler={() => setToast('')} />}
+            {toast && userErrorMessage && <ErrorToast message={userErrorMessage.message} closeHandler={handleClose} />}
+            {toast && teamsErrorMessage && <ErrorToast message={teamsErrorMessage.message} closeHandler={handleClose} />}
         </>
     )
 }

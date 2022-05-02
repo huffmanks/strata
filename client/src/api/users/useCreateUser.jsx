@@ -3,7 +3,7 @@ import { useAxiosPrivate } from '../../hooks/useAxiosPrivate'
 
 import { createFormData } from '../../utils/createFormData'
 
-export const useUpdateUser = (userId) => {
+export const useCreateUser = () => {
     const queryClient = useQueryClient()
 
     const privateRequest = useAxiosPrivate()
@@ -13,13 +13,13 @@ export const useUpdateUser = (userId) => {
     }
 
     const updateUser = async (formData) => {
-        const { data } = await privateRequest.patch(`/users/edit/${userId}`, createFormData(formData), config)
+        const { data } = await privateRequest.post('/users/create', createFormData(formData), config)
         return data
     }
 
     return useMutation(updateUser, {
         onSuccess: () => {
-            queryClient.invalidateQueries(['users', userId])
+            queryClient.invalidateQueries('users')
         },
     })
 }

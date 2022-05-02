@@ -26,7 +26,8 @@ import SingleTeam from '../pages/Teams/SingleTeam'
 import CreateTeam from '../pages/Teams/CreateTeam'
 
 // Common
-import { AccessDenied, NotFound } from '../pages/Common'
+import { AccessDenied } from '../pages/Common/AccessDenied'
+import { NotFound } from '../pages/Common/NotFound'
 
 export const ROLES = {
     ADMIN: 'bull',
