@@ -9,6 +9,7 @@ module.exports = {
             'primary-dark': '#4b1b96',
             'dark-main': '#1e1e1e',
             'dark-alt': '#333333',
+            'dark-overlay': 'rgba(0, 0, 0, 0.7)',
             'light-main': '#fefefe',
             transparent: 'transparent',
             current: 'currentColor',

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { useGetUsers } from '../../api/users/useGetUsers'
+import { useDeleteUser } from '../../api/users/useDeleteUser'
 
 import Header from '../../layout/Content/Header'
 
@@ -15,12 +16,11 @@ import Modal from '../../components/Modal'
 import LoadSpinner from '../../components/LoadSpinner'
 import ErrorToast from '../../components/Errors/ErrorToast'
 
-// import { useAuth } from '../../hooks/useAuth'
-
 const Users = () => {
     const [dataView, setDataView] = useState(true)
     const [modal, setModal] = useState(false)
     const [modalData, setModalData] = useState({
+        id: '',
         hasImage: false,
         image: '',
         imageAlt: '',
@@ -28,6 +28,7 @@ const Users = () => {
     })
 
     const { data: users, isLoading, isError, error } = useGetUsers()
+    const deleteUser = useDeleteUser()
 
     if (isLoading) {
         return <LoadSpinner />
@@ -41,31 +42,32 @@ const Users = () => {
         setDataView((prev) => !prev)
     }
 
-    // const { auth } = useAuth()
-
     const handleModal = (e) => {
-        // const { name, value } = e.target
+        const rowId = e.currentTarget.id
 
-        console.log(e.currentTarget)
+        const user = users.find((user) => {
+            return user._id === rowId
+        })
 
         setModalData(() => {
             return {
-                hasImage: '',
-                image: '',
-                imageAlt: '',
-                email: '',
-                // hasImage: true,
-                // image: auth.user.profileImage,
-                // imageAlt: 'alt',
-                // email: 'my@email.com',
+                id: !modal ? user._id : '',
+                hasImage: !modal ? user?.profileImage : '',
+                image: !modal ? user?.profileImage : '',
+                imageAlt: !modal ? user.userName : '',
+                email: !modal ? user.email : '',
             }
         })
 
         setModal((prev) => !prev)
     }
 
-    const handleDelete = () => {
-        console.log('deleted')
+    const handleDelete = (e) => {
+        const userId = e.currentTarget.id
+
+        deleteUser.mutate(userId)
+
+        setModal((prev) => !prev)
     }
 
     return (
@@ -77,6 +79,7 @@ const Users = () => {
                     {users.map((user) => (
                         <Row
                             key={user._id}
+                            rowId={user._id}
                             hasImage={true}
                             imageSrc={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
                             imageAlt={user.userName}
@@ -108,6 +111,7 @@ const Users = () => {
 
             <Modal
                 isOpen={modal}
+                modalId={modalData.id}
                 hasImage={modalData.hasImage}
                 imageSrc={modalData.image}
                 imageAlt={modalData.imageAlt}

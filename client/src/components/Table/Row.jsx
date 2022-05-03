@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
+
 import { MdDelete, MdModeEdit } from 'react-icons/md'
 import UserImage from '../Image/UserImage'
 
-const Row = ({ hasImage, imageSrc, imageAlt, imageSize, linkPath, clickHandler, ...props }) => {
+const Row = ({ rowId, hasImage, imageSrc, imageAlt, imageSize, linkPath, clickHandler, ...props }) => {
     return (
         <>
             <tr className='even:bg-dark-alt cursor-pointer hover:bg-neutral-700'>
@@ -16,13 +17,15 @@ const Row = ({ hasImage, imageSrc, imageAlt, imageSize, linkPath, clickHandler, 
                     </td>
                 ))}
 
-                <td>
-                    <Link to={linkPath}>
+                <td className='w-5'>
+                    <Link className='flex w-full justify-center' to={linkPath}>
                         <MdModeEdit className='h-5 w-5 stroke-current' />
                     </Link>
                 </td>
-                <td>
-                    <MdDelete className='h-5 w-5 stroke-current' onClick={clickHandler} />
+                <td className='w-5'>
+                    <div className='flex justify-center'>
+                        <MdDelete id={rowId} className='h-5 w-5 stroke-current' onClick={clickHandler} />
+                    </div>
                 </td>
             </tr>
         </>
