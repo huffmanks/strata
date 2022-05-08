@@ -14,7 +14,7 @@ export const errorHandler = (err, req, res, next) => {
     if (err.name === 'ValidationError') {
         const { name, value, path } = error[0]
 
-        return errorResponse(res, 400, { name, message: `The ${path}, '${value}', is not valid.` })
+        return errorResponse(res, 400, { name, message: !value ? `The ${path} field can not be blank.` : `The ${path}, '${value}', is not valid.` })
     }
 
     return errorResponse(res, 500, { name: err.name, code: err.code, message: err.message })

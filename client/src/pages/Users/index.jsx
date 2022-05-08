@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useGetUsers } from '../../api/users/useGetUsers'
 import { useDeleteUser } from '../../api/users/useDeleteUser'
+import { useGlobalState } from '../../hooks/useContext'
 
 import Header from '../../layout/Content/Header'
 
@@ -14,7 +15,6 @@ import Row from '../../components/Table/Row'
 import Modal from '../../components/Modal'
 
 import LoadSpinner from '../../components/LoadSpinner'
-import ErrorToast from '../../components/Errors/ErrorToast'
 
 const Users = () => {
     const [dataView, setDataView] = useState(true)
@@ -27,16 +27,16 @@ const Users = () => {
         email: '',
     })
 
+    const { addToast } = useGlobalState()
+
     const { data: users, isLoading, isError, error } = useGetUsers()
     const deleteUser = useDeleteUser()
 
-    if (isLoading) {
-        return <LoadSpinner />
-    }
-
-    if (isError) {
-        return <ErrorToast message={error.message} />
-    }
+    useEffect(() => {
+        if (isError) {
+            addToast(error.message)
+        }
+    }, [isError])
 
     const handleDataView = () => {
         setDataView((prev) => !prev)
@@ -70,42 +70,48 @@ const Users = () => {
         setModal((prev) => !prev)
     }
 
+    if (isLoading) {
+        return <LoadSpinner />
+    }
+
     return (
         <>
             <Header pageTitle='USERS' addLink='/users/create' activeIcon={dataView} clickHandler={handleDataView} />
 
-            {users && dataView ? (
+            {dataView ? (
                 <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role', 'Edit', 'Delete']}>
-                    {users.map((user) => (
-                        <Row
-                            key={user._id}
-                            rowId={user._id}
-                            hasImage={true}
-                            imageSrc={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
-                            imageAlt={user.userName}
-                            imageSize={10}
-                            linkPath={`/users/${user._id}`}
-                            userFirstName={user?.firstName}
-                            userLastName={user?.lastName}
-                            userEmail={user.email}
-                            userRole={user.role}
-                            clickHandler={handleModal}
-                        />
-                    ))}
+                    {users &&
+                        users.map((user) => (
+                            <Row
+                                key={user._id}
+                                rowId={user._id}
+                                hasImage={true}
+                                imageSrc={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
+                                imageAlt={user.userName}
+                                imageSize={10}
+                                linkPath={`/users/edit/${user._id}`}
+                                userFirstName={user?.firstName}
+                                userLastName={user?.lastName}
+                                userEmail={user.email}
+                                userRole={user.role}
+                                clickHandler={handleModal}
+                            />
+                        ))}
                 </Table>
             ) : (
                 <GridList>
-                    {users.map((user) => (
-                        <Card key={user._id}>
-                            <CardBody
-                                userName={user.firstName ? `${user.firstName} ${user?.lastName}` : 'User'}
-                                userEmail={user.email}
-                                userImage={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
-                                userRole={user.role}
-                                userLink={`/users/${user._id}`}
-                            />
-                        </Card>
-                    ))}
+                    {users &&
+                        users.map((user) => (
+                            <Card key={user._id}>
+                                <CardBody
+                                    userName={user.firstName ? `${user.firstName} ${user?.lastName}` : 'User'}
+                                    userEmail={user.email}
+                                    userImage={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
+                                    userRole={user.role}
+                                    userLink={`/users/edit/${user._id}`}
+                                />
+                            </Card>
+                        ))}
                 </GridList>
             )}
 

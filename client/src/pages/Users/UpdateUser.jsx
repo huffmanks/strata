@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { useCreateUser } from '../../api/users/useCreateUser'
+import { useGetUser } from '../../api/users/useGetUser'
+import { useUpdateUser } from '../../api/users/useUpdateUser'
 import { useGetTeams } from '../../api/teams/useGetTeams'
 import { useGlobalState } from '../../hooks/useContext'
 
@@ -12,7 +13,6 @@ import FormFooter from '../../components/Form/Container/FormFooter'
 
 import FormInput from '../../components/Form/Inputs/FormInput'
 import FormFile from '../../components/Form/Inputs/FormFile'
-import FormUncontrolledInput from '../../components/Form/Inputs/FormUncontrolledInput'
 
 import FormRadioGroup from '../../components/Form/Radio/FormRadioGroup'
 import FormRadio from '../../components/Form/Radio/FormRadio'
@@ -25,16 +25,17 @@ import FormOptionItem from '../../components/Form/Select/FormOptionItem'
 
 import LoadSpinner from '../../components/LoadSpinner'
 
-const SingleUser = () => {
+const UpdateUser = () => {
+    const { userId } = useParams()
     const navigate = useNavigate()
-    const createUser = useCreateUser()
+
+    const updateUser = useUpdateUser(userId)
     const { addToast } = useGlobalState()
 
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
-        password: '',
         profileImage: '',
         role: '',
         team: '',
@@ -42,11 +43,29 @@ const SingleUser = () => {
 
     const [previewImage, setPreviewImage] = useState('')
 
-    const { data: teams, isLoading, isError, error } = useGetTeams()
+    const { data: user, isLoading: userLoading, isError: isUserError, error: userError, isSuccess } = useGetUser(userId)
+    const { data: teams, isLoading: teamsLoading, isError: isTeamsError, error: teamsError } = useGetTeams()
 
     useEffect(() => {
-        if (isError) {
-            addToast(error.message)
+        if (isSuccess) {
+            setFormData({
+                firstName: user?.firstName,
+                lastName: user?.lastName,
+                email: user?.email,
+                profileImage: user?.profileImage,
+                role: user?.role,
+                team: user?.team?._id,
+            })
+
+            setPreviewImage(user?.profileImage ? `${user.profileImage}?${user.updatedAt}` : undefined)
+        }
+
+        if (isUserError) {
+            addToast(userError.message)
+        }
+
+        if (isTeamsError) {
+            addToast(teamsError.message)
         }
 
         return () => {
@@ -60,7 +79,7 @@ const SingleUser = () => {
             })
             setPreviewImage('')
         }
-    }, [isError])
+    }, [isSuccess, isUserError, isTeamsError])
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target
@@ -81,34 +100,28 @@ const SingleUser = () => {
         e.preventDefault()
 
         try {
-            const user = await createUser.mutateAsync(formData)
+            await updateUser.mutateAsync(formData)
 
-            navigate(`/users/${user._id}`)
+            navigate(`/users/${userId}`)
         } catch (error) {
             addToast(error.response.data.message)
         }
     }
 
-    if (isLoading) {
+    if (userLoading || teamsLoading) {
         return <LoadSpinner />
     }
 
     return (
         <>
             <Form isLarge='true' submitHandler={handleSubmit}>
-                <FormHeader title='Create User' />
+                <FormHeader title='Update' />
                 <FormBody>
                     <FormInput type='text' name='firstName' label='First Name' changeHandler={handleChange} inputValue={formData.firstName} />
 
                     <FormInput type='text' name='lastName' label='Last Name' changeHandler={handleChange} inputValue={formData.lastName} />
 
-                    <FormUncontrolledInput isVisible='false' type='email' name='newEmail' label='Email' defaultValue='' />
-
-                    <FormUncontrolledInput isVisible='false' type='password' name='newPassword' label='Password' defaultValue='' />
-
                     <FormInput type='email' name='email' label='Email' changeHandler={handleChange} inputValue={formData.email} />
-
-                    <FormInput type='password' name='password' label='Password' changeHandler={handleChange} inputValue={formData.password} />
 
                     <FormFile type='file' name='profileImage' label={previewImage ? 'Update Profile Image' : 'Upload Profile Image'} changeHandler={handleChange} previewImg={previewImage} />
 
@@ -137,16 +150,16 @@ const SingleUser = () => {
                     )}
 
                     <FormRadioGroup label='Role' changeHandler={handleChange}>
-                        <FormRadio id='tiger' name='role' label='Tiger' radioValue='tiger' isChecked={true} />
-                        <FormRadio id='mako' name='role' label='Mako' radioValue='mako' />
-                        <FormRadio id='bull' name='role' label='Bull' radioValue='bull' />
+                        <FormRadio id='tiger' name='role' label='Tiger' radioValue='tiger' isChecked={user?.role === 'tiger'} />
+                        <FormRadio id='mako' name='role' label='Mako' radioValue='mako' isChecked={user?.role === 'mako'} />
+                        <FormRadio id='bull' name='role' label='Bull' radioValue='bull' isChecked={user?.role === 'bull'} />
                     </FormRadioGroup>
                 </FormBody>
 
-                <FormFooter buttonText='Create' />
+                <FormFooter buttonText='Update' />
             </Form>
         </>
     )
 }
 
-export default SingleUser
+export default UpdateUser

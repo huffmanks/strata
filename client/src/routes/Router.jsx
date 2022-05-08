@@ -19,11 +19,13 @@ import Dashboard from '../pages/Dashboard'
 import Users from '../pages/Users'
 import SingleUser from '../pages/Users/SingleUser'
 import CreateUser from '../pages/Users/CreateUser'
+import UpdateUser from '../pages/Users/UpdateUser'
 
 // Team
 import Teams from '../pages/Teams'
 import SingleTeam from '../pages/Teams/SingleTeam'
 import CreateTeam from '../pages/Teams/CreateTeam'
+// import UpdateTeam from '../pages/Teams/UpdateTeam'
 
 // Common
 import { AccessDenied } from '../pages/Common/AccessDenied'
@@ -54,12 +56,14 @@ const Router = () => {
                             <Route index element={<Users />} />
                             <Route path=':userId' element={<SingleUser />} />
                             <Route path='create' element={<CreateUser />} />
+                            <Route path='edit/:userId' element={<UpdateUser />} />
                         </Route>
 
                         <Route path='teams' element={<PrivateRoute roles={[ROLES.ADMIN]} />}>
                             <Route index element={<Teams />} />
                             <Route path=':teamId' element={<SingleTeam />} />
                             <Route path='create' element={<CreateTeam />} />
+                            {/* <Route path='edit/:teamId' element={<UpdateTeam />} /> */}
                         </Route>
 
                         <Route path='access-denied' element={<AccessDenied />} />

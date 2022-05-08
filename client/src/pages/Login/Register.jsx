@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '../../hooks/useContext'
 import axios from '../../api/axios'
 
 import Form from '../../components/Form'

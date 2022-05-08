@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import { useRefreshToken } from '../hooks/useRefreshToken'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '../hooks/useContext'
 
 import ErrorToast from '../components/Errors/ErrorToast'
 import LoadSpinner from '../components/LoadSpinner'

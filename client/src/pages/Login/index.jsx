@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '../../hooks/useContext'
 import axios from '../../api/axios'
 
 import Form from '../../components/Form'
@@ -56,7 +56,7 @@ const Login = () => {
     }
 
     useEffect(() => {
-        localStorage.setItem('persist', persist)
+        localStorage.setItem(`${process.env.REACT_APP_NAME}_persist`, persist)
     }, [persist])
 
     return (

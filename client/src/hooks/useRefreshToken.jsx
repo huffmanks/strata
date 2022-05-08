@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 
 import axios from '../api/axios'
-import { useAuth } from './useAuth'
+import { useAuth } from './useContext'
 
 export const useRefreshToken = () => {
     const { setAuth } = useAuth()

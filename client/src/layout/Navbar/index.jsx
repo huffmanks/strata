@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '../../hooks/useContext'
 
 import UserImage from '../../components/Image/UserImage'
 

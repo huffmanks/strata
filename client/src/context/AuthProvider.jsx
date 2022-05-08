@@ -1,13 +1,22 @@
 import { createContext, useState } from 'react'
 
-const AuthContext = createContext({})
+export const AuthContext = createContext({})
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({})
     const [authIsRefreshing, setAuthIsRefreshing] = useState({})
-    const [persist, setPersist] = useState(JSON.parse(localStorage.getItem('persist')) || false)
+    const [persist, setPersist] = useState(JSON.parse(localStorage.getItem(`${process.env.REACT_APP_NAME}_persist`)) || false)
 
-    return <AuthContext.Provider value={{ auth, setAuth, authIsRefreshing, setAuthIsRefreshing, persist, setPersist }}>{children}</AuthContext.Provider>
+    const contextValue = {
+        auth,
+        setAuth,
+        authIsRefreshing,
+        setAuthIsRefreshing,
+        persist,
+        setPersist,
+    }
+
+    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
 }
 
-export default AuthContext
+export default AuthProvider
