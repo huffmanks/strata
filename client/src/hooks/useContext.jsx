@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
 import { AuthContext } from '../context/AuthProvider'
-import { GlobalStateContext } from '../context/GlobalProvider'
+import { GlobalStateContext } from '../context/GlobalStateProvider'
 
 export const useAuth = () => {
     const { auth, setAuth, authIsRefreshing, setAuthIsRefreshing, persist, setPersist } = useContext(AuthContext)

@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import AuthProvider from './context/AuthProvider'
-import GlobalStateProvider from './context/GlobalProvider'
+import GlobalStateProvider from './context/GlobalStateProvider'
 
 import Router from './routes/Router'
 import ErrorToast from './components/Errors/ErrorToast'

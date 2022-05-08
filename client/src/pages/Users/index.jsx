@@ -13,21 +13,14 @@ import CardBody from '../../components/Card/CardBody'
 import Table from '../../components/Table'
 import Row from '../../components/Table/Row'
 import Modal from '../../components/Modal'
+import ModalDeleteUser from '../../components/Modal/ModalDeleteUser'
 
 import LoadSpinner from '../../components/LoadSpinner'
 
 const Users = () => {
     const [dataView, setDataView] = useState(true)
-    const [modal, setModal] = useState(false)
-    const [modalData, setModalData] = useState({
-        id: '',
-        hasImage: false,
-        image: '',
-        imageAlt: '',
-        email: '',
-    })
 
-    const { addToast } = useGlobalState()
+    const { addToast, modal, addModal, removeModal } = useGlobalState()
 
     const { data: users, isLoading, isError, error } = useGetUsers()
     const deleteUser = useDeleteUser()
@@ -49,17 +42,15 @@ const Users = () => {
             return user._id === rowId
         })
 
-        setModalData(() => {
-            return {
-                id: !modal ? user._id : '',
-                hasImage: !modal ? user?.profileImage : '',
-                image: !modal ? user?.profileImage : '',
-                imageAlt: !modal ? user.userName : '',
-                email: !modal ? user.email : '',
-            }
-        })
-
-        setModal((prev) => !prev)
+        if (modal) {
+            addModal({
+                id: user._id,
+                hasImage: user?.profileImage,
+                image: user?.profileImage,
+                imageAlt: user.userName,
+                email: user.email,
+            })
+        }
     }
 
     const handleDelete = (e) => {
@@ -67,7 +58,7 @@ const Users = () => {
 
         deleteUser.mutate(userId)
 
-        setModal((prev) => !prev)
+        removeModal()
     }
 
     if (isLoading) {
@@ -115,19 +106,11 @@ const Users = () => {
                 </GridList>
             )}
 
-            <Modal
-                isOpen={modal}
-                modalId={modalData.id}
-                hasImage={modalData.hasImage}
-                imageSrc={modalData.image}
-                imageAlt={modalData.imageAlt}
-                userEmail={modalData.email}
-                message={`Are you sure you want to delete this user?`}
-                confirmButton='Delete'
-                cancelButton='Cancel'
-                closeHandler={handleModal}
-                confirmClickHandler={handleDelete}
-            />
+            {modal.id && (
+                <Modal>
+                    <ModalDeleteUser message='Are you sure you want to delete this user?' confirmButton='Delete' cancelButton='Cancel' confirmClickHandler={handleDelete} />
+                </Modal>
+            )}
         </>
     )
 }
