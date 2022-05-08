@@ -8,10 +8,14 @@ node_modules
 
 # production
 /build
-/uploads
+uploads/*/*/*
+
+# development
+!uploads/files/example.pdf
+!uploads/images/profile/example.jpg
+!uploads/images/team/example.jpg
 
 # misc
-/todo.md
 config.env
 /*.DS_Store
 .DS_Store
