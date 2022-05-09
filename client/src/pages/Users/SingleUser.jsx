@@ -2,25 +2,46 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { useGetUser } from '../../api/users/useGetUser'
+import { useDeleteUser } from '../../api/users/useDeleteUser'
 import { useGlobalState } from '../../hooks/useContext'
 
 import Card from '../../components/Card'
-import CardBody from '../../components/Card/CardBody'
+import Modal from '../../components/Modal'
+import ModalDelete from '../../components/Modal/ModalDelete'
 
 import LoadSpinner from '../../components/LoadSpinner'
 
 const SingleUser = () => {
     const { userId } = useParams()
 
-    const { addToast } = useGlobalState()
+    const { addToast, modal, addModal, removeModal } = useGlobalState()
 
     const { data: user, isLoading, isError, error } = useGetUser(userId)
+    const deleteUser = useDeleteUser()
 
     useEffect(() => {
         if (isError) {
             addToast(error.message)
         }
     }, [isError])
+
+    const handleModal = () => {
+        if (modal) {
+            addModal({
+                id: user._id,
+                hasImage: user?.profileImage,
+                image: user?.profileImage,
+                imageAlt: user.userName,
+                title: user.email,
+            })
+        }
+    }
+
+    const handleDelete = () => {
+        deleteUser.mutate(user._id)
+
+        removeModal()
+    }
 
     if (isLoading) {
         return <LoadSpinner />
@@ -29,15 +50,21 @@ const SingleUser = () => {
     return (
         <>
             {user && (
-                <Card key={user._id}>
-                    <CardBody
-                        userName={user.firstName ? `${user.firstName} ${user?.lastName}` : 'User'}
-                        userEmail={user.email}
-                        userImage={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
-                        userRole={user.role}
-                        userLink={`/users/edit/${user._id}`}
-                    />
-                </Card>
+                <Card
+                    key={user._id}
+                    cardTitle={user.firstName ? `${user.firstName} ${user?.lastName}` : 'User'}
+                    cardDetails={user.email}
+                    cardImage={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
+                    cardAccent={user.role}
+                    pathEdit={`/users/edit/${user._id}`}
+                    clickHandler={handleModal}
+                />
+            )}
+
+            {modal.id && (
+                <Modal>
+                    <ModalDelete modalType='user' confirmHandler={handleDelete} />
+                </Modal>
             )}
         </>
     )

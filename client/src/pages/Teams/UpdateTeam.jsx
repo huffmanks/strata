@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { useCreateTeam } from '../../api/teams/useCreateTeam'
+import { useGetTeam } from '../../api/teams/useGetTeam'
+import { useUpdateTeam } from '../../api/teams/useUpdateTeam'
 // import { useGetUsers } from '../../api/users/useGetUsers'
 import { useGlobalState } from '../../hooks/useContext'
 
@@ -22,28 +23,47 @@ import FormRadio from '../../components/Form/Radio/FormRadio'
 // import FormOptionList from '../../components/Form/Select/FormOptionList'
 // import FormOptionItem from '../../components/Form/Select/FormOptionItem'
 
-// import LoadSpinner from '../../components/LoadSpinner'
+import LoadSpinner from '../../components/LoadSpinner'
 
-const CreateTeam = () => {
+const UpdateTeam = () => {
+    const { teamId } = useParams()
     const navigate = useNavigate()
-    const createTeam = useCreateTeam()
+
+    const updateTeam = useUpdateTeam(teamId)
     const { addToast } = useGlobalState()
 
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         teamImage: '',
-        // users: [],
+        users: [],
         type: '',
     })
 
     const [previewImage, setPreviewImage] = useState('')
 
-    // const { data: users, isLoading, isError, error } = useGetUsers()
+    const { data: team, isLoading: teamLoading, isError: isTeamError, error: teamError, isSuccess } = useGetTeam(teamId)
+    // const { data: users, isLoading: usersLoading, isError: isUsersError, error: usersError } = useGetUsers()
 
     useEffect(() => {
-        // if (isError) {
-        //     addToast(error.message)
+        if (isSuccess) {
+            setFormData({
+                title: team?.title,
+                description: team?.description,
+                teamImage: team?.teamImage,
+                // users: [team.users],
+                type: team?.type,
+            })
+
+            setPreviewImage(team?.teamImage ? `${team.teamImage}?${team.updatedAt}` : undefined)
+        }
+
+        if (isTeamError) {
+            addToast(teamError.message)
+        }
+
+        // if (isUsersError) {
+        //     addToast(usersError.message)
         // }
 
         return () => {
@@ -56,8 +76,8 @@ const CreateTeam = () => {
             })
             setPreviewImage('')
         }
-    }, [])
-    // }, [isError])
+    }, [isSuccess, isTeamError])
+    // }, [isSuccess, isTeamError, isUsersError])
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target
@@ -78,28 +98,31 @@ const CreateTeam = () => {
         e.preventDefault()
 
         try {
-            const team = await createTeam.mutateAsync(formData)
+            await updateTeam.mutateAsync(formData)
 
-            navigate(`/teams/${team._id}`)
+            navigate(`/teams/${teamId}`)
         } catch (error) {
             addToast(error.response.data.message)
         }
     }
 
-    // if (isLoading) {
+    if (teamLoading) {
+        return <LoadSpinner />
+    }
+    // if (teamLoading || usersLoading) {
     //     return <LoadSpinner />
     // }
 
     return (
         <>
             <Form isLarge='true' submitHandler={handleSubmit}>
-                <FormHeader title='Create Team' />
+                <FormHeader title='Update' />
                 <FormBody>
                     <FormInput type='text' name='title' label='Title' changeHandler={handleChange} inputValue={formData.title} />
 
                     <FormInput type='text' name='description' label='Description' changeHandler={handleChange} inputValue={formData.description} />
 
-                    <FormFile type='file' name='profileImage' label={previewImage ? 'Update Team Image' : 'Upload Team Image'} changeHandler={handleChange} previewImg={previewImage} />
+                    <FormFile type='file' name='teamImage' label={previewImage ? 'Update Team Image' : 'Upload Team Image'} changeHandler={handleChange} previewImg={previewImage} />
 
                     {/* {users && (
                         <Select title='Users'>
@@ -126,19 +149,19 @@ const CreateTeam = () => {
                     )} */}
 
                     <FormRadioGroup label='Type' changeHandler={handleChange}>
-                        <FormRadio id='marketing' name='type' label='Marketing' radioValue='marketing' isChecked={true} />
-                        <FormRadio id='design' name='type' label='Design' radioValue='design' />
-                        <FormRadio id='photo' name='type' label='Photo' radioValue='photo' />
-                        <FormRadio id='social' name='type' label='Social' radioValue='social' />
-                        <FormRadio id='video' name='type' label='Video' radioValue='video' />
-                        <FormRadio id='web' name='type' label='Web' radioValue='web' />
+                        <FormRadio id='marketing' name='type' label='Marketing' radioValue='marketing' isChecked={team?.type === 'marketing'} />
+                        <FormRadio id='design' name='type' label='Design' radioValue='design' isChecked={team?.type === 'design'} />
+                        <FormRadio id='photo' name='type' label='Photo' radioValue='photo' isChecked={team?.type === 'photo'} />
+                        <FormRadio id='social' name='type' label='Social' radioValue='social' isChecked={team?.type === 'social'} />
+                        <FormRadio id='video' name='type' label='Video' radioValue='video' isChecked={team?.type === 'video'} />
+                        <FormRadio id='web' name='type' label='Web' radioValue='web' isChecked={team?.type === 'web'} />
                     </FormRadioGroup>
                 </FormBody>
 
-                <FormFooter buttonText='Create' />
+                <FormFooter buttonText='Update' />
             </Form>
         </>
     )
 }
 
-export default CreateTeam
+export default UpdateTeam

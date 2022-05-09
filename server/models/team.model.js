@@ -11,6 +11,11 @@ const TeamSchema = new Schema(
         description: {
             type: String,
         },
+        type: {
+            type: String,
+            enum: ['design', 'marketing', 'photo', 'social', 'video', 'web'],
+            default: 'marketing',
+        },
         users: [
             {
                 type: Schema.Types.ObjectId,

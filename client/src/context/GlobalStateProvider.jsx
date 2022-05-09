@@ -1,13 +1,5 @@
 import { createContext, useCallback, useState } from 'react'
 
-const initialModalState = {
-    id: '',
-    hasImage: false,
-    image: '',
-    imageAlt: '',
-    email: '',
-}
-
 export const GlobalStateContext = createContext({
     errors: {
         error: '',
@@ -26,9 +18,9 @@ const GlobalStateProvider = ({ children }) => {
     const addToast = (message) => setError(message)
     const removeToast = () => setError('')
 
-    const [modal, setModal] = useState(initialModalState)
+    const [modal, setModal] = useState({})
     const addModal = (data) => setModal(data)
-    const removeModal = () => setModal(initialModalState)
+    const removeModal = () => setModal({})
 
     const contextValue = {
         errors: {
@@ -39,7 +31,7 @@ const GlobalStateProvider = ({ children }) => {
         modals: {
             modal,
             addModal: useCallback((data) => addModal(data), []),
-            removeModal: useCallback(() => removeModal(initialModalState), []),
+            removeModal: useCallback(() => removeModal({}), []),
         },
     }
 

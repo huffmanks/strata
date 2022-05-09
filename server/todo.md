@@ -1,10 +1,18 @@
-1.  Login and register
+1. When saving to db check for null value and dont submit it
 
-    -   Magic link
-    -   Registration email
+2. Login and register
 
-2.  Project model
+    - Magic link
+    - Registration email
 
-3.  Task model
+3. User model
 
-4.  Messages model
+    - Add
+        - Department
+        - Title
+
+4. Project model
+
+5. Task model
+
+6. Messages model

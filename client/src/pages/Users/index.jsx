@@ -6,14 +6,13 @@ import { useGlobalState } from '../../hooks/useContext'
 
 import Header from '../../layout/Content/Header'
 
-import GridList from '../../components/GridList'
+import CardGroup from '../../components/Card/CardGroup'
 import Card from '../../components/Card'
-import CardBody from '../../components/Card/CardBody'
 
 import Table from '../../components/Table'
 import Row from '../../components/Table/Row'
 import Modal from '../../components/Modal'
-import ModalDeleteUser from '../../components/Modal/ModalDeleteUser'
+import ModalDelete from '../../components/Modal/ModalDelete'
 
 import LoadSpinner from '../../components/LoadSpinner'
 
@@ -48,7 +47,7 @@ const Users = () => {
                 hasImage: user?.profileImage,
                 image: user?.profileImage,
                 imageAlt: user.userName,
-                email: user.email,
+                title: user.email,
             })
         }
     }
@@ -70,7 +69,7 @@ const Users = () => {
             <Header pageTitle='USERS' addLink='/users/create' activeIcon={dataView} clickHandler={handleDataView} />
 
             {dataView ? (
-                <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role', 'Edit', 'Delete']}>
+                <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role', 'View', 'Edit', 'Delete']}>
                     {users &&
                         users.map((user) => (
                             <Row
@@ -80,7 +79,8 @@ const Users = () => {
                                 imageSrc={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
                                 imageAlt={user.userName}
                                 imageSize={10}
-                                linkPath={`/users/edit/${user._id}`}
+                                pathView={`/users/${user._id}`}
+                                pathEdit={`/users/edit/${user._id}`}
                                 userFirstName={user?.firstName}
                                 userLastName={user?.lastName}
                                 userEmail={user.email}
@@ -90,25 +90,27 @@ const Users = () => {
                         ))}
                 </Table>
             ) : (
-                <GridList>
+                <CardGroup>
                     {users &&
                         users.map((user) => (
-                            <Card key={user._id}>
-                                <CardBody
-                                    userName={user.firstName ? `${user.firstName} ${user?.lastName}` : 'User'}
-                                    userEmail={user.email}
-                                    userImage={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
-                                    userRole={user.role}
-                                    userLink={`/users/edit/${user._id}`}
-                                />
-                            </Card>
+                            <Card
+                                key={user._id}
+                                cardId={user._id}
+                                cardTitle={user.firstName ? `${user.firstName} ${user?.lastName}` : 'User'}
+                                cardDetails={user.email}
+                                cardImage={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
+                                cardType='user'
+                                cardAccent={user.role}
+                                pathEdit={`/users/edit/${user._id}`}
+                                clickHandler={handleModal}
+                            />
                         ))}
-                </GridList>
+                </CardGroup>
             )}
 
             {modal.id && (
                 <Modal>
-                    <ModalDeleteUser message='Are you sure you want to delete this user?' confirmButton='Delete' cancelButton='Cancel' confirmClickHandler={handleDelete} />
+                    <ModalDelete modalType='user' confirmHandler={handleDelete} />
                 </Modal>
             )}
         </>

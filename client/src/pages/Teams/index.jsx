@@ -1,73 +1,128 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { useGetTeams } from '../../api/teams/useGetTeams'
+import { useDeleteTeam } from '../../api/teams/useDeleteTeam'
+import { useGlobalState } from '../../hooks/useContext'
 
 import Header from '../../layout/Content/Header'
-import GridList from '../../components/GridList'
+
+import CardGroup from '../../components/Card/CardGroup'
 import Card from '../../components/Card'
-import CardBody from '../../components/Card/CardBody'
-import LoadSpinner from '../../components/LoadSpinner'
-import ErrorToast from '../../components/Errors/ErrorToast'
+
 import Table from '../../components/Table'
 import Row from '../../components/Table/Row'
+import Modal from '../../components/Modal'
+import ModalDelete from '../../components/Modal/ModalDelete'
+
+import LoadSpinner from '../../components/LoadSpinner'
 
 const Teams = () => {
-    const [view, setView] = useState(true)
+    const [dataView, setDataView] = useState(true)
+
+    const { addToast, modal, addModal, removeModal } = useGlobalState()
 
     const { data: teams, isLoading, isError, error } = useGetTeams()
+    const deleteTeam = useDeleteTeam()
+
+    useEffect(() => {
+        if (isError) {
+            addToast(error.message)
+        }
+    }, [isError])
+
+    const handleDataView = () => {
+        setDataView((prev) => !prev)
+    }
+
+    const handleModal = (e) => {
+        const rowId = e.currentTarget.id
+
+        const team = teams.find((team) => {
+            return team._id === rowId
+        })
+
+        if (modal) {
+            addModal({
+                id: team._id,
+                hasImage: team?.teamImage,
+                image: team?.teamImage,
+                imageAlt: team.title,
+                title: team.title,
+            })
+        }
+    }
+
+    const handleDelete = (e) => {
+        const teamId = e.currentTarget.id
+
+        deleteTeam.mutate(teamId)
+
+        removeModal()
+    }
 
     if (isLoading) {
         return <LoadSpinner />
     }
 
-    if (isError) {
-        return <ErrorToast message={error.message} />
-    }
-
-    const handleClick = () => {
-        setView((prev) => !prev)
-    }
-
     return (
         <>
-            <Header pageTitle='Teams' addLink='/teams/create' activeIcon={view} clickHandler={handleClick} />
+            <Header pageTitle='TEAMS' addLink='/teams/create' activeIcon={dataView} clickHandler={handleDataView} />
 
-            {teams && view ? (
-                <Table headCols={['Image', 'Title', 'Description', 'Users', 'Edit', 'Delete']}>
-                    {teams.map((team) => (
-                        <Row
-                            key={team._id}
-                            hasImage={true}
-                            imageSrc={team?.teamImage}
-                            imageAlt={team.title}
-                            imageSize={10}
-                            linkPath={`/teams/${team._id}`}
-                            teamTitle={team.title}
-                            teamDescription={team.description ? `${team.description.slice(0, 20)}...` : ' '}
-                            // teamDescription={team?.description > 20 ? team.description.slice(0, 20) + '...' : team?.description ? team.description : ' '}
-                            teamUsers={
-                                <div className='flex gap-2'>
-                                    {Object.values(team.users)
-                                        .slice(0, 3)
-                                        .map((user, index) => (
-                                            <Link key={index} to={`/users/${user._id}`}>
-                                                <img className='h-10 w-10 rounded-full' src={user.profileImage} />
-                                            </Link>
-                                        ))}
-                                </div>
-                            }
-                        />
-                    ))}
+            {dataView ? (
+                <Table headCols={['Image', 'Title', 'Description', 'Users', 'View', 'Edit', 'Delete']}>
+                    {teams &&
+                        teams.map((team) => (
+                            <Row
+                                key={team._id}
+                                rowId={team._id}
+                                hasImage={true}
+                                imageSrc={team.teamImage && `${team.teamImage}?${team.updatedAt}`}
+                                imageAlt={team.title}
+                                imageSize={10}
+                                pathView={`/teams/${team._id}`}
+                                pathEdit={`/teams/edit/${team._id}`}
+                                teamtitle={team.title}
+                                teamDescription={team.description ? `${team.description.slice(0, 20)}...` : 'No description'}
+                                // teamDescription={team?.description > 20 ? team.description.slice(0, 20) + '...' : team?.description ? team.description : ' '}
+                                teamUsers={
+                                    <div className='flex gap-2'>
+                                        {Object.values(team.users)
+                                            .slice(0, 3)
+                                            .map((user, index) => (
+                                                <Link key={index} to={`/users/${user._id}`}>
+                                                    <img className='h-10 w-10 rounded-full' src={user.profileImage} />
+                                                </Link>
+                                            ))}
+                                    </div>
+                                }
+                                clickHandler={handleModal}
+                            />
+                        ))}
                 </Table>
             ) : (
-                <GridList>
-                    {teams.map((team) => (
-                        <Card key={team._id}>
-                            <CardBody teamTitle={team.title} teamDescription={team?.description} teamUsers={team.users} teamImage={team?.teamImage} teamLink={`/teams/${team._id}`} />
-                        </Card>
-                    ))}
-                </GridList>
+                <CardGroup>
+                    {teams &&
+                        teams.map((team) => (
+                            <Card
+                                key={team._id}
+                                cardId={team._id}
+                                cardTitle={team.title}
+                                cardDetails={team.description ? `${team.description.slice(0, 75)}...` : 'No description'}
+                                cardImage={team.teamImage && `${team.teamImage}?${team.updatedAt}`}
+                                cardType='team'
+                                cardAccent={team.type}
+                                pathEdit={`/teams/edit/${team._id}`}
+                                clickHandler={handleModal}
+                            />
+                        ))}
+                </CardGroup>
+            )}
+
+            {modal.id && (
+                <Modal>
+                    <ModalDelete modalType='team' confirmHandler={handleDelete} />
+                </Modal>
             )}
         </>
     )

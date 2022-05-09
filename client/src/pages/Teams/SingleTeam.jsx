@@ -1,28 +1,73 @@
-// import { useGetTeamQuery } from '../../api/teamApiSlice'
-// import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
-// import { Link } from 'react-router-dom'
+import { useGetTeam } from '../../api/teams/useGetTeam'
+import { useDeleteTeam } from '../../api/teams/useDeleteTeam'
+import { useGlobalState } from '../../hooks/useContext'
+
+import Card from '../../components/Card'
+import Modal from '../../components/Modal'
+import ModalDelete from '../../components/Modal/ModalDelete'
+
+import LoadSpinner from '../../components/LoadSpinner'
 
 const SingleTeam = () => {
-    // const { teamId } = useParams()
+    const { teamId } = useParams()
 
-    // const { data, isLoading, error } = useGetTeamQuery(teamId)
+    const { addToast, modal, addModal, removeModal } = useGlobalState()
 
-    // if (isLoading) {
-    //     return <div>Loading...</div>
-    // }
-    // if (error) {
-    //     return <div>Oops, an error occured</div>
-    // }
+    const { data: team, isLoading, isError, error } = useGetTeam(teamId)
+    const deleteTeam = useDeleteTeam()
 
-    // const { title, description } = data.data.attributes
+    useEffect(() => {
+        if (isError) {
+            addToast(error.message)
+        }
+    }, [isError])
+
+    const handleModal = () => {
+        if (modal) {
+            addModal({
+                id: team._id,
+                hasImage: team?.teamImage,
+                image: team?.teamImage,
+                imageAlt: team.title,
+                title: team.title,
+            })
+        }
+    }
+
+    const handleDelete = () => {
+        deleteTeam.mutate(team._id)
+
+        removeModal()
+    }
+
+    if (isLoading) {
+        return <LoadSpinner />
+    }
 
     return (
-        <div>
-            <h1>One Team</h1>
-            {/* <h2>{title}</h2>
-            <p>{description}</p> */}
-        </div>
+        <>
+            {team && (
+                <Card
+                    key={team._id}
+                    cardTitle={team.title}
+                    cardDetails={team.description}
+                    cardImage={team.teamImage && `${team.teamImage}?${team.updatedAt}`}
+                    cardType='team'
+                    cardAccent={team.type}
+                    pathEdit={`/teams/edit/${team._id}`}
+                    clickHandler={handleModal}
+                />
+            )}
+
+            {modal.id && (
+                <Modal>
+                    <ModalDelete modalType='team' confirmHandler={handleDelete} />
+                </Modal>
+            )}
+        </>
     )
 }
 

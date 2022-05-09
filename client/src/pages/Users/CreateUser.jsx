@@ -25,7 +25,7 @@ import FormOptionItem from '../../components/Form/Select/FormOptionItem'
 
 import LoadSpinner from '../../components/LoadSpinner'
 
-const SingleUser = () => {
+const CreateUser = () => {
     const navigate = useNavigate()
     const createUser = useCreateUser()
     const { addToast } = useGlobalState()
@@ -149,4 +149,4 @@ const SingleUser = () => {
     )
 }
 
-export default SingleUser
+export default CreateUser

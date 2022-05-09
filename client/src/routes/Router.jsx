@@ -25,7 +25,7 @@ import UpdateUser from '../pages/Users/UpdateUser'
 import Teams from '../pages/Teams'
 import SingleTeam from '../pages/Teams/SingleTeam'
 import CreateTeam from '../pages/Teams/CreateTeam'
-// import UpdateTeam from '../pages/Teams/UpdateTeam'
+import UpdateTeam from '../pages/Teams/UpdateTeam'
 
 // Common
 import { AccessDenied } from '../pages/Common/AccessDenied'
@@ -63,7 +63,7 @@ const Router = () => {
                             <Route index element={<Teams />} />
                             <Route path=':teamId' element={<SingleTeam />} />
                             <Route path='create' element={<CreateTeam />} />
-                            {/* <Route path='edit/:teamId' element={<UpdateTeam />} /> */}
+                            <Route path='edit/:teamId' element={<UpdateTeam />} />
                         </Route>
 
                         <Route path='access-denied' element={<AccessDenied />} />
