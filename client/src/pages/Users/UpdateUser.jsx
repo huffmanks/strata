@@ -49,11 +49,11 @@ const UpdateUser = () => {
     useEffect(() => {
         if (isSuccess) {
             setFormData({
-                firstName: user?.firstName,
-                lastName: user?.lastName,
-                email: user?.email,
+                firstName: user?.firstName || '',
+                lastName: user?.lastName || '',
+                email: user.email,
                 profileImage: user?.profileImage,
-                role: user?.role,
+                role: user.role,
                 team: user?.team?._id,
             })
 

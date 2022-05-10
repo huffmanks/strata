@@ -29,6 +29,11 @@
     .load-spinner div:nth-child(2) {
         animation-delay: -0.625s;
     }
+
+    .responsive-grid-300 {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    }
 }
 
 /* File input */

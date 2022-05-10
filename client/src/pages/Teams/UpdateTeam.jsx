@@ -17,11 +17,8 @@ import FormFile from '../../components/Form/Inputs/FormFile'
 import FormRadioGroup from '../../components/Form/Radio/FormRadioGroup'
 import FormRadio from '../../components/Form/Radio/FormRadio'
 
-// import Select from '../../components/Form/Select'
-// import FormSelectBox from '../../components/Form/Select/FormSelectBox'
-// import FormSelectValue from '../../components/Form/Select/FormSelectValue'
-// import FormOptionList from '../../components/Form/Select/FormOptionList'
-// import FormOptionItem from '../../components/Form/Select/FormOptionItem'
+// import FormCheckboxGroup from '../../components/Form/Checkbox/FormCheckboxGroup'
+// import FormCheckbox from '../../components/Form/Checkbox/FormCheckbox'
 
 import LoadSpinner from '../../components/LoadSpinner'
 
@@ -47,12 +44,13 @@ const UpdateTeam = () => {
 
     useEffect(() => {
         if (isSuccess) {
+            // const teamUsers = !team?.users?.length > 0 ? [] : team.users
             setFormData({
-                title: team?.title,
+                title: team.title,
                 description: team?.description,
                 teamImage: team?.teamImage,
-                // users: [team.users],
-                type: team?.type,
+                // users: teamUsers,
+                type: team.type,
             })
 
             setPreviewImage(team?.teamImage ? `${team.teamImage}?${team.updatedAt}` : undefined)
@@ -71,7 +69,7 @@ const UpdateTeam = () => {
                 title: '',
                 description: '',
                 teamImage: '',
-                // users: [],
+                users: [],
                 type: '',
             })
             setPreviewImage('')
@@ -80,7 +78,7 @@ const UpdateTeam = () => {
     // }, [isSuccess, isTeamError, isUsersError])
 
     const handleChange = (e) => {
-        const { name, value, type, files } = e.target
+        const { name, value, type, checked, files } = e.target
 
         if (files) {
             setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
@@ -89,7 +87,7 @@ const UpdateTeam = () => {
         setFormData((prev) => {
             return {
                 ...prev,
-                [name]: type === 'file' ? e.target.files[0] : value,
+                [name]: type === 'file' ? e.target.files[0] : type === 'checkbox' ? checked : value,
             }
         })
     }
@@ -124,29 +122,7 @@ const UpdateTeam = () => {
 
                     <FormFile type='file' name='teamImage' label={previewImage ? 'Update Team Image' : 'Upload Team Image'} changeHandler={handleChange} previewImg={previewImage} />
 
-                    {/* {users && (
-                        <Select title='Users'>
-                            <FormSelectBox defaultName='users' isDefault={!formData.users} isDisabled={!formData.users} changeHandler={handleChange}>
-                                {users.map((user) => (
-                                    <FormSelectValue
-                                        key={user._id}
-                                        valueId={user._id}
-                                        groupName='users'
-                                        selectLabel={user.email}
-                                        selectValue={user._id}
-                                        isChecked={formData.users === user._id}
-                                        changeHandler={handleChange}
-                                    />
-                                ))}
-                            </FormSelectBox>
-
-                            <FormOptionList groupName='users' isHidden={!formData.users}>
-                                {users.map((user) => (
-                                    <FormOptionItem key={user._id} labelFor={user._id} label={user.email} />
-                                ))}
-                            </FormOptionList>
-                        </Select>
-                    )} */}
+                    {/* <FormCheckboxGroup label='Users'>{users && users.map((user) => <FormCheckbox key={user._id} id={user._id} label={user.email} changeHandler={handleChange} />)}</FormCheckboxGroup> */}
 
                     <FormRadioGroup label='Type' changeHandler={handleChange}>
                         <FormRadio id='marketing' name='type' label='Marketing' radioValue='marketing' isChecked={team?.type === 'marketing'} />
