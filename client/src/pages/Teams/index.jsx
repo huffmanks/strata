@@ -29,6 +29,10 @@ const Teams = () => {
         if (isError) {
             addToast(error.message)
         }
+
+        return () => {
+            removeModal()
+        }
     }, [isError])
 
     const handleDataView = () => {

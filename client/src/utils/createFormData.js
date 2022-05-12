@@ -5,6 +5,13 @@ export const createFormData = (formData) =>
             formData[key] = undefined
         }
 
-        data.append(key, formData[key])
+        if (typeof formData[key] === 'object') {
+            formData[key].forEach((value) => {
+                data.append(key, value.toString())
+            })
+        } else {
+            data.append(key, formData[key])
+        }
+
         return data
     }, new FormData())

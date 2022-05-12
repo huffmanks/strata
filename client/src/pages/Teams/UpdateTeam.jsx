@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useGetTeam } from '../../api/teams/useGetTeam'
 import { useUpdateTeam } from '../../api/teams/useUpdateTeam'
-// import { useGetUsers } from '../../api/users/useGetUsers'
+import { useGetUsers } from '../../api/users/useGetUsers'
 import { useGlobalState } from '../../hooks/useContext'
 
 import Form from '../../components/Form'
@@ -17,9 +17,9 @@ import FormFile from '../../components/Form/Inputs/FormFile'
 import FormRadioGroup from '../../components/Form/Radio/FormRadioGroup'
 import FormRadio from '../../components/Form/Radio/FormRadio'
 
-// import FormCheckboxGroup from '../../components/Form/Checkbox/FormCheckboxGroup'
-// import FormCheckbox from '../../components/Form/Checkbox/FormCheckbox'
-
+import Modal from '../../components/Modal'
+import ModalSelectUsers from '../../components/Modal/ModalSelectUsers'
+import Button from '../../components/Button'
 import LoadSpinner from '../../components/LoadSpinner'
 
 const UpdateTeam = () => {
@@ -27,7 +27,7 @@ const UpdateTeam = () => {
     const navigate = useNavigate()
 
     const updateTeam = useUpdateTeam(teamId)
-    const { addToast } = useGlobalState()
+    const { addToast, modal, addModal, removeModal } = useGlobalState()
 
     const [formData, setFormData] = useState({
         title: '',
@@ -40,16 +40,16 @@ const UpdateTeam = () => {
     const [previewImage, setPreviewImage] = useState('')
 
     const { data: team, isLoading: teamLoading, isError: isTeamError, error: teamError, isSuccess } = useGetTeam(teamId)
-    // const { data: users, isLoading: usersLoading, isError: isUsersError, error: usersError } = useGetUsers()
+    const { data: users, isLoading: usersLoading, isError: isUsersError, error: usersError } = useGetUsers()
 
     useEffect(() => {
         if (isSuccess) {
-            // const teamUsers = !team?.users?.length > 0 ? [] : team.users
+            const teamUsers = !team?.users?.length > 0 ? [] : team.users.map((user) => user._id)
             setFormData({
                 title: team.title,
                 description: team?.description,
                 teamImage: team?.teamImage,
-                // users: teamUsers,
+                users: teamUsers,
                 type: team.type,
             })
 
@@ -60,9 +60,9 @@ const UpdateTeam = () => {
             addToast(teamError.message)
         }
 
-        // if (isUsersError) {
-        //     addToast(usersError.message)
-        // }
+        if (isUsersError) {
+            addToast(usersError.message)
+        }
 
         return () => {
             setFormData({
@@ -73,9 +73,9 @@ const UpdateTeam = () => {
                 type: '',
             })
             setPreviewImage('')
+            removeModal()
         }
-    }, [isSuccess, isTeamError])
-    // }, [isSuccess, isTeamError, isUsersError])
+    }, [isSuccess, isTeamError, isUsersError])
 
     const handleChange = (e) => {
         const { name, value, type, checked, files } = e.target
@@ -87,9 +87,29 @@ const UpdateTeam = () => {
         setFormData((prev) => {
             return {
                 ...prev,
-                [name]: type === 'file' ? e.target.files[0] : type === 'checkbox' ? checked : value,
+                [name]:
+                    type === 'file'
+                        ? e.target.files[0]
+                        : type === 'checkbox' && checked
+                        ? [value, ...prev.users]
+                        : type === 'checkbox' && !checked
+                        ? prev.users.filter((user) => user !== value)
+                        : value,
             }
         })
+    }
+
+    const handleModal = () => {
+        if (modal) {
+            addModal({
+                id: team._id,
+                users,
+            })
+        }
+    }
+
+    const handleModalClose = () => {
+        removeModal()
     }
 
     const handleSubmit = async (e) => {
@@ -104,12 +124,9 @@ const UpdateTeam = () => {
         }
     }
 
-    if (teamLoading) {
+    if (teamLoading || usersLoading) {
         return <LoadSpinner />
     }
-    // if (teamLoading || usersLoading) {
-    //     return <LoadSpinner />
-    // }
 
     return (
         <>
@@ -122,7 +139,16 @@ const UpdateTeam = () => {
 
                     <FormFile type='file' name='teamImage' label={previewImage ? 'Update Team Image' : 'Upload Team Image'} changeHandler={handleChange} previewImg={previewImage} />
 
-                    {/* <FormCheckboxGroup label='Users'>{users && users.map((user) => <FormCheckbox key={user._id} id={user._id} label={user.email} changeHandler={handleChange} />)}</FormCheckboxGroup> */}
+                    <div className='mb-5 flex items-center gap-5'>
+                        <Button buttonType='button' size='small' variant='primary' buttonText='Select users' clickHandler={handleModal} />
+                        {users && users.filter((user) => formData.users.includes(user._id)).map((user) => <div key={user._id}>{user.email}</div>)}
+                    </div>
+
+                    {modal.id && (
+                        <Modal>
+                            <ModalSelectUsers data={formData.users} changeHandler={handleChange} confirmHandler={handleModalClose} />
+                        </Modal>
+                    )}
 
                     <FormRadioGroup label='Type' changeHandler={handleChange}>
                         <FormRadio id='marketing' name='type' label='Marketing' radioValue='marketing' isChecked={team?.type === 'marketing'} />
