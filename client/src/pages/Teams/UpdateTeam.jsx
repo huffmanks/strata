@@ -131,7 +131,7 @@ const UpdateTeam = () => {
     return (
         <>
             <Form isLarge='true' submitHandler={handleSubmit}>
-                <FormHeader title='Update' />
+                <FormHeader title='Update Team' />
                 <FormBody>
                     <FormInput type='text' name='title' label='Title' changeHandler={handleChange} inputValue={formData.title} />
 

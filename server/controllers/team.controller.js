@@ -108,7 +108,7 @@ export const createTeam = async (req, res, next) => {
 
 export const updateTeam = async (req, res, next) => {
     try {
-        const users = !req.body.users ? undefined : Array.isArray(req.body.users) ? req.body.users : [req.body.users]
+        const users = !req.body.users ? [] : Array.isArray(req.body.users) ? req.body.users : [req.body.users]
 
         if (users) {
             const usersIdIsValid = users.map((userId) => {
@@ -134,18 +134,17 @@ export const updateTeam = async (req, res, next) => {
             }
         }
 
-        const prevUsers = await User.find({ _id: { $in: users } }).select('team')
+        const prevUsers = await Team.find({ _id: req.params.id }).select('users -_id')
+        const prevTeams = await User.find({ _id: { $in: users } }).select('team')
 
         const teamImage = req?.files?.teamImage
-        let pathSuffix
+
+        const pathSuffix = teamImage ? `/uploads/images/team/${req.params.id}${path.extname(teamImage.name).toLowerCase()}` : undefined
 
         if (teamImage) {
             if (!teamImage?.mimetype || !teamImage?.mimetype.includes('image')) {
                 return errorResponse(res, 415, { name: 'Unsupported Media Type', message: 'The image field only accepts image file types.' })
             }
-
-            const extension = path.extname(teamImage.name)
-            pathSuffix = `/uploads/images/team/${req.params.id}${extension.toLowerCase()}`
 
             const imagePath = __dirname + pathSuffix
 
@@ -162,17 +161,38 @@ export const updateTeam = async (req, res, next) => {
         const team = await Team.findByIdAndUpdate(
             { _id: req.params.id },
             {
-                $set: { ...fieldsWithoutUsers },
-                $addToSet: { users: users },
+                $set: { ...fieldsWithoutUsers, users },
                 teamImage: imageUrl,
             },
             { new: true }
         )
 
-        if (prevUsers?.[0]?.team) {
-            const prevUsersIds = prevUsers.map((user) => user._id.toString())
+        if (prevUsers?.[0]?.users) {
+            const prevUsersIds = prevUsers[0].users.map((user) => user.toString())
 
-            const uniquePrevTeamsIds = [...new Set(prevUsers.map((user) => user.team.toString()))]
+            const removeUsersPrevTeamIds = prevUsersIds.filter((id) => {
+                if (users) {
+                    return !users.includes(id)
+                }
+
+                return id
+            })
+
+            await User.updateMany({ _id: removeUsersPrevTeamIds }, { $unset: { team } }, { new: true })
+        }
+
+        if (prevTeams?.[0]?.team) {
+            const prevUsersIds = prevTeams.map((user) => user._id)
+
+            const uniquePrevTeamsIds = [
+                ...new Set(
+                    prevTeams.map((user) => {
+                        if (user?.team) {
+                            return user.team.toString()
+                        }
+                    })
+                ),
+            ]
 
             const removeUsersPrevTeamIds = uniquePrevTeamsIds.filter((id) => !req.params.id.includes(id))
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCreateTeam } from '../../api/teams/useCreateTeam'
-// import { useGetUsers } from '../../api/users/useGetUsers'
+import { useGetUsers } from '../../api/users/useGetUsers'
 import { useGlobalState } from '../../hooks/useContext'
 
 import Form from '../../components/Form'
@@ -16,51 +16,48 @@ import FormFile from '../../components/Form/Inputs/FormFile'
 import FormRadioGroup from '../../components/Form/Radio/FormRadioGroup'
 import FormRadio from '../../components/Form/Radio/FormRadio'
 
-// import Select from '../../components/Form/Select'
-// import FormSelectBox from '../../components/Form/Select/FormSelectBox'
-// import FormSelectValue from '../../components/Form/Select/FormSelectValue'
-// import FormOptionList from '../../components/Form/Select/FormOptionList'
-// import FormOptionItem from '../../components/Form/Select/FormOptionItem'
-
-// import LoadSpinner from '../../components/LoadSpinner'
+import Modal from '../../components/Modal'
+import ModalSelectUsers from '../../components/Modal/ModalSelectUsers'
+import Button from '../../components/Button'
+import LoadSpinner from '../../components/LoadSpinner'
 
 const CreateTeam = () => {
     const navigate = useNavigate()
     const createTeam = useCreateTeam()
-    const { addToast } = useGlobalState()
+    const { addToast, modal, addModal, removeModal } = useGlobalState()
 
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         teamImage: '',
-        // users: [],
+        users: [],
         type: '',
     })
 
     const [previewImage, setPreviewImage] = useState('')
 
-    // const { data: users, isLoading, isError, error } = useGetUsers()
+    const { data: users, isLoading, isError, error } = useGetUsers()
 
     useEffect(() => {
-        // if (isError) {
-        //     addToast(error.message)
-        // }
+        if (isError) {
+            addToast(error.message)
+        }
 
         return () => {
             setFormData({
                 title: '',
                 description: '',
                 teamImage: '',
-                // users: [],
+                users: [],
                 type: '',
             })
             setPreviewImage('')
+            removeModal()
         }
-    }, [])
-    // }, [isError])
+    }, [isError])
 
     const handleChange = (e) => {
-        const { name, value, type, files } = e.target
+        const { name, value, type, checked, files } = e.target
 
         if (files) {
             setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
@@ -69,9 +66,29 @@ const CreateTeam = () => {
         setFormData((prev) => {
             return {
                 ...prev,
-                [name]: type === 'file' ? e.target.files[0] : value,
+                [name]:
+                    type === 'file'
+                        ? e.target.files[0]
+                        : type === 'checkbox' && checked
+                        ? [value, ...prev.users]
+                        : type === 'checkbox' && !checked
+                        ? prev.users.filter((user) => user !== value)
+                        : value,
             }
         })
+    }
+
+    const handleModal = () => {
+        if (modal) {
+            addModal({
+                id: Math.round(new Date().getTime() / 1000),
+                users,
+            })
+        }
+    }
+
+    const handleModalClose = () => {
+        removeModal()
     }
 
     const handleSubmit = async (e) => {
@@ -86,9 +103,9 @@ const CreateTeam = () => {
         }
     }
 
-    // if (isLoading) {
-    //     return <LoadSpinner />
-    // }
+    if (isLoading) {
+        return <LoadSpinner />
+    }
 
     return (
         <>
@@ -99,31 +116,18 @@ const CreateTeam = () => {
 
                     <FormInput type='text' name='description' label='Description' changeHandler={handleChange} inputValue={formData.description} />
 
-                    <FormFile type='file' name='profileImage' label={previewImage ? 'Update Team Image' : 'Upload Team Image'} changeHandler={handleChange} previewImg={previewImage} />
+                    <FormFile type='file' name='teamImage' label={previewImage ? 'Update Team Image' : 'Upload Team Image'} changeHandler={handleChange} previewImg={previewImage} />
 
-                    {/* {users && (
-                        <Select title='Users'>
-                            <FormSelectBox defaultName='users' isDefault={!formData.users} isDisabled={!formData.users} changeHandler={handleChange}>
-                                {users.map((user) => (
-                                    <FormSelectValue
-                                        key={user._id}
-                                        valueId={user._id}
-                                        groupName='users'
-                                        selectLabel={user.email}
-                                        selectValue={user._id}
-                                        isChecked={formData.users === user._id}
-                                        changeHandler={handleChange}
-                                    />
-                                ))}
-                            </FormSelectBox>
+                    <div className='mb-5 flex items-center gap-5'>
+                        <Button buttonType='button' size='small' variant='primary' buttonText='Select users' clickHandler={handleModal} />
+                        {users && users.filter((user) => formData.users.includes(user._id)).map((user) => <div key={user._id}>{user.email}</div>)}
+                    </div>
 
-                            <FormOptionList groupName='users' isHidden={!formData.users}>
-                                {users.map((user) => (
-                                    <FormOptionItem key={user._id} labelFor={user._id} label={user.email} />
-                                ))}
-                            </FormOptionList>
-                        </Select>
-                    )} */}
+                    {modal.id && (
+                        <Modal>
+                            <ModalSelectUsers data={formData.users} changeHandler={handleChange} confirmHandler={handleModalClose} />
+                        </Modal>
+                    )}
 
                     <FormRadioGroup label='Type' changeHandler={handleChange}>
                         <FormRadio id='marketing' name='type' label='Marketing' radioValue='marketing' isChecked={true} />

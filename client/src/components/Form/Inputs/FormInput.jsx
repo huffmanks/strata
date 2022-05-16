@@ -1,6 +1,6 @@
 const FormInput = ({ type, name, label, changeHandler, inputValue }) => {
     return (
-        <div className='text-input focus-within:border-primary-alt relative mb-10 border-b-2'>
+        <div className='text-input relative mb-10 border-b-2 focus-within:border-primary-alt'>
             <input
                 type={type}
                 name={name}
@@ -8,10 +8,10 @@ const FormInput = ({ type, name, label, changeHandler, inputValue }) => {
                 className='peer block w-full appearance-none bg-transparent focus:outline-none'
                 onChange={changeHandler}
                 autoComplete='new-password'
-                value={inputValue}
+                defaultValue={inputValue}
             />
 
-            <label htmlFor={name} className='origin-0 absolute top-0 duration-300'>
+            <label htmlFor={name} className='absolute top-0 origin-0 duration-300'>
                 {label}
             </label>
         </div>

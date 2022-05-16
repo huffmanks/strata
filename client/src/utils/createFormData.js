@@ -5,9 +5,9 @@ export const createFormData = (formData) =>
             formData[key] = undefined
         }
 
-        if (typeof formData[key] === 'object') {
+        if (Array.isArray(formData[key])) {
             formData[key].forEach((value) => {
-                data.append(key, value.toString())
+                data.append(key, value)
             })
         } else {
             data.append(key, formData[key])
