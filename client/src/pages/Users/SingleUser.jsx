@@ -52,12 +52,15 @@ const SingleUser = () => {
             {user && (
                 <Card
                     key={user._id}
+                    singleCard={true}
                     cardTitle={user.firstName ? `${user.firstName} ${user?.lastName}` : 'User'}
-                    cardDetails={user.email}
                     cardImage={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
                     cardAccent={user.role}
                     pathEdit={`/users/edit/${user._id}`}
                     clickHandler={handleModal}
+                    email={user.email}
+                    role={user.role}
+                    team={user.team.title}
                 />
             )}
 

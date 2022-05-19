@@ -52,13 +52,15 @@ const SingleTeam = () => {
             {team && (
                 <Card
                     key={team._id}
+                    singleCard={true}
                     cardTitle={team.title}
-                    cardDetails={team.description}
                     cardImage={team.teamImage && `${team.teamImage}?${team.updatedAt}`}
                     cardType='team'
                     cardAccent={team.type}
                     pathEdit={`/teams/edit/${team._id}`}
                     clickHandler={handleModal}
+                    description={team.description}
+                    type={team.type}
                 />
             )}
 
