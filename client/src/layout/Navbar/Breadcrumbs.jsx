@@ -7,7 +7,7 @@ const Breadcrumbs = () => {
     return (
         <div className='flex gap-2 pl-48'>
             {breadcrumbs.map(({ match, breadcrumb }, index, array) => (
-                <div key={match.pathname} className={breadcrumb.props.children === 'Edit' && 'hidden'}>
+                <div key={match.pathname} className={breadcrumb.props.children === 'Edit' ? 'hidden' : ''}>
                     {index !== array.length - 1 ? (
                         <div key={match.pathname}>
                             <NavLink to={match.pathname}>{breadcrumb}</NavLink>
