@@ -5,6 +5,8 @@ import { useGetUser } from '../../api/users/useGetUser'
 import { useUpdateUser } from '../../api/users/useUpdateUser'
 import { useGetTeams } from '../../api/teams/useGetTeams'
 import { useGlobalState } from '../../hooks/useContext'
+import { useFormData } from '../../hooks/useFormData'
+import { initialUserData } from '../../constants/initialData'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Container/FormHeader'
@@ -29,22 +31,15 @@ const UpdateUser = () => {
     const { userId } = useParams()
     const navigate = useNavigate()
 
+    const [previewImage, setPreviewImage] = useState('')
+
     const updateUser = useUpdateUser(userId)
     const { addToast } = useGlobalState()
 
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        profileImage: '',
-        role: '',
-        team: '',
-    })
-
-    const [previewImage, setPreviewImage] = useState('')
-
     const { data: user, isLoading: userLoading, isError: isUserError, error: userError, isSuccess } = useGetUser(userId)
     const { data: teams, isLoading: teamsLoading, isError: isTeamsError, error: teamsError } = useGetTeams()
+
+    const [formData, setFormData, handleChange] = useFormData(initialUserData)
 
     useEffect(() => {
         if (isSuccess) {
@@ -69,32 +64,25 @@ const UpdateUser = () => {
         }
 
         return () => {
-            setFormData({
-                firstName: '',
-                lastName: '',
-                email: '',
-                profileImage: '',
-                role: '',
-                team: '',
-            })
+            setFormData(initialUserData)
             setPreviewImage('')
         }
     }, [isSuccess, isUserError, isTeamsError])
 
-    const handleChange = (e) => {
-        const { name, value, type, files } = e.target
+    // const handleChange = (e) => {
+    //     const { name, value, type, files } = e.target
 
-        if (files) {
-            setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
-        }
+    //     if (files) {
+    //         setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
+    //     }
 
-        setFormData((prev) => {
-            return {
-                ...prev,
-                [name]: type === 'file' ? e.target.files[0] : value,
-            }
-        })
-    }
+    //     setFormData((prev) => {
+    //         return {
+    //             ...prev,
+    //             [name]: type === 'file' ? e.target.files[0] : value,
+    //         }
+    //     })
+    // }
 
     const handleSubmit = async (e) => {
         e.preventDefault()

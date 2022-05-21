@@ -15,13 +15,17 @@ import Modal from '../../components/Modal'
 import ModalDelete from '../../components/Modal/ModalDelete'
 
 import LoadSpinner from '../../components/LoadSpinner'
+import Pagination from '../../components/Pagination'
 
 const Users = () => {
     const [dataView, setDataView] = useState(true)
+    const [page, setPage] = useState(1)
+    const limit = 2
 
     const { addToast, modal, addModal, removeModal } = useGlobalState()
 
-    const { data: users, isLoading, isError, error } = useGetUsers()
+    // const { data, isLoading, isError, error, isPreviousData } = useGetUsers()
+    const { data, isLoading, isError, error, isPreviousData } = useGetUsers(page, limit)
     const deleteUser = useDeleteUser()
 
     useEffect(() => {
@@ -37,7 +41,7 @@ const Users = () => {
     const handleModal = (e) => {
         const rowId = e.currentTarget.id
 
-        const user = users.find((user) => {
+        const user = data.users.find((user) => {
             return user._id === rowId
         })
 
@@ -64,14 +68,16 @@ const Users = () => {
         return <LoadSpinner />
     }
 
+    console.log(data)
+
     return (
         <>
             <Header pageTitle='USERS' addLink='/users/create' activeIcon={dataView} clickHandler={handleDataView} />
 
             {dataView ? (
                 <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role', 'View', 'Edit', 'Delete']}>
-                    {users &&
-                        users.map((user) => (
+                    {data &&
+                        data.users.map((user) => (
                             <Row
                                 key={user._id}
                                 rowId={user._id}
@@ -91,8 +97,8 @@ const Users = () => {
                 </Table>
             ) : (
                 <CardGroup>
-                    {users &&
-                        users.map((user) => (
+                    {data &&
+                        data.users.map((user) => (
                             <Card
                                 key={user._id}
                                 cardId={user._id}
@@ -108,6 +114,22 @@ const Users = () => {
                 </CardGroup>
             )}
 
+            {data.count && (
+                <Pagination
+                    currentPage={data.currentPage}
+                    totalPages={data.totalPages}
+                    prevVariant={page === 1 ? 'secondary' : 'primary'}
+                    nextVariant={isPreviousData || data.currentPage === data.totalPages ? 'secondary' : 'primary'}
+                    prevClickHandler={() => setPage((old) => Math.max(old - 1, 1))}
+                    prevDisabled={page === 1}
+                    nextClickHandler={() => {
+                        if (!isPreviousData && data.currentPage !== data.totalPages) {
+                            setPage((old) => old + 1)
+                        }
+                    }}
+                    nextDisabled={isPreviousData || data.currentPage === data.totalPages}
+                />
+            )}
             {modal.id && (
                 <Modal>
                     <ModalDelete modalType='user' confirmHandler={handleDelete} />

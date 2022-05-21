@@ -20,14 +20,24 @@ export const getSingleUser = async (req, res, next) => {
 }
 
 export const getAllUsers = async (req, res, next) => {
+    const page = req?.query?.page
+    const limit = req?.query?.limit
     try {
-        const users = await User.find({}).populate('team', 'title')
+        const users = await User.find({})
+            .populate('team', 'title')
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
 
         if (!users) {
             return errorResponse(res, 404, { name: 'NotFound', message: 'No users can be found.' })
         }
 
-        res.json(users)
+        if (page && limit) {
+            const count = await User.estimatedDocumentCount()
+            res.json({ users, totalPages: Math.ceil(count / limit), currentPage: parseInt(page), count })
+        } else {
+            res.json({ users })
+        }
     } catch (err) {
         next(err)
     }

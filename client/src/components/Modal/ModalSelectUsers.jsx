@@ -16,6 +16,7 @@ const ModalSelectUsers = ({ data, changeHandler, confirmHandler }) => {
                     ))}
                 </FormCheckboxGroup>
             </div>
+
             <ModalFooter hasConfirm={true} confirmText='Update' cancelText='Cancel' confirmHandler={confirmHandler} />
         </>
     )

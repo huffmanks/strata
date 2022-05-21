@@ -5,6 +5,8 @@ import { useGetTeam } from '../../api/teams/useGetTeam'
 import { useUpdateTeam } from '../../api/teams/useUpdateTeam'
 import { useGetUsers } from '../../api/users/useGetUsers'
 import { useGlobalState } from '../../hooks/useContext'
+import { useFormData } from '../../hooks/useFormData'
+import { initialTeamData } from '../../constants/initialData'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Container/FormHeader'
@@ -19,54 +21,34 @@ import FormRadio from '../../components/Form/Radio/FormRadio'
 
 import Modal from '../../components/Modal'
 import ModalSelectUsers from '../../components/Modal/ModalSelectUsers'
+
 import Button from '../../components/Button'
 import LoadSpinner from '../../components/LoadSpinner'
-import { useFormData } from '../../hooks/useFormData'
 
 const UpdateTeam = () => {
     const { teamId } = useParams()
     const navigate = useNavigate()
 
+    const [previewImage, setPreviewImage] = useState('')
+
     const updateTeam = useUpdateTeam(teamId)
     const { addToast, modal, addModal, removeModal } = useGlobalState()
 
     const { data: team, isLoading: teamLoading, isError: isTeamError, error: teamError, isSuccess } = useGetTeam(teamId)
-    const { data: users, isLoading: usersLoading, isError: isUsersError, error: usersError } = useGetUsers()
+    const { data, isLoading: usersLoading, isError: isUsersError, error: usersError } = useGetUsers()
 
-    const [formData, handleChange] = useFormData(
-        {
-            title: '',
-            description: '',
-            teamImage: '',
-            users: [],
-            type: '',
-        },
-        isSuccess,
-        team
-    )
-    // const [formData, setFormData] = useState({
-    //     title: '',
-    //     description: '',
-    //     teamImage: '',
-    //     users: [],
-    //     type: '',
-    // })
-
-    const [previewImage, setPreviewImage] = useState('')
-
-    // const { data: team, isLoading: teamLoading, isError: isTeamError, error: teamError, isSuccess } = useGetTeam(teamId)
-    // const { data: users, isLoading: usersLoading, isError: isUsersError, error: usersError } = useGetUsers()
+    const [formData, setFormData, handleChange] = useFormData(initialTeamData)
 
     useEffect(() => {
         if (isSuccess) {
-            // const teamUsers = !team?.users?.length > 0 ? [] : team.users.map((user) => user._id)
-            // setFormData({
-            //     title: team.title,
-            //     description: team?.description,
-            //     teamImage: team?.teamImage,
-            //     users: teamUsers,
-            //     type: team.type,
-            // })
+            const teamUsers = !team?.users?.length > 0 ? [] : team.users.map((user) => user._id)
+            setFormData({
+                title: team.title,
+                description: team?.description,
+                teamImage: team?.teamImage,
+                users: teamUsers,
+                type: team.type,
+            })
 
             setPreviewImage(team?.teamImage ? `${team.teamImage}?${team.updatedAt}` : undefined)
         }
@@ -80,45 +62,17 @@ const UpdateTeam = () => {
         }
 
         return () => {
-            // setFormData({
-            //     title: '',
-            //     description: '',
-            //     teamImage: '',
-            //     users: [],
-            //     type: '',
-            // })
+            setFormData(initialTeamData)
             setPreviewImage('')
             removeModal()
         }
     }, [isSuccess, isTeamError, isUsersError])
 
-    // const handleChange = (e) => {
-    //     const { name, value, type, checked, files } = e.target
-
-    //     if (files) {
-    //         setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
-    //     }
-
-    //     setFormData((prev) => {
-    //         return {
-    //             ...prev,
-    //             [name]:
-    //                 type === 'file'
-    //                     ? e.target.files[0]
-    //                     : type === 'checkbox' && checked
-    //                     ? [value, ...prev.users]
-    //                     : type === 'checkbox' && !checked
-    //                     ? prev.users.filter((user) => user !== value)
-    //                     : value,
-    //         }
-    //     })
-    // }
-
     const handleModal = () => {
         if (modal) {
             addModal({
                 id: team._id,
-                users,
+                users: data.users,
             })
         }
     }
@@ -156,7 +110,7 @@ const UpdateTeam = () => {
 
                     <div className='mb-5 flex items-center gap-5'>
                         <Button buttonType='button' size='small' variant='primary' buttonText='Select users' clickHandler={handleModal} />
-                        {users && users.filter((user) => formData.users.includes(user._id)).map((user) => <div key={user._id}>{user.email}</div>)}
+                        {data && data.users.filter((user) => formData.users.includes(user._id)).map((user) => <div key={user._id}>{user.email}</div>)}
                     </div>
 
                     {modal.id && (
