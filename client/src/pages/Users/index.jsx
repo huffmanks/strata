@@ -20,12 +20,14 @@ import Pagination from '../../components/Pagination'
 const Users = () => {
     const [dataView, setDataView] = useState(true)
     const [page, setPage] = useState(1)
+    const [sortFields, setSortFields] = useState('')
+    // const [sortAscending, setSortAscending] = useState(false)
     const limit = 2
 
     const { addToast, modal, addModal, removeModal } = useGlobalState()
 
     // const { data, isLoading, isError, error, isPreviousData } = useGetUsers()
-    const { data, isLoading, isError, error, isPreviousData } = useGetUsers(page, limit)
+    const { data, isLoading, isError, error, isPreviousData } = useGetUsers(page, limit, sortFields)
     const deleteUser = useDeleteUser()
 
     useEffect(() => {
@@ -37,6 +39,21 @@ const Users = () => {
     const handleDataView = () => {
         setDataView((prev) => !prev)
     }
+
+    const handleSort = (e) => {
+        if (sortFields?.includes(`-${e.target.id}`)) {
+            const newSort = sortFields.replace(`-${e.target.id}`, e.target.id).toString()
+            setSortFields(newSort)
+        } else if (sortFields?.includes(e.target.id)) {
+            const newSort = sortFields.replace(e.target.id, `-${e.target.id}`).toString()
+            setSortFields(newSort)
+        } else {
+            const newSort = sortFields !== '' ? sortFields + `,${e.target.id}` : e.target.id
+            setSortFields(newSort.toString())
+        }
+    }
+
+    console.log(sortFields)
 
     const handleModal = (e) => {
         const rowId = e.currentTarget.id
@@ -68,14 +85,12 @@ const Users = () => {
         return <LoadSpinner />
     }
 
-    console.log(data)
-
     return (
         <>
             <Header pageTitle='USERS' addLink='/users/create' activeIcon={dataView} clickHandler={handleDataView} />
 
             {dataView ? (
-                <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role', 'View', 'Edit', 'Delete']}>
+                <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role', 'View', 'Edit', 'Delete']} clickHandler={handleSort}>
                     {data &&
                         data.users.map((user) => (
                             <Row
@@ -128,6 +143,7 @@ const Users = () => {
                         }
                     }}
                     nextDisabled={isPreviousData || data.currentPage === data.totalPages}
+                    pageClickHandler={(e) => setPage(e.target.id)}
                 />
             )}
             {modal.id && (
