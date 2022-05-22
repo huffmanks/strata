@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCreateUser } from '../../api/users/useCreateUser'
 import { useGetTeams } from '../../api/teams/useGetTeams'
 import { useGlobalState } from '../../hooks/useContext'
+import { useFormData } from '../../hooks/useFormData'
+import { initialUserData } from '../../constants/initialData'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Container/FormHeader'
@@ -30,19 +32,9 @@ const CreateUser = () => {
     const createUser = useCreateUser()
     const { addToast } = useGlobalState()
 
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        profileImage: '',
-        role: '',
-        team: '',
-    })
-
-    const [previewImage, setPreviewImage] = useState('')
-
     const { data: teams, isLoading, isError, error } = useGetTeams()
+
+    const [formData, setFormData, previewImage, setPreviewImage, handleChange] = useFormData(initialUserData)
 
     useEffect(() => {
         if (isError) {
@@ -50,32 +42,10 @@ const CreateUser = () => {
         }
 
         return () => {
-            setFormData({
-                firstName: '',
-                lastName: '',
-                email: '',
-                profileImage: '',
-                role: '',
-                team: '',
-            })
+            setFormData(initialUserData)
             setPreviewImage('')
         }
     }, [isError])
-
-    const handleChange = (e) => {
-        const { name, value, type, files } = e.target
-
-        if (files) {
-            setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
-        }
-
-        setFormData((prev) => {
-            return {
-                ...prev,
-                [name]: type === 'file' ? e.target.files[0] : value,
-            }
-        })
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()

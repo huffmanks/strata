@@ -15,9 +15,9 @@ const SingleTeam = () => {
     const { teamId } = useParams()
 
     const { addToast, modal, addModal, removeModal } = useGlobalState()
+    const deleteTeam = useDeleteTeam()
 
     const { data: team, isLoading, isError, error } = useGetTeam(teamId)
-    const deleteTeam = useDeleteTeam()
 
     useEffect(() => {
         if (isError) {

@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useCreateTeam } from '../../api/teams/useCreateTeam'
 import { useGetUsers } from '../../api/users/useGetUsers'
 import { useGlobalState } from '../../hooks/useContext'
+import { useFormData } from '../../hooks/useFormData'
+import { initialTeamData } from '../../constants/initialData'
 
 import Form from '../../components/Form'
 import FormHeader from '../../components/Form/Container/FormHeader'
@@ -23,20 +25,13 @@ import LoadSpinner from '../../components/LoadSpinner'
 
 const CreateTeam = () => {
     const navigate = useNavigate()
-    const createTeam = useCreateTeam()
+
     const { addToast, modal, addModal, removeModal } = useGlobalState()
+    const createTeam = useCreateTeam()
 
-    const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        teamImage: '',
-        users: [],
-        type: '',
-    })
+    const { data, isLoading, isError, error } = useGetUsers()
 
-    const [previewImage, setPreviewImage] = useState('')
-
-    const { data: users, isLoading, isError, error } = useGetUsers()
+    const [formData, setFormData, previewImage, setPreviewImage, handleChange] = useFormData(initialTeamData)
 
     useEffect(() => {
         if (isError) {
@@ -44,45 +39,17 @@ const CreateTeam = () => {
         }
 
         return () => {
-            setFormData({
-                title: '',
-                description: '',
-                teamImage: '',
-                users: [],
-                type: '',
-            })
+            setFormData(initialTeamData)
             setPreviewImage('')
             removeModal()
         }
     }, [isError])
 
-    const handleChange = (e) => {
-        const { name, value, type, checked, files } = e.target
-
-        if (files) {
-            setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
-        }
-
-        setFormData((prev) => {
-            return {
-                ...prev,
-                [name]:
-                    type === 'file'
-                        ? e.target.files[0]
-                        : type === 'checkbox' && checked
-                        ? [value, ...prev.users]
-                        : type === 'checkbox' && !checked
-                        ? prev.users.filter((user) => user !== value)
-                        : value,
-            }
-        })
-    }
-
     const handleModal = () => {
         if (modal) {
             addModal({
                 id: Math.round(new Date().getTime() / 1000),
-                users,
+                users: data.users,
             })
         }
     }
@@ -120,7 +87,7 @@ const CreateTeam = () => {
 
                     <div className='mb-5 flex items-center gap-5'>
                         <Button buttonType='button' size='small' variant='primary' buttonText='Select users' clickHandler={handleModal} />
-                        {users && users.filter((user) => formData.users.includes(user._id)).map((user) => <div key={user._id}>{user.email}</div>)}
+                        {data && data.users.filter((user) => formData.users.includes(user._id)).map((user) => <div key={user._id}>{user.email}</div>)}
                     </div>
 
                     {modal.id && (

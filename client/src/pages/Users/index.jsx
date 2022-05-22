@@ -21,14 +21,13 @@ const Users = () => {
     const [dataView, setDataView] = useState(true)
     const [page, setPage] = useState(1)
     const [sortFields, setSortFields] = useState('')
-    // const [sortAscending, setSortAscending] = useState(false)
     const limit = 2
 
     const { addToast, modal, addModal, removeModal } = useGlobalState()
+    const deleteUser = useDeleteUser()
 
     // const { data, isLoading, isError, error, isPreviousData } = useGetUsers()
     const { data, isLoading, isError, error, isPreviousData } = useGetUsers(page, limit, sortFields)
-    const deleteUser = useDeleteUser()
 
     useEffect(() => {
         if (isError) {
@@ -53,7 +52,7 @@ const Users = () => {
         }
     }
 
-    console.log(sortFields)
+    // console.log(sortFields)
 
     const handleModal = (e) => {
         const rowId = e.currentTarget.id

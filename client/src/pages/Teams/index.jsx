@@ -21,9 +21,9 @@ const Teams = () => {
     const [dataView, setDataView] = useState(true)
 
     const { addToast, modal, addModal, removeModal } = useGlobalState()
+    const deleteTeam = useDeleteTeam()
 
     const { data: teams, isLoading, isError, error } = useGetTeams()
-    const deleteTeam = useDeleteTeam()
 
     useEffect(() => {
         if (isError) {

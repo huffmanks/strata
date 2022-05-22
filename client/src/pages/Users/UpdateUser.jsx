@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useGetUser } from '../../api/users/useGetUser'
@@ -31,15 +31,13 @@ const UpdateUser = () => {
     const { userId } = useParams()
     const navigate = useNavigate()
 
-    const [previewImage, setPreviewImage] = useState('')
-
     const updateUser = useUpdateUser(userId)
     const { addToast } = useGlobalState()
 
     const { data: user, isLoading: userLoading, isError: isUserError, error: userError, isSuccess } = useGetUser(userId)
     const { data: teams, isLoading: teamsLoading, isError: isTeamsError, error: teamsError } = useGetTeams()
 
-    const [formData, setFormData, handleChange] = useFormData(initialUserData)
+    const [formData, setFormData, previewImage, setPreviewImage, handleChange] = useFormData(initialUserData)
 
     useEffect(() => {
         if (isSuccess) {
@@ -68,21 +66,6 @@ const UpdateUser = () => {
             setPreviewImage('')
         }
     }, [isSuccess, isUserError, isTeamsError])
-
-    // const handleChange = (e) => {
-    //     const { name, value, type, files } = e.target
-
-    //     if (files) {
-    //         setPreviewImage(`${URL.createObjectURL(e.target.files[0])}#?${Date.now()}`)
-    //     }
-
-    //     setFormData((prev) => {
-    //         return {
-    //             ...prev,
-    //             [name]: type === 'file' ? e.target.files[0] : value,
-    //         }
-    //     })
-    // }
 
     const handleSubmit = async (e) => {
         e.preventDefault()

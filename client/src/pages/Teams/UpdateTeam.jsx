@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useGetTeam } from '../../api/teams/useGetTeam'
@@ -29,15 +29,13 @@ const UpdateTeam = () => {
     const { teamId } = useParams()
     const navigate = useNavigate()
 
-    const [previewImage, setPreviewImage] = useState('')
-
     const updateTeam = useUpdateTeam(teamId)
     const { addToast, modal, addModal, removeModal } = useGlobalState()
 
     const { data: team, isLoading: teamLoading, isError: isTeamError, error: teamError, isSuccess } = useGetTeam(teamId)
     const { data, isLoading: usersLoading, isError: isUsersError, error: usersError } = useGetUsers()
 
-    const [formData, setFormData, handleChange] = useFormData(initialTeamData)
+    const [formData, setFormData, previewImage, setPreviewImage, handleChange] = useFormData(initialTeamData)
 
     useEffect(() => {
         if (isSuccess) {
