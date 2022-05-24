@@ -14,6 +14,7 @@ server/uploads/*/*/*
 !server/uploads/files/example.pdf
 !server/uploads/images/profile/example.jpg
 !server/uploads/images/team/example.jpg
+server/initial*.json
 
 # misc
 config.env
