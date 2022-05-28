@@ -9,8 +9,7 @@ import Header from '../../layout/Content/Header'
 import CardGroup from '../../components/Card/CardGroup'
 import Card from '../../components/Card'
 
-import Table from '../../components/Table'
-import Row from '../../components/Table/Row'
+import UsersTable from './UsersTable'
 import Modal from '../../components/Modal'
 import ModalDelete from '../../components/Modal/ModalDelete'
 
@@ -19,40 +18,28 @@ import Pagination from '../../components/Pagination'
 
 const Users = () => {
     const [dataView, setDataView] = useState(true)
+    const [tableData, setTableData] = useState([])
     const [page, setPage] = useState(1)
-    const [sortFields, setSortFields] = useState('')
     const limit = 2
+
+    const { data, isLoading, isError, error, isPreviousData } = useGetUsers(page, limit)
 
     const { addToast, modal, addModal, removeModal } = useGlobalState()
     const deleteUser = useDeleteUser()
-
-    // const { data, isLoading, isError, error, isPreviousData } = useGetUsers()
-    const { data, isLoading, isError, error, isPreviousData } = useGetUsers(page, limit, sortFields)
 
     useEffect(() => {
         if (isError) {
             addToast(error.message)
         }
-    }, [isError])
+
+        if (data) {
+            setTableData(data.users)
+        }
+    }, [data, isError])
 
     const handleDataView = () => {
         setDataView((prev) => !prev)
     }
-
-    const handleSort = (e) => {
-        if (sortFields?.includes(`-${e.target.id}`)) {
-            const newSort = sortFields.replace(`-${e.target.id}`, e.target.id).toString()
-            setSortFields(newSort)
-        } else if (sortFields?.includes(e.target.id)) {
-            const newSort = sortFields.replace(e.target.id, `-${e.target.id}`).toString()
-            setSortFields(newSort)
-        } else {
-            const newSort = sortFields !== '' ? sortFields + `,${e.target.id}` : e.target.id
-            setSortFields(newSort.toString())
-        }
-    }
-
-    // console.log(sortFields)
 
     const handleModal = (e) => {
         const rowId = e.currentTarget.id
@@ -80,7 +67,7 @@ const Users = () => {
         removeModal()
     }
 
-    if (isLoading) {
+    if (isLoading || !tableData) {
         return <LoadSpinner />
     }
 
@@ -89,26 +76,7 @@ const Users = () => {
             <Header pageTitle='USERS' addLink='/users/create' activeIcon={dataView} clickHandler={handleDataView} />
 
             {dataView ? (
-                <Table headCols={['Image', 'First Name', 'Last Name', 'Email', 'Role', 'View', 'Edit', 'Delete']} clickHandler={handleSort}>
-                    {data &&
-                        data.users.map((user) => (
-                            <Row
-                                key={user._id}
-                                rowId={user._id}
-                                hasImage={true}
-                                imageSrc={user.profileImage && `${user.profileImage}?${user.updatedAt}`}
-                                imageAlt={user.userName}
-                                imageSize={10}
-                                pathView={`/users/${user._id}`}
-                                pathEdit={`/users/edit/${user._id}`}
-                                userFirstName={user?.firstName}
-                                userLastName={user?.lastName}
-                                userEmail={user.email}
-                                userRole={user.role}
-                                clickHandler={handleModal}
-                            />
-                        ))}
-                </Table>
+                <UsersTable tableData={tableData} clickHandler={handleModal} />
             ) : (
                 <CardGroup>
                     {data &&

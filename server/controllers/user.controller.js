@@ -22,13 +22,10 @@ export const getSingleUser = async (req, res, next) => {
 export const getAllUsers = async (req, res, next) => {
     const page = req?.query?.page
     const limit = req?.query?.limit
-    const sort = req?.query?.sort
 
     try {
         const users = await User.find({})
             .populate('team', 'title')
-            .collation({ locale: 'en' })
-            .sort(sort)
             .limit(limit * 1)
             .skip((page - 1) * limit)
 
