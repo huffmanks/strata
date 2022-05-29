@@ -1,13 +1,16 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { useTable, useSortBy } from 'react-table'
+import { useTable, useSortBy, useFilters, useGlobalFilter } from 'react-table'
 
-import TableLayout from '../../../components/Table/TableLayout'
+import Table from '../../../components/Table'
 import UserImage from '../../../components/Image/UserImage'
 
 import { MdDelete, MdModeEdit, MdVisibility } from 'react-icons/md'
+import { fuzzyTextFilter, defaultColumn, filterTypes } from '../../../components/Search/filterUtils'
 
 const UsersTable = ({ tableData, clickHandler }) => {
+    fuzzyTextFilter.autoRemove = (val) => !val
+
     const [columns, data] = useMemo(() => {
         const columns = [
             {
@@ -62,9 +65,9 @@ const UsersTable = ({ tableData, clickHandler }) => {
         return [columns, tableData]
     }, [tableData])
 
-    const tableInstance = useTable({ columns, data }, useSortBy)
+    const tableInstance = useTable({ columns, data, defaultColumn, filterTypes }, useSortBy, useFilters, useGlobalFilter)
 
-    return <TableLayout {...tableInstance} />
+    return <Table {...tableInstance} />
 }
 
 export default UsersTable

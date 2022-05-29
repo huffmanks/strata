@@ -1,6 +1,6 @@
 import { MdArrowDropDown } from 'react-icons/md'
 
-const TableLayout = ({ getTableProps, getTableBodyProps, headerGroups, rows, prepareRow }) => {
+const Table = ({ getTableProps, getTableBodyProps, headerGroups, rows, prepareRow }) => {
     return (
         <div className='table-responsive overflow-x-auto'>
             <table className='my-5 w-full' {...getTableProps()}>
@@ -42,4 +42,4 @@ const TableLayout = ({ getTableProps, getTableBodyProps, headerGroups, rows, pre
     )
 }
 
-export default TableLayout
+export default Table

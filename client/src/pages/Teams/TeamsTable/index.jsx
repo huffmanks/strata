@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useTable, useSortBy } from 'react-table'
 
-import TableLayout from '../../../components/Table/TableLayout'
+import Table from '../../../components/Table'
 import UserImage from '../../../components/Image/UserImage'
 
 import { MdDelete, MdModeEdit, MdVisibility } from 'react-icons/md'
@@ -77,7 +77,7 @@ const TeamsTable = ({ tableData, clickHandler }) => {
 
     const tableInstance = useTable({ columns, data }, useSortBy)
 
-    return <TableLayout {...tableInstance} />
+    return <Table {...tableInstance} />
 }
 
 export default TeamsTable
