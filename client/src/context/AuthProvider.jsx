@@ -5,7 +5,7 @@ export const AuthContext = createContext({})
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({})
     const [authIsRefreshing, setAuthIsRefreshing] = useState({})
-    const [persist, setPersist] = useState(JSON.parse(localStorage.getItem(`${process.env.REACT_APP_NAME}_persist`)) || false)
+    const [persist, setPersist] = useState(JSON.parse(localStorage.getItem(`${process.env.REACT_APP_NAME}_persist`)) ?? false)
 
     const contextValue = {
         auth,

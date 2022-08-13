@@ -11,7 +11,7 @@ const Navbar = () => {
         <>
             <div className='fixed z-30 h-16 w-full bg-neutral-800'>
                 <div className='ml-16 flex items-center justify-end md:ml-0'>
-                    <div className='pl-6 text-2xl font-bold text-primary-main md:hidden'>Strata</div>
+                    <div className='pl-6 text-2xl font-bold text-primary-alt md:hidden'>Strata</div>
 
                     <Breadcrumbs />
 

@@ -5,10 +5,10 @@ import SidebarLogout from './SidebarLogout'
 const Sidebar = () => {
     return (
         <>
-            <aside className='bg-dark-alt fixed top-0 left-0 bottom-0 z-40 flex h-full w-16 flex-col items-center overflow-hidden text-gray-400 md:w-40'>
+            <aside className='fixed top-0 left-0 bottom-0 z-40 flex h-full w-16 flex-col items-center overflow-hidden bg-dark-alt text-gray-400 md:w-40'>
                 <SidebarLogo />
 
-                <div className='w-full px-2'>
+                <div className='w-full'>
                     <SidebarNavLinks />
                 </div>
 

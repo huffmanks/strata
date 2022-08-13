@@ -4,9 +4,7 @@ const Pagination = ({ prevVariant, nextVariant, currentPage, totalPages, prevDis
     return (
         <div className='flex w-full items-center justify-end gap-2'>
             <Button buttonType='button' size='small' variant={prevVariant} isDisabled={prevDisabled} buttonText='Prev' clickHandler={prevClickHandler} />
-            {/* <div>
-                {currentPage} of {totalPages}
-            </div> */}
+
             {Array(totalPages)
                 .fill(1)
                 .map((step, index) => (

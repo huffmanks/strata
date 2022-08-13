@@ -8,7 +8,7 @@ const Table = ({ getTableProps, getTableBodyProps, headerGroups, rows, prepareRo
                     {headerGroups.map((headerGroup) => (
                         <tr key={headerGroup.headers} className='border-b-2 border-gray-500 bg-neutral-800 text-left' {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column) => (
-                                <th key={column} className='p-2.5 text-lg' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                <th key={column} className='p-2.5 text-lg' {...column.getHeaderProps()}>
                                     <div className='flex items-center gap-1'>
                                         <span>{column.render('Header')}</span>
                                         <span>{column.isSorted ? column.isSortedDesc ? <MdArrowDropDown className='h-6 w-6' /> : <MdArrowDropDown className='h-6 w-6 rotate-180' /> : ''}</span>

@@ -1,9 +1,17 @@
-const Home = () => {
+import { teamRoutes, userRoutes } from '../../routes'
+
+import LinkGroup from './LinkGroup'
+
+const Dashboard = () => {
     return (
         <>
-            <h1 className='text-primary-alt mt-4 text-center text-2xl font-bold'>DASHBOARD</h1>
+            <h1 className='mt-4 text-center text-2xl font-bold text-primary-alt'>DASHBOARD</h1>
+
+            <LinkGroup title='Users' routes={userRoutes} />
+
+            <LinkGroup title='Teams' routes={teamRoutes} />
         </>
     )
 }
 
-export default Home
+export default Dashboard

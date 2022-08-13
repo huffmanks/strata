@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { useTable, useSortBy } from 'react-table'
+import { useTable } from 'react-table'
 
 import Table from '../../../components/Table'
 import UserImage from '../../../components/Image/UserImage'
@@ -75,7 +75,7 @@ const TeamsTable = ({ tableData, clickHandler }) => {
         return [columns, tableData]
     }, [tableData])
 
-    const tableInstance = useTable({ columns, data }, useSortBy)
+    const tableInstance = useTable({ columns, data })
 
     return <Table {...tableInstance} />
 }

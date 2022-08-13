@@ -1,12 +1,12 @@
-import { MdSearch, MdPerson, MdPeople, MdFileCopy, MdChat, MdSettings } from 'react-icons/md'
+import { MdHome, MdPerson, MdPeople } from 'react-icons/md'
 
 const iconStyle = 'w-7 h-7 stroke-current'
 
 export const primaryRoutes = [
     {
-        title: 'Search',
-        path: '/search',
-        icon: <MdSearch className={iconStyle} />,
+        title: 'Dashboard',
+        path: '/',
+        icon: <MdHome className={iconStyle} />,
     },
     {
         title: 'Users',
@@ -18,23 +18,26 @@ export const primaryRoutes = [
         path: '/teams',
         icon: <MdPeople className={iconStyle} />,
     },
+]
+
+export const userRoutes = [
     {
-        title: 'Uploads',
-        path: '/uploads',
-        icon: <MdFileCopy className={iconStyle} />,
+        label: 'View',
+        path: '/users',
+    },
+    {
+        label: 'Create',
+        path: '/users/create',
     },
 ]
 
-export const secondaryRoutes = [
+export const teamRoutes = [
     {
-        title: 'Messages',
-        path: '/messages',
-        icon: <MdChat className={iconStyle} />,
-        hasNotifications: true,
+        label: 'View',
+        path: '/teams',
     },
     {
-        title: 'Settings',
-        path: '/settings',
-        icon: <MdSettings className={iconStyle} />,
+        label: 'Create',
+        path: '/teams/create',
     },
 ]

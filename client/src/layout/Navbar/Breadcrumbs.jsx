@@ -5,7 +5,7 @@ const Breadcrumbs = () => {
     const breadcrumbs = useBreadcrumbs()
 
     return (
-        <div className='flex gap-2 pl-48'>
+        <div className='hidden gap-2 pl-48 md:flex'>
             {breadcrumbs.map(({ match, breadcrumb }, index, array) => (
                 <div key={match.pathname} className={breadcrumb.props.children === 'Edit' ? 'hidden' : ''}>
                     {index !== array.length - 1 ? (

@@ -10,7 +10,6 @@ import CardGroup from '../../components/Card/CardGroup'
 import Card from '../../components/Card'
 
 import UsersTable from './UsersTable'
-import Search from '../../components/Search'
 import Modal from '../../components/Modal'
 import ModalDelete from '../../components/Modal/ModalDelete'
 
@@ -35,6 +34,10 @@ const Users = () => {
 
         if (data) {
             setTableData(data.users)
+        }
+
+        return () => {
+            removeModal()
         }
     }, [data, isError])
 
@@ -75,8 +78,6 @@ const Users = () => {
     return (
         <>
             <Header pageTitle='USERS' addLink='/users/create' activeIcon={dataView} clickHandler={handleDataView} />
-
-            <Search />
 
             {dataView ? (
                 <UsersTable tableData={tableData} clickHandler={handleModal} />

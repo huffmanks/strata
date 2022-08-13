@@ -15,7 +15,7 @@ const Button = ({ buttonId, buttonType, size, variant, isDisabled, buttonIcon, i
             variant={variant}
             disabled={isDisabled}
             className={`${baseStyles} ${variant === 'primary' ? primary : variant === 'secondary' ? secondary : active} ${
-                size === 'small' ? 'text-sm' : size === 'large' ? 'text-2xl' : 'w-full text-xl'
+                size === 'small' ? 'text-sm' : size === 'large' ? 'text-xl' : 'w-full text-lg'
             } ${buttonIcon && 'inline-flex items-center justify-center gap-2'}`}
             {...(clickHandler && { onClick: clickHandler })}>
             {buttonText} {buttonIcon && <ButtonIcon iconName={iconName} />}

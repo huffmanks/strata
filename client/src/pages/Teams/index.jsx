@@ -36,7 +36,7 @@ const Teams = () => {
         return () => {
             removeModal()
         }
-    }, [isError])
+    }, [teams, isError])
 
     const handleDataView = () => {
         setDataView((prev) => !prev)

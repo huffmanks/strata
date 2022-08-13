@@ -12,6 +12,7 @@ import FormInput from '../../components/Form/Inputs/FormInput'
 import FormCheckbox from '../../components/Form/Checkbox/FormCheckbox'
 
 import ErrorToast from '../../components/Errors/ErrorToast'
+import FormCheckboxGroup from '../../components/Form/Checkbox/FormCheckboxGroup'
 
 const Login = () => {
     const { setAuth, persist, setPersist } = useAuth()
@@ -69,12 +70,14 @@ const Login = () => {
 
                     <FormInput type='password' name='password' label='Password' changeHandler={(e) => setPassword(e.target.value)} inputValue={password} />
 
-                    <FormCheckbox id='persist' label='Stay logged in' changeHandler={togglePersist} checked={persist} />
+                    <FormCheckboxGroup changeHandler={togglePersist}>
+                        <FormCheckbox id='persist' label='Stay logged in' checked={persist} />
+                    </FormCheckboxGroup>
                 </FormBody>
 
                 <FormFooter subtitle='Forgot Password' subtitlePath='/forgot-password' buttonText='Sign In' />
 
-                <div className='hover:text-primary-alt mt-6 text-center'>
+                <div className='mt-6 text-center hover:text-primary-alt'>
                     <Link to='/register'>Don&rsquo;t have an account? Register</Link>
                 </div>
             </Form>
