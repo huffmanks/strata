@@ -18,7 +18,7 @@ const App = () => {
                     <ErrorToast />
                 </GlobalStateProvider>
             </AuthProvider>
-            <ReactQueryDevtools initialIsOpen='false' />
+            {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen='false' />}
         </QueryClientProvider>
     )
 }
