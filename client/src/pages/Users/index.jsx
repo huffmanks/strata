@@ -20,7 +20,7 @@ const Users = () => {
     const [dataView, setDataView] = useState(true)
     const [tableData, setTableData] = useState([])
     const [page, setPage] = useState(1)
-    const limit = 3
+    const limit = 25
 
     const { data, isLoading, isError, error, isPreviousData } = useGetUsers(page, limit)
 

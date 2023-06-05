@@ -9,6 +9,8 @@ const connectDB = async () => {
         con.connection.on('close', () => {
             con.connection.removeAllListeners()
         })
+
+        return con
     } catch (error) {
         console.error(`Error: ${error.message}`)
         process.exit(1)
