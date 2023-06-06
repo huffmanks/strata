@@ -12,7 +12,7 @@ server/uploads/*/*/*
 
 # development
 !server/uploads/files/example.pdf
-!server/uploads/images/profile/example.jpg
+!server/uploads/images/profile/employee*.jpg
 !server/uploads/images/team/example.jpg
 server/initial*.json
 

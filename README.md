@@ -43,13 +43,7 @@ To get a local copy up and running follow these simple example steps.
     2. Update environment variables
 
         ```sh
-        touch .env.development.local
-
-        // .env.development.local
-
-        REACT_APP_NAME={APP_NAME}
-        REACT_APP_BASE_AUTH_API_URL=http://localhost:{PORT}/api/auth/
-        REACT_APP_BASE_PRIVATE_API_URL=http://localhost:{PORT}/api/private/
+        cp example.env .env.development.local
         ```
 
     3. Run
@@ -67,20 +61,10 @@ To get a local copy up and running follow these simple example steps.
     2. Update environment variables
 
         ```sh
-        touch config.env
-
-        // config.env
-
-        PORT=5000
-        MONGO_URI=mongodb://127.0.0.1:27017/{DB_NAME}
-        SERVER_URL=http://localhost:{PORT}
-        JWT_REFRESH_TOKEN_SECRET=d
-        JWT_REFRESH_TOKEN_EXPIRE=2hr
-        JWT_ACCESS_TOKEN_SECRET=d
-        JWT_ACCESS_TOKEN_EXPIRE=2d
+        cp example.config.env config.env
         ```
 
     3. Run
         ```sh
-        yarn server
+        yarn dev
         ```
